@@ -1,0 +1,17 @@
+--- 
+title: "DSC-WAV ValleyBike Project Report"
+author: |
+  | **PI:** Nicholas J. Horton (Amherst College)
+  | **Team:** Umaimah Ahmed, Kenny Chen, Graham Chickering, Chris Chukwura, Maria-Cristiana Gîrjău, Konstantin Larin, Maggie Wu, Jessica Yu
+date: "Fall 2020"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+---
+
+# Project Description
+
+
