@@ -1,27 +1,9 @@
----
-title: "Demographics Exploration for ValleyBike Users2"
-author: "Konstantin Larin"
-date: "12/07/2020"
-output:
-  html_document:
-    df_print: paged
-    toc: yes
-  pdf_document:
-    toc: yes
-subtitle: DSC-WAV ValleyBike Team
-header-includes: \usepackage{xcolor}
----
 
 ```{r setup, include=FALSE}
 library(valleybikeData)
 library(tidyverse)
 library(curl)
 ```
-
-\newpage
- 
-
-\newpage
 
 # Demographic Exploration of ValleyBike Users
 
@@ -57,7 +39,7 @@ cleaned_trips_NA3_count <- cleaned_trips_NA3 %>%
   filter(na_per_day/n < 0.2)
 ```
 
-```{r}
+```{r, warning = FALSE}
 ggplot(data = cleaned_trips_NA3_count) +
   geom_bar(aes(x = start_date, y = na_per_day/n),stat="identity") +
   labs(title = "Barplot of Normalized Rides to NA Chronologically") +
