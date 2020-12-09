@@ -1,0 +1,199 @@
+# Jessica
+
+```{r setup, include = FALSE}
+library(valleybikeData)
+library(tidyverse)
+library(lubridate)
+library(ggmap)
+library(knitr)
+library(kableExtra)
+library(sparkline)
+library(gridExtra)
+```
+
+While we have explored visualizations of many trips that are aggregated through heatmaps, it is also important to visualize trips on an individual user level to gain more insight about valleybike users. Each individual has their own patterns and reasons for riding the bike, and being able to capture that story will help us better understand who uses valleybike and why.
+
+We created a function that generates a 'report' for a given individual user that displays up to 16 of their trips, along with summaries of when those trips were and how they are. At this detailed level, we can see if an individual was using valleybikes to make daily commutes, or if they were perhaps a tourist visiting the pioneer valley for the weekend. We can only infer based on riding patterns and cannot make any definite conclusions, but this summary can still prove to be valuable. 
+
+As an example, we can generate a report for a random Springfield user. The function is shown below. 
+
+```{r, include = FALSE}
+users_elapsed <- readRDS("users_elapsed.Rds")
+users2020_cleaned <- readRDS("users2020_cleaned.Rds")
+users_elapsed <- users_elapsed %>%
+  left_join(users2020_cleaned, by ="user_id")
+
+users_elapsed %>%
+  filter(location == "Springfield") %>%
+  arrange(desc(trips))
+```
+
+```{r, eval = FALSE}
+
+
+get_trips <- function(trip_ids) {
+  
+ ds <- trips %>%
+  filter(route_id %in% trip_ids)
+
+ ds <- ds %>% 
+  mutate(month = stringr::str_to_lower(lubridate::month(start_time, label =TRUE, abbr = FALSE)),
+         year = lubridate::year(start_time),
+         time = paste0(month,year))
+
+df<- map_df(.x = unique(ds$time), function(.x){
+  
+  return(data.frame(eval(as.name(.x)) %>% filter(route_id %in% ds$route_id )))
+} )
+
+return(df)
+}
+
+
+```
+
+```{r, eval = FALSE}
+
+
+top_station_per_trips <- function(trip_ids){
+  
+  user_trip <- trips %>%
+    filter(route_id %in% trip_ids)
+  
+   return(as.data.frame(tally(as.vector(as.matrix(user_trip[, 
+                                      c("start_station", "end_station")])))) %>%
+    arrange(desc(Freq)) %>%
+    head(1) %>%
+    left_join(stations, by = c("X" = "name")))
+  
+}
+
+
+
+```
+
+
+```{r,  eval = FALSE}
+
+user_story <- function(userid) {
+  set.seed(2020)
+
+  ds <- users_elapsed %>%
+    filter(user_id == userid)
+
+  user_trip <- trips %>%
+    filter(duration > 120, user_id == 
+             userid)
+  
+  user_trip <- user_trip %>%
+    mutate(duration = paste(round(duration/60),"minutes"))
+
+  # TOP STATION 1:
+  
+  top_station1 <- top_station_per_trips(user_trip$route_id)
+  
+  trips_from_top_station1 <- user_trip %>%
+    filter(start_station == top_station1$X | end_station == top_station1$X)
+  
+  if (nrow(trips_from_top_station1) > 16) {
+    sample_trip1 <- trips_from_top_station1 %>%
+      sample_n(16)
+  } else {
+    sample_trip1 <- trips_from_top_station1
+  }
+
+  sample_df1 <- get_trips(sample_trip1$route_id) %>%
+    group_by(route_id) %>%
+    mutate(total = as.vector(tally(route_id)), row = row_number()) %>%
+    left_join(user_trip, by = "route_id") %>%
+    mutate(r = row/ total)
+
+map_borders <- c(bottom  = min(sample_df1$latitude)  , 
+                 top     = max(sample_df1$latitude) ,
+                 left    = min(sample_df1$longitude) ,
+                 right   = max(sample_df1$longitude) )
+  
+    map <- get_map(location = c(lon =top_station1$longitude , lat =top_station1$latitude ), source = "stamen", zoom = 14)
+
+
+a <- t(ds)
+b <- trips_from_top_station1 %>%head(20) %>% select(bike,start_time,end_time,start_station,end_station, duration) %>% mutate(day = lubridate::wday(start_time, label = TRUE))
+
+c <- ggmap(map) +
+    geom_point(aes(x = longitude, y = latitude, color = r), data = sample_df1, size = .5) +
+    facet_wrap(~ start_time + end_time +start_station + end_station + duration, labeller= label_both) +
+    guides(alpha = FALSE) +
+    xlab("Longitude") +
+    ylab("Latitude") +
+    ggtitle(paste("Trips For User",ds$user_id),
+      subtitle = paste("Top Station:", top_station1$X, "Trips from/to this station: ", top_station1$Freq)
+    ) + theme(axis.text.x = element_text(size = 6)) + theme(strip.text.x = element_text(size = 6))+ scale_color_gradient(breaks = c(0.2,.8), labels = c("Beginning", "End"), name = "Trip Progression") 
+
+  
+# TOP STATION 2:
+`%notin%` <- Negate(`%in%`)
+
+trip2 <- user_trip %>% 
+  filter(route_id %notin% trips_from_top_station1$route_id) 
+
+  top_station2 <- top_station_per_trips(trip2$route_id)
+
+trips_from_top_station2 <- user_trip %>%
+    filter(start_station == top_station2$X | end_station == top_station2$X,
+           route_id %notin% trips_from_top_station1$route_id)
+
+  if (nrow(trips_from_top_station2) > 16) {
+    sample_trip2 <- trips_from_top_station2 %>%
+      sample_n(16)
+  } else {
+    sample_trip2 <- trips_from_top_station2
+  }
+
+if (dim(sample_trip2)[1] > 0) {
+  
+  sample_df2 <- get_trips(sample_trip2$route_id) %>%
+    group_by(route_id) %>%
+    mutate(total = as.vector(tally(route_id)), row = row_number()) %>%
+    left_join(user_trip, by = "route_id") %>%
+    mutate(r = row/ total)
+
+map_borders2 <- c(bottom  = min(sample_df2$latitude)  , 
+                 top     = max(sample_df2$latitude) ,
+                 left    = min(sample_df2$longitude) ,
+                 right   = max(sample_df2$longitude) )
+  
+    map2 <- get_map(location = c(lon = top_station2$longitude, lat = top_station2$latitude), source = "stamen", zoom = 14)
+    
+d<- trips_from_top_station2 %>%
+  head(20) %>% 
+  mutate(day = lubridate::wday(start_time, label = TRUE))%>% select(bike,start_time,end_time,start_station,duration, end_station, day)
+  
+
+e<-ggmap(map2) +
+    geom_point(aes(x = longitude, y = latitude, color = r), data = sample_df2, size = .5) +
+    facet_wrap(~ start_time + end_time +start_station + end_station + duration , labeller= label_both) +
+    guides(alpha = FALSE) +
+    xlab("Longitude") +
+    ylab("Latitude") +
+    ggtitle(paste("Trips For User",ds$user_id),
+      subtitle = paste("2nd Top Station:", top_station2$X, "Trips from/to this station: ", top_station2$Freq)
+    ) + theme(axis.text.x = element_text(size = 6)) + theme(strip.text.x = element_text(size = 6))+ scale_color_gradient(breaks = c(0.2,.8), labels = c("Beginning", "End"), name = "Trip Progression")
+    
+ return(list(a,b,c,d,e))
+}else{
+
+  
+ return(list(a,b,c))
+}
+}
+```
+
+```{r, message = FALSE, warning = FALSE}
+user_story("63dee55c-20e2-48bb-9c5f-7a0232f6b707")
+```
+
+The function will create a pdf summary for the given user. That pdf can be accessed here: https://github.com/DSC-WAV/proj-valleyriders/blob/master/63dee55c-20e2-48bb-9c5f-7a0232f6b707.pdf
+
+We can see that this user, a 50-60 year old male, took frequent trips in the downtown springfield area from 2018-2019. Their top station was STCC and their trips occurred throughout the week. We can characterize this user as a frequent user.
+
+One topic of interest to the valleybike program is the feasibility of opening the stations in Springfield in 2021, as they were closed in 2020. Examples of frequently users like this individual show that there are regular users of the Springfield area that were potentially affected by the closure. 
