@@ -1,0 +1,194 @@
+# Trips to Nowhere Overview
+
+## Motivation
+
+Most ValleBike Users take trips between working stations. However, some trips end at a location unconnected to any specific station. The cause of this lies in a large number of potential factors. Some of these trips represent the bikes that were taken for repairs. A lot of the trips represent secondary stops, where a bike will stay at the location for a relatively short period of time before the same user rides on it again to their final destination or makes a trip back to the original station. Secondary stops will be discussed in more detail in the next section, but this chapter focuses on providing a general overview of how common these trips are, looks at a small subset of trips whose end locations don't correspond to a specific station to identify how close they are to preexisting stations, and provides a resource to look over all the trips that don't end at a station.
+
+```{r loadpackages, include=FALSE}
+library(valleybikeData)
+library(tibble)
+library(dplyr)
+library(mdsr)
+library(tidyverse)
+library(fuzzyjoin)
+library(kableExtra)
+library(ggmap)
+library(leaflet)
+```
+
+## General Summary 
+
+```{r, warning = FALSE, message = FALSE}
+l_bound <- -74
+r_bound <- -71
+b_bound <- 42
+t_bound <- 43
+
+max_duration <- 4 * 60 * 60 # maximum valid duration of 4 hours
+min_duration <- 2 * 60 # minimum valid duration of 2 minutes
+
+trips_cleaned_end <- trips %>%
+  select(-start_station, -start_longitude, -start_latitude) %>%
+  rename(station = "end_station", longitude = "end_longitude", latitude = "end_latitude")
+
+trips_NA <- trips_cleaned_end %>%
+  filter(is.na(station) & between(duration, min_duration, max_duration) &
+    between(latitude, b_bound, t_bound) & between(longitude, l_bound, r_bound)) %>%
+  mutate(year = lubridate::year(start_time))
+
+
+knitr::kable(rbind(trips_NA %>% 
+        group_by(year) %>%
+        summarise(Count=n()),c("Total", nrow(trips_NA))), 
+          caption = "Number of Trips that End at No Established Station by Year")
+```
+
+This summary includes trips between June 2018 and start of October, 2020. In total, there are 8022 trips that fit the criteria of being a trip that does not end at a specified station, over half of them in 2019. However, since the data for 2018 and 2020 are only for a part of the year and not all stations were active in 2020, this metric does not tell us about trends in the proportion of such trips over time.
+
+## Proportion of Trips That Don't Rnd At an Identified Station Over Time 
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
+trips_to_NA <- trips %>% filter(is.na(end_station) & !is.na(start_station))
+cutoff <- 5000
+cleaned_trips_NA2 <- trips_to_NA %>% filter(duration < cutoff, duration > 120, duration < 4*60*60)
+
+NA_user <- trips_to_NA %>%
+  group_by(user_id) %>%
+  tally(sort = TRUE)
+list_non_super_NA_users <- filter(NA_user, n < 20)$user_id
+cleaned_trips_NA3 <- cleaned_trips_NA2 %>% filter(user_id %in% list_non_super_NA_users)
+
+trips_per_day <- trips %>%
+  mutate(start_date = cut.POSIXt(start_time, "day")) %>%
+  count(start_date)
+
+cleaned_trips_NA3_count <- cleaned_trips_NA3 %>%
+  mutate(start_date = cut.POSIXt(start_time, "day")) %>%
+  count(start_date) %>%
+  rename(na_per_day = n) %>%
+  left_join(trips_per_day) %>%
+  mutate(start_date = as.POSIXct(start_date, "")) %>%
+  filter(na_per_day / n < 0.2)
+```
+
+```{r, warning = FALSE}
+ggplot(data = cleaned_trips_NA3_count) +
+  geom_bar(aes(x = start_date, y = na_per_day / n), stat = "identity") +
+  labs(title = "Plot of Normalized Rides to NA Chronologically") +
+  xlab("Ride Start Date") +
+  ylab("Proportion of all rides that are from a station to NA")
+```
+
+The plot above specifically measures the proportion of trips each day that qualify as trips to NA station. Among the days when there is trip data, we see that only around 2-3% of trips each day don't end at a specified station. However, on some days, the proportion increases to over 5% and even close to 10%. The biggest spikes occur in 2018, which may be explained by the fact that there were fewer trips when ValleyBike was just starting.
+
+## Close Look at Trips to NA in Springfield, June-July 2019
+
+The trips are from South End/Main Street and Mercy Medical Center stations in Springfield between June 1st-July 13, 2019. The time and stations were chosen arbitrarily to provide specific examples of trips that start at a station, but don't end at any station.
+
+```{r register, echo = FALSE}
+ggmap::register_google("AIzaSyD_HDAWszwjUbeNFv2QHB9LvgmMMV13GIk")
+```
+
+```{r accessdata, cache = TRUE}
+min_date <- as.POSIXct("2019-06-01 00:05:00")
+max_date <- as.POSIXct("2019-07-14 00:05:00")
+station_city <- stations %>%
+  select(name, city)
+
+get_day_NA_trips <- function(min, max, stations_list) {
+  to_return <- trips %>%
+    filter(
+      is.na(end_station),
+      !is.na(start_station),
+      (start_time > min & start_time < max & start_station %in% stations_list)
+    )
+  return(to_return)
+}
+
+NA_trips_SE_MMCC <-
+  get_day_NA_trips(
+    min_date,
+    max_date,
+    c("South End/Main Street", "Mercy Medical Center Station")
+  ) %>%
+  mutate(
+    start_time = start_time - 5 * 60 * 60,
+    start_date = cut.POSIXt(start_time, "day")
+  )
+```
+
+```{r pivot_trips}
+long_NA <- NA_trips_SE_MMCC %>%
+  pivot_longer(
+    cols = c(
+      start_latitude, end_latitude, start_longitude,
+      end_longitude, start_time, end_time
+    ),
+    names_to = c("col", ".value"), names_sep = "_"
+  )
+```
+
+```{r}
+check_nearest_3dec <- fuzzyjoin::difference_inner_join(NA_trips_SE_MMCC, valleybikeData::stations,
+  by = c("end_latitude" = "latitude", "end_longitude" = "longitude"),
+  max_dist = 0.001
+)
+
+NA_close_to_station_Springfield <- check_nearest_3dec %>% count(name, city, sort = TRUE) %>% 
+               rename("Closest Station" = name, "Number of Trips" = n)
+
+knitr::kable(rbind(NA_close_to_station_Springfield, c("NA", "Springfield",
+          nrow(NA_trips_SE_MMCC) - nrow(check_nearest_3dec))), 
+          caption = "Table of the Closest Stations to Trips to NA in June-July 2019, 2 Springfield Stations")
+```
+
+Looking at the table of nearest stations to the end locations of these trips, we see that most of the trips for this data can be mapped to Kenefick Park station in Springfield, with 1 each to Baystate Health/Main Street and 1 to South End/Main Street. There are no stations that map to several stations. 9 stations were further than 100m from any station and thus were not connected to any station.
+
+```{r}
+sample_trips <- june2019 %>%
+  filter(route_id %in% NA_trips_SE_MMCC$route_id[1:4] |
+    route_id %in% NA_trips_SE_MMCC$route_id[6:17])
+sample_trips <- sample_trips %>% mutate(route_id = as.factor(route_id))
+```
+
+```{r, cache = TRUE, message = FALSE}
+area_small_Spring <- get_map(c(
+  left = -72.630,
+  bottom = 42.05, right = -72.5, top = 42.15
+),
+maptype = "terrain"
+)
+```
+
+```{r, fig.width = 10, fig.height = 10}
+ggmap(area_small_Spring, extent = "normal") +
+  geom_point(aes(x = longitude, y = latitude), data = sample_trips) +
+  facet_wrap(~route_id) +
+  guides(alpha = FALSE) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("Trips to NA from South End and Mercy Medical")
+```
+
+If we plot a sample of 16 trips to visualize them, we see that they tend to be relatively direct, with some exceptions. In addition, the common destination for a lot of trips is the same location close to Kenefick Park, which is reasonable since most of the trips were close to that location.
+
+## Interactive Map of Trip End Points That Are Not Stations 
+
+```{r}
+yCol <- colorFactor(palette = "Set2", trips_NA$year)
+
+leaflet(trips_NA) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    color = ~ yCol(year)
+  ) %>%
+  addLegend("bottomright",
+    pal = yCol, values = trips_NA$year,
+    title = "Year of Trip to No Identified Station",
+    opacity = 1
+  )
+```
+
+A full interactive map with all end locations that end at NA is provided. A map of secondary stops, included in the next section, provides more specific information and analysis.
