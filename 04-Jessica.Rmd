@@ -15,7 +15,7 @@ While we have explored visualizations of many trips that are aggregated through 
 
 We created a function that generates a 'report' for a given individual user that displays up to 16 of their trips, along with summaries of when those trips were and how they are. At this detailed level, we can see if an individual was using valleybikes to make daily commutes, or if they were perhaps a tourist visiting the pioneer valley for the weekend. We can only infer based on riding patterns and cannot make any definite conclusions, but this summary can still prove to be valuable. 
 
-As an example, we can generate a report for a random Springfield user. The function is shown below. 
+As an example, we can generate a report for a random Springfield user. The functions used to build the report are shown below. 
 
 ```{r, include = FALSE}
 users_elapsed <- readRDS("users_elapsed.Rds")
