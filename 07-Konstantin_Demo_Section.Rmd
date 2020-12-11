@@ -1,0 +1,566 @@
+
+```{r setup, include=FALSE}
+library(valleybikeData)
+library(tidyverse)
+library(curl)
+```
+
+# Demographic Exploration of ValleyBike Users
+
+## Motivations and Initial Summary
+
+The motivation behind this project is that it has only recently become possible to obtain demographic data of ValleyBike users and connect it to the existing data on the number of trips. Thus, it has become possible to gather information on whether different demographic factors influence frequency and duration of trips. This can help ValleyBike leadership understand who exactly are its largest clients and what they use the bikes for, which can then influence the location of future stations and other changes to the ValleyBike structure.
+
+In total, there are 16589 users and 112011 trips by those users from June 2018 to October 2020. Trips shorter than 2 minutes or longer than 4 hours were excluded from this analysis. The central question of this project is what patterns we can glean from different demographic information about users, as well as some of the trip characteristics that haven't been explore before, e.g. # of trips by hour and whether the day of the trip falls on a weekend/holiday. For this project, all trips shorter than 2 minutes and longer than 4 hours are excluded from the dataset.
+
+
+```{r, echo = FALSE, message=FALSE,warning=FALSE}
+users2020 <- readr::read_csv(curl("https://raw.githubusercontent.com/DSC-WAV/proj-valleyriders/master/data/users_2020_10.csv?token=ANCR62LHPFUAQPVKBTFBOFK73JU22")) %>%
+  mutate(
+    membership_start = lubridate::parse_date_time(membership_start, "YmdHMS"),
+    membership_end = lubridate::parse_date_time(membership_end, "YmdHMS")
+  ) %>%
+  select(-X1)
+
+get_other <- function(ds) {
+  categories <- c(
+    "Missing", "Agawam", "Belchertown", "Boston", "Chicopee", "East Longmeadow", "Enfield, CT",
+    "Granby", "Hadley", "Leverett", "Ludlow", "New York City", "South Hadley", "Southampton",
+    "Sunderland", "West Springfield", "Westfield"
+  )
+
+  for (i in 1:length(ds$location)) {
+    if (str_detect(ds$location[i], "Other") | ds$location[i] %in% categories) {
+      ds$location[i] <- "Other"
+    }
+  }
+  return(ds)
+}
+users2020_cleaned <- get_other(users2020)
+
+users2020_cleaned <- users2020_cleaned %>%
+  mutate(
+    age_group = ifelse(age_group == "<=23", "18-23", age_group),
+    gender = case_when(
+      is.na(gender) | gender == "o" ~ "Missing",
+      gender == "f" ~ "Female",
+      gender == "m" ~ "Male"
+    )
+  )
+
+max_duration <- 4 * 60 * 60 # max valid duration (in seconds)
+min_duration <- 2 * 60 # minimum valid duration (in seconds)
+trips_cleaned <- trips %>%
+  filter(duration >= min_duration, duration <= max_duration)
+
+trips_combined <- left_join(trips_cleaned, users2020_cleaned, by = "user_id")
+
+trips_cleaned <- trips_combined %>%
+  filter(!is.na(location)) 
+
+holidates <- lubridate::ymd(c(
+  "2018-07-04", "2019-07-04", "2020-07-04",
+  "2018-09-03", "2019-09-02", "2020-09-07",
+  "2018-05-28", "2019-05-27", "2020-05-25"
+))
+trips_cleaned_users <- trips_cleaned %>%
+  mutate(duration = duration/60, 
+         type_of_day = ifelse(lubridate::wday(start_time,
+    label = TRUE
+  ) == "Sat" | lubridate::wday(start_time,
+    label = TRUE
+  ) == "Sun" | cut.POSIXt(
+    start_time,
+    "day"
+  ) %in% holidates, "Weekend/Holiday", "Workday"))
+
+
+duration_by_user <- trips_cleaned_users %>%
+  group_by(user_id) %>%
+  summarize(med_duration = median(duration))
+
+summary_by_user <- left_join(duration_by_user, users2020_cleaned, by = "user_id")
+
+trips_cleaned_users <- trips_cleaned_users %>%
+  mutate(Hour = lubridate::hour(start_time))
+```
+
+
+\newpage
+## Tables and Plots of Trips by User Age
+
+```{r, warning = FALSE, message=FALSE, fig.height= 6, fig.width = 8, echo = FALSE}
+age_table <- users2020_cleaned %>% summarise(age_group) %>% count(age_group) %>%
+  rename('Age Group' = age_group, 'Count_user' = n) %>%
+  mutate(`Proportion of Users` = round(Count_user/sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>% group_by(user_id, age_group) %>% summarise(trip_number = n())
+
+median_ages <- tempo %>% 
+  group_by(age_group) %>% 
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename('Age Group' = age_group)
+
+trip_age_table <- trips_cleaned_users %>% 
+  summarise(age_group, `Median Duration` = median(duration)) %>% 
+  count(age_group) %>%
+  rename('Age Group' = age_group, 'Count_trip' = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip/sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_age_table <- trips_cleaned_users %>% 
+  group_by(age_group) %>% 
+  summarise(`Median Trip Duration, mins` = round(median(duration),2)) %>%
+  rename('Age Group' = age_group)
+
+
+age_table_comb <- full_join(age_table, trip_age_table, by = "Age Group") %>% 
+  full_join(median_ages, by = "Age Group") %>%
+  mutate(`Avg Number of Trips per User`  = round(Count_trip/Count_user,2)) %>%
+  select(-Count_trip, -Count_user) %>% 
+  full_join(duration_age_table, by = "Age Group") 
+
+age_table_comb[7, "Proportion of Trips"] <- 1
+age_table_comb[7, "Median Trip Duration, mins"] <- median(round(trips_cleaned_users$duration, 2))
+age_table_comb[7, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(age_table_comb %>% arrange(`Age Group`), 
+             caption = "Trip Summary By User Age")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24,colour='black', fill='gray') + 
+  facet_wrap(~age_group) +
+  ylab("Number of Trips by Hour") +
+  ggtitle("Histogram of Trips per Hour by Age Group")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour, y =
+                       (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), 
+                 bins = 24,colour='black', fill='gray') + 
+  facet_wrap(~age_group) +
+  ylab("Number of Trips per Hour Normalized by Age Group") +
+  ggtitle("Histogram of Trips per Hour Normalized by Age Group")
+```
+
+By age, we see that most users are either 18-23 or 23-30. Proportion of trips and proportion of users are very close for all groups. Although average numbers of trips per user differ, a comparison with the medians shows that this is mostly caused by a few users who take a large number of trips, while the median is only 2-3 trips. It appears that the youngest group (18-23) take the shortest trips with the median of 17.8 minutes, while users in older groups take trips of 20 minutes or longer. This may reflect a self-selection effect, where the older users who still bike are more dedicated to it than an average individual of that age.
+
+For this and future subsections, the second plot of trips per hour is normalized to account for different sizes of the groups. However, smaller groups will tend to have bigger shifts hour-to-hour on that plot. Overall, there doesn't seem to be much difference in terms of different age groups, aside from the older users exhibiting a sharper drop in usage after 7pm. The usage starts to increase around 6-8 and reaches its peak in the afternoon and early evening.
+
+\newpage
+
+## Tables and Plots by Gender
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+
+gender_table <- users2020_cleaned %>% 
+  summarise(gender) %>% 
+  count(gender) %>%
+  rename(Gender = gender, 'Count_user' = n) %>%
+  mutate(`Proportion of Users` = round(Count_user/sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>% group_by(user_id, gender) %>% summarise(trip_number = n())
+
+median_ages <- tempo %>% 
+  group_by(gender) %>% 
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename(Gender = gender)
+
+trip_gender_table <- trips_cleaned_users %>% 
+  summarise(gender) %>% 
+  count(gender) %>%
+  rename(Gender = gender, 'Count_trip' = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip/sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_gender_table <- trips_cleaned_users %>% 
+  group_by(gender) %>% 
+  summarise(`Median Trip Duration, mins` = round(median(duration),2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename(Gender = gender)
+
+gender_table_comb <- full_join(gender_table, trip_gender_table, 
+                                 by = "Gender") %>%
+  full_join(median_ages, by = "Gender") %>%
+  mutate(`Avg Number of Trips per User`  = round(Count_trip/Count_user,2)) %>%
+  select(-Count_trip, -Count_user) 
+
+gender_table_comb <- full_join(duration_gender_table, 
+                                 gender_table_comb, by = "Gender")
+gender_table_comb[4, 
+            "Median Trip Duration, mins"] <- 
+median(round(trips_cleaned_users$duration, 2))
+
+gender_table_comb[4, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(gender_table_comb[, c(1,3,4,5,6, 2)], 
+             caption = "Trip Summary By User Gender")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24,colour='black', fill='gray') + 
+  facet_grid(rows = vars(gender)) +
+  ylab("Number of Trips by User Gender") +
+  ggtitle("Histogram of Trips per Hour by Gender")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour, y = 
+            (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), 
+  bins = 24, colour='black', fill='gray') + 
+  facet_grid(rows = vars(gender)) +
+  ylab("Number of Trips by Gender of User (Normalized by Location)") +
+  ggtitle("Histogram of Trips per Hour by Gender (Normalized by Location)")
+
+```
+
+It is important to note that, although 73% of ValleyBike registered users have not stated their gender, only 45% of all trips were taken by these users. Known female and male users, on the other hand, are only 7% and 20% of all users, but complete 13% and 42% of all trips, respectively. Male and female users generally take more trips than users whose gender is missing, but the length of their trips is slightly shorter, with medians of 17 and 18 minutes compared to 22.6 minutes.
+
+The users who do not include their gender in the profile. As shown in a future section, the "Missing" category serves as a reflection of users with specific account type, who bike less, but for longer periods.
+
+\newpage
+
+## Tables by Gender and Age
+
+```{r, warning= FALSE,  message=FALSE, echo = FALSE}
+gender_age_table <- table(summary_by_user$age_group, summary_by_user$gender)
+knitr::kable(gender_age_table, caption = "Summary Table of Counts by Gender and Age")
+
+dem_table <- users2020_cleaned %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  summarise(dem_type) %>%
+  count(dem_type) %>%
+  rename("Demographic Group" = dem_type, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 3)) %>%
+  janitor::adorn_totals("row")
+
+tempo_dem <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  group_by(user_id, dem_type) %>%
+  summarise(trip_number = n())
+
+median_dem <- tempo_dem %>%
+  group_by(dem_type) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("Demographic Group" = dem_type)
+
+trip_dem_table <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  summarise(dem_type, `Median Duration` = median(duration)) %>%
+  count(dem_type) %>%
+  rename("Demographic Group" = dem_type, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_dem_table <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  group_by(dem_type) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  rename("Demographic Group" = dem_type)
+
+
+dem_table_comb <- full_join(dem_table, trip_dem_table, by = "Demographic Group") %>%
+  full_join(median_dem, by = "Demographic Group") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user) %>%
+  full_join(duration_dem_table, by = "Demographic Group")
+
+dem_table_comb[19, "Proportion of Users"] <- 1
+dem_table_comb[19, "Proportion of Trips"] <- 1
+dem_table_comb[19, "Median Trip Duration, mins"] <- median(round(trips_cleaned_users$duration, 2))
+dem_table_comb[19, "Median Number of Trips Per User"] <- median(tempo_dem$trip_number)
+
+knitr::kable(dem_table_comb %>% arrange(`Demographic Group`),
+  caption = "Trip Summary By User Age and Gender"
+)
+```
+
+If we look at both gender and age, we see that the patterns of the number of trips per user and median trip durations differ by gender. The oldest user group (60+) takes the fewest trips for all three categories. However, the reverse is not always the case. While the median number of trips for younger male users is the highest, middle age female users tend to take more trips than the younger female users, while for the "Missing" group, the median is almost flat. However, since the female age group is the smallest, their summary numbers are more likely to fluctuate than the numbers for the larger male and missing groups. For trip durations, the oldest users take either average length trips (for males) or the longest trips (for females and especially for the missing group). Although the youngest users in male and missing categories take the shortest trips, the female bikers are on the high end, with median trip duration of 19.5 minutes, longer than 18-23 users in the other two groups and the second longest trip duration among female age groups. However, female users 23-30 have the shortest median trip duration out of all groups, which implies that the effect is caused by in-group variability and not by gender-specific biking trends. Since a significant number of trips involves secondary stops, the median duration would be higher if round trips with a stop get counted as one trip, while the average number of trips would be correspondingly lower.
+
+## Tables and Plots by User Location
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+location_table <- users2020_cleaned %>%
+  summarise(location) %>%
+  count(location) %>%
+  rename(Location = location, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>%
+  group_by(user_id, location) %>%
+  summarise(trip_number = n())
+
+median_ages <- tempo %>%
+  group_by(location) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("Location" = location)
+
+trips_location_table <- trips_cleaned_users %>%
+  summarise(location) %>%
+  count(location) %>%
+  rename(Location = location, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_location_table <- trips_cleaned_users %>%
+  group_by(location) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename(Location = location)
+
+location_table_comb <- full_join(location_table, trips_location_table,
+  by = "Location"
+) %>%
+  full_join(median_ages, by = "Location") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user)
+
+location_table_comb <- full_join(duration_location_table,
+  location_table_comb,
+  by = "Location"
+)
+location_table_comb[
+  7,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+
+location_table_comb[7, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(location_table_comb[, c(1, 3, 4, 5, 6, 2)],
+  caption = "Trip Summary By User Location"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_wrap(~location) +
+  ylab("Number of Trips by User Location") +
+  ggtitle("Histogram of Trips per Hour by User Location")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_wrap(~location) +
+  ylab("Number of Trips by Location (Normalized by Location)") +
+  ggtitle("Histogram of Trips per Hour by User Location (Normalized by Location)")
+```
+
+User location represents the location of the home address inputted at the creation of the account. Other category includes all addresses outside of the top 5, which are listed separately. Thus, "Other" category would include both tourists from areas such as Boston and New York and those living in towns in the Pioneer Valley, such as Hadley. One of the most interesting findings of the table is that, despite 74% of user locations falling under "Other", only 49% of trips are taken by those users, with the 5 towns with the greatest number of users accounting for the share of trips that is twice as big as their share of users. Although there exists some variation by town, users in the listed towns take more and shorter trips than user in "Other" category. This would be the case if the users with "Other" location used bikes for occasional recreation, while users in towns with several ValleyBike stations were more likely to use them for shorter purpose-driven trips around town.
+
+\newpage
+
+## Tables and Plots by User Type
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+type_table <- users2020_cleaned %>%
+  summarise(dtype) %>%
+  count(dtype) %>%
+  rename("User Account Type" = dtype, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>%
+  group_by(user_id, dtype) %>%
+  summarise(trip_number = n())
+
+median_ages <- tempo %>%
+  group_by(dtype) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("User Account Type" = dtype)
+
+trip_type_table <- trips_cleaned_users %>%
+  summarise(dtype) %>%
+  count(dtype) %>%
+  rename("User Account Type" = dtype, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_type_table <- trips_cleaned_users %>%
+  group_by(dtype) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename("User Account Type" = dtype)
+
+type_table_comb <- full_join(type_table, trip_type_table,
+  by = "User Account Type"
+) %>%
+  full_join(median_ages, by = "User Account Type") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user)
+
+type_table_comb <- full_join(duration_type_table,
+  type_table_comb,
+  by = "User Account Type"
+)
+type_table_comb[
+  4,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+type_table_comb[4, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(type_table_comb[, c(1, 3, 4, 5, 6, 2)],
+  caption = "Trip Summary By User Account Type"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_grid(rows = vars(dtype)) +
+  ylab("Number of Trips by User Account Type") +
+  ggtitle("Histogram of Trips per Hour by User Account Type")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_grid(rows = vars(dtype)) +
+  ylab("Proportion of Trips by User Account Type (Normalized per Account Type)") +
+  ggtitle("Histogram of Trips per Hour Normalized by User Account Type")
+```
+
+This table focuses on different types of accounts. While "MobileUserEntity" is by far the largest in terms of both users and trips, "IndividualUserEntity" users take over twice as many trips, with a median trip being shorter than for a median "MobileUserEntity" user's trip. This is similar to a pattern exhibited by Male and Female vs. Missing divide for gender, which is not an accident for this dataset, as we'll see later.
+
+\newpage
+## Tables and Plots by Whether the Trip is on a Workday
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+day_table <- trips_cleaned_users %>%
+  summarise(type_of_day) %>%
+  count(type_of_day) %>%
+  rename("Type of Day" = type_of_day, "Count" = n) %>%
+  mutate(`Proportion of Trips` = round(Count / sum(Count), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_day_table <- trips_cleaned_users %>%
+  group_by(type_of_day) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename("Type of Day" = type_of_day)
+
+day_table_comb <- full_join(duration_day_table,
+  day_table,
+  by = "Type of Day"
+) %>%
+  select(-Count)
+
+day_table_comb[
+  3,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+
+knitr::kable(day_table_comb[, c(1, 3, 2)],
+  caption = "Trip Summary By Type of Day"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_grid(rows = vars(type_of_day)) +
+  ylab("Number of Trips by Whether Trip is on Weekend") +
+  ggtitle("Histogram of Trips per Hour by Whether The Trip is on a Workday")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_grid(rows = vars(type_of_day)) +
+  ylab("Number of Trips by Whether Trip is on a Workday") +
+  ggtitle("Histogram of Trips per Hour by Whether The Trip is on a Workday")
+```
+
+It is important to note that, other than weekends, the holidays include Independence Day, Labor Day, and Memorial Day. We see that the peak bike usage plot shifts to the right on weekends, representing that people use bikes less in the morning on weekends and holidays. The fraction of the trips taken on weekends is 0.31, which is slightly higher than the expected $2/7 \approx$`r round(2/7, 2)`. In terms of duration, a median holiday trip is also longer than a median weekday trip, 23 vs 18 minutes.
+
+\newpage
+## Table Summary of Most Common Visited Stations by User Location
+
+Tables included below list the number of visited stations (as either a starting station or an end station). The proportion of trips variable is the proportion of all trips for users who put that place as their location which includes this station. Since trips are between two, usually different, locations, the total of the proportion of all trips may add up to > 1. We see that users living in one of the towns with ValleyBike stations tend to most commonly visit stations in that town, with stations from other towns usually outside of the list of top 10 stations. For users who put their locations as "Other", the most often visited stations are UMass-connected stations, and stations connected to town centers and transportation such as Amherst Town Hall and Northampton Train Stations. This strengthens the interpretation that many of these users come to a town with ValleyBike station through different means for a limited time and then use a bike to move around the area. The prevalence of NA stations for trips for all users likely stems from secondary stops.
+
+```{r, results='asis', warning = FALSE, message=FALSE, echo = FALSE}
+trips_cleaned_p1 <- trips_cleaned %>%
+  select(-end_station) %>%
+  rename(station = "start_station")
+trips_cleaned_p2 <- trips_cleaned %>%
+  select(-start_station) %>%
+  rename(station = "end_station")
+
+trips_cleaned_stations <- rbind(trips_cleaned_p1, trips_cleaned_p2)
+
+locations <- unique(trips_cleaned_stations$location)
+station_cities <- stations %>% select(name, city)
+
+for (i in 1:(length(locations) - 1)) {
+  temp <- trips_cleaned_stations %>% filter(location == locations[i])
+  total_n_trips <- nrow(trips_cleaned %>%
+    filter(location == locations[i]))
+  temp_city <- temp %>%
+    group_by(station) %>%
+    tally(sort = TRUE) %>%
+    top_n(20, wt = n) %>%
+    left_join(station_cities, by = c("station" = "name")) %>%
+    rename(`total number of trips` = n) %>%
+    mutate(`proportion of trips` = round(`total number of trips` / total_n_trips, 3))
+
+  temp2 <- knitr::kable(temp_city[c(1, 3, 2, 4)],
+    caption = paste("User Location: ", locations[i], sep = "")
+  )
+  cat("\n\n\\pagebreak\n")
+  print(temp2)
+}
+```
+
+\newpage
+
+## Other Tables
+
+
+```{r}
+table(summary_by_user$dtype, summary_by_user$membership_type)
+table(summary_by_user$membership_type, summary_by_user$gender)
+```
+
+These tables show distribution of `dtype` variable by the other membership type and gender. We see that "ORU" and "OccasionalUserEntity" are identical, while "IRU" mostly corresponds to "IndividualUserEntity" and "MRU" to "MobileUserEntity". In addition, almost all users with gender listed as "Missing" fall into "MRU" account category, potentially explaining differences in usage patterns as stemming partially from the account type.
+
+```{r}
+gender_loc_table <- table(summary_by_user$location, summary_by_user$gender)
+gender_loc_table
+```
+
+```{r}
+ftable(round(prop.table(gender_loc_table, margin = 1), 3))
+```
+
+The gender distribution of users from different locations is generally similar, with "Missing" overrepresented or users with "Other" location and underrepresented for users from Springfield and Northampton. Males are overrepresented over females compared to the rest of the locations for user from Holyoke and locations listed as "Other."
+
+```{r}
+table(summary_by_user$location, summary_by_user$dtype)
+```
+
+```{r}
+table(summary_by_user$location, summary_by_user$membership_type)
+```
+
+```{r}
+table(summary_by_user$age_group, summary_by_user$dtype)
+```
+
+The fact that all users with "OccasionalUserEntity" accounts fall into "Other" location category and 50-60 age group highlights that this is a very specific type of account and user that could be potentially removed to focus on the more representative users.
+
+```{r, message = FALSE, warning = FALSE}
+knitr::kable(table(summary_by_user$membership_name, summary_by_user$dtype))
+```
+
+```{r, message = FALSE, warning = FALSE}
+knitr::kable(table(summary_by_user$membership_name, summary_by_user$membership_type)) %>%
+  kableExtra::column_spec(1, "2in")
+```
+The last two plots expand on different types of memberships. However, due to the number of options for "membership_name" variable, "dtype" and "membership_type" are most likely the more relevant variables.

@@ -1,0 +1,309 @@
+# Leaflet - Graham
+
+## Leaflet Plots 
+
+When focusing on trying to help answer the question of where are riders going, in order to identify where to potentially put new stations, the leaflet plots become extremely useful when used in combination with the heatmap plots. Whereas the heatmap plots provide the information on the routes and locations that rides concentrate, leaflet plots can be much more helpful when trying to look into where exactly one when along their trip, which can be very helpful when trying to identify different user stories.  
+
+
+To do this we ended up creating a function that now allows a user to put in different variables of interest in order to create the heatmap or leaflet plot of their choosing. To plot, the user can specify their desired map type (heat map or leaflet plot), a starting or stop station or both, a desired date range (within the same calendar year) of data, and a max number of rides if desired. This will allow one to be able to quickly be able to compare routes between different stations, comparing across years or months or any desired time interval, see which routes are being used most often for any given station or pair of stations. With these functions that we created, it makes it so someone who does not have sort of statistics or computer science background can now input any station, date, or number of rides they want and have it return the desired plot that they want.
+
+In particular, the leaflet plots now show you the specific routes that individual trips took, and you can choose the number of rides you want to see. When looking at the plot, each color represents a different ride. When looking at the plot you can follow and look at where exactly someone traveled along their trip, and see exactly which roads and paths they turned on to. With the functions we created to, this could allow one to possible put in just a starting station and see where bikes got dropped off, or an ending station and see what stations started at, or how one got to the desired starting and stopping station.
+
+These leaflet plots work great when combined with the heat map plots, because while the heat map plots do a great job of highlighting where all rides are going and the main routes they are taking, they do not show where trips are exactly traveling to. This is where the leaflet plots can be used to show exactly where a small number of trips are going and combine that information with the information gained from the heat maps.
+
+```{r setup, include=FALSE, echo=FALSE, message=FALSE}
+library(dplyr)
+library(emoGG)
+library(ggmap)
+library(ggnewscale)
+library(ggplot2)
+library(kableExtra)
+library(leaflet)
+library(lubridate)
+library(tidyverse)
+library(valleybikeData)
+
+# Tweaks to adjust code chunk font size
+chunk_hook <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- chunk_hook(x, options)
+  ifelse(options$size != "normalsize", 
+         paste0("\n \\", options$size, "\n\n", x, "\n\n \\normalsize"), x)
+})
+
+knitr::opts_chunk$set(
+  tidy = FALSE, # display code as typed
+  size = "small", # slightly smaller font for code
+  comment = NA)
+
+key <- readLines("apikey.txt")
+register_google(key)
+
+source("all-secondary-stops.R")
+```
+
+```{r,echo=FALSE, message=FALSE}
+data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2019, october2019, november2019)
+```
+
+```{r,echo=FALSE, messages=FALSE, warning=FALSE}
+#API key
+mykey <- readLines("apikey.txt") #insert your own key
+```
+
+## Functions for Visuals
+```{r}
+##this is the main function
+create_visualization <- function(maptype = NULL, starting_station = NULL, stop_station = NULL, num_rides = 25, dataset = NULL,
+                                 start_date = NULL, end_date = NULL,key = NULL, zoom = NULL) {
+  ## want to set a max number of rides
+  rides <- get_rides(start_date, end_date, dataset)
+  set.seed(27)
+  if (is.null(maptype)) {
+    print("You need to choose a map type")
+    return()
+  }
+  else if (maptype == "Leaflet") {
+    create_leaflet(starting_station, stop_station, num_rides, dataset = rides)
+  }
+  else if (maptype == "Heatmap") {
+    ## need to put in correct inputs for create_heatmap
+    create_heatmap(starting_station = starting_station, stop_station=stop_station, mykey = key, zoom = zoom, dataset = rides)
+  }
+}
+```
+
+
+```{r}
+get_rides <- function(start_date = NULL, end_date = NULL, dataset = NULL) {
+  #glimpse(dataset)
+  if(is.null(start_date) | is.null(end_date)){
+    print("please enter a start and stop date")
+    one_day<-dataset %>% left_join(trips, route_id = route_id)
+    glimpse(one_day)
+    return(one_day)
+  }
+  else{
+    #print("got to here")
+    start_date <- as_date(start_date)
+    end_date <- as_date(end_date)
+    #print(start_date)
+    one_day <- dataset %>% 
+       left_join(trips, route_id = route_id) %>% 
+       mutate(ride_date = as_date(time)) %>%
+       filter(start_date <= ride_date, end_date >= ride_date) 
+    #glimpse(one_day)
+    return(one_day)
+
+  }
+}
+```
+
+
+```{r}
+create_leaflet <- function(starting_station = starting_station, stop_station = stop_station, num_rides = num_rides,
+                           dataset = dataset) {
+  routes <- get_trips(starting_station, stop_station, num_rides, dataset)
+  #glimpse(routes)
+  factpal <- color_ramp(routes, num_rides)
+  route_map <- leaflet(routes) %>%
+    addTiles() %>% 
+    addProviderTiles(providers$CartoDB.Positron)  %>% 
+    addCircleMarkers(
+      lng = ~longitude,
+      lat = ~latitude, radius = 0.2, color = ~ factpal(route_id)
+    )
+  route_map
+}
+```
+
+```{r}
+get_trips <- function(starting_station, stop_station, num_rides, dataset) {
+  #glimpse(dataset)
+  if ((!is.null(starting_station)) & (is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(start_station == starting_station)
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    return(sample_routes)
+  }
+  if ((is.null(starting_station)) & (!is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(end_station == stop_station)
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    return(sample_routes)
+  }
+  else {
+    trip_routes <- dataset %>%
+      filter(start_station == starting_station & end_station == stop_station)
+    
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    #sample_routes <- trip_routes %>% filter(route_id %in% sample_rides[, 1])
+    #glimpse(sample_routes)
+    return(sample_routes)
+  }
+}
+
+```
+
+```{r}
+color_ramp <- function(routes, num_rides) {
+  colors <- colorRampPalette(c("red", "orange1","pink", "lightskyblue", "lightgoldenrod1", "deepskyblue", "sienna1"))(num_rides)
+  factpal <- colorFactor(
+    palette = colors,
+    domain = routes$route_id
+  )
+  return(factpal)
+}
+```
+
+
+```{r}
+create_heatmap <- function(starting_station=NULL, stop_station=NULL, mykey = NULL, zoom = NULL, location = NULL, dataset = NULL) {
+  routes <- get_stations(starting_station, stop_station, dataset)
+  print(get_trip_count(routes))
+  basemap <-getbasemap(key = mykey, zoom = zoom, dataset = routes)
+  route_map <- ggmap(basemap) +
+    geom_point(aes(x = longitude, y = latitude),  color = "#FF3201", alpha = 0.009,
+      size = 0.03, data = routes) +
+    theme(legend.position = "none")
+  route_map
+  #get_trip_count(routes)
+}
+```
+
+```{r,echo=FALSE}
+get_trip_count<-function(dataset=NULL){
+    trip_num<-dataset %>%
+    select(route_id) %>% unique()
+  x<-paste("Number of trips:", nrow(trip_num), sep="")
+  return(x)
+}
+```
+
+
+```{r}
+getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL) {
+  register_google(key)
+  if (!has_google_key()) {
+    print("Please provide a valid google API key.")
+    return()
+  }
+  PopRange<-c(min(dataset$longitude, na.rm=T),
+              min(dataset$latitude, na.rm=T),
+              max(dataset$longitude, na.rm=T),
+              max(dataset$latitude, na.rm=T)
+              )
+  basemap <- get_map(location = PopRange, source = "stamen", maptype = "terrain", zoom=zoom)
+  return(basemap)
+}
+```
+
+
+```{r}
+get_stations<- function(starting_station=NULL, stop_station=NULL, dataset=NULL) {
+  if ((!is.null(starting_station)) & (is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(start_station == starting_station)
+    return(trip_routes)
+  }
+  else if ((is.null(starting_station)) & (!is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(end_station == stop_station)
+    return(trip_routes)
+  }
+  else {
+    trip_routes <- dataset %>% filter(start_station == starting_station & end_station == stop_station)
+     return(trip_routes)
+  }
+}
+```
+
+\newpage
+
+## Leaflet Plots
+-Each different color is a unique ride. 
+
+-If one zooms in and looks at the different colors, one can follow the exact paths and routes each bike took.
+
+-These are more beneficial when the number of rides is smaller since its easier to distinguish where the routes are going themselves. 
+
+
+#### Leaflet of 1 Ride starting and ending at Florence Center
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Florence Center",
+                     stop_station="Florence Center",
+                     num_rides=1,
+                     start_date = "2019-01-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+
+This shows an example of where one trip that started and ended at Florence center went
+
+#### Leaflet of 5 Rides starting and ending at Jackson Street
+```{r, warning=FALSE, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Jackson Street",
+                     stop_station = "Jackson Street",
+                     num_rides= 5,
+                     start_date = "2019-01-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+This is 5 rides that started and ended at Jackson Street and where they traveled to.
+
+#### Leaflet of 5 Ride starting at Florence Center and ending at Jackson Street
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Florence Center",
+                     stop_station= "Jackson Street",
+                     num_rides=5,
+                     start_date = "2019-03-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+This is 5 rides that started at Florence Center and ended at Jackson Street and where they traveled to.
+
+#### Leaflet of 10 Rides starting at the Basketball Hall of Fame
+
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Basketball Hall of Fame",
+                     num_rides=10,
+                     start_date = "2019-03-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+(One can also look at the visualizations/heatmaps-and-leaflet folder to see more leaflet and heatmap plots)
