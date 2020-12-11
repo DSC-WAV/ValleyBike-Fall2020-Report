@@ -107,43 +107,43 @@ plot_heatmap <- function(mykey = NULL, zoom = "auto", data, lat, long, radius,
 
 ## Using the Function
 
-The user should only be concerned with calling the `plot_heatmap` function (the others are helper functions). The user can specify several inputs: a longitude and latitude of the location should be passed into the *lat* and *long* arguments as the center of an area of interest. The boundary from the central location should be specified with the *radius* argument, with the value being in terms of geocoordinates. The *mapradius* argument should also be specified. Finally, one must pass in a data set into *data* and a date range into *start* and *end*.
+The user should only be concerned with calling the `plot_heatmap` function (the others are helper functions). The user can specify several inputs: a longitude and latitude of the location should be passed into the *lat* and *long* arguments as the center of an area of interest. The boundary from the central location should be specified with the *radius* argument, with the value being in terms of geocoordinates. The *mapradius* argument should also be specified. Finally, one must pass in a data set into *data* and a date range into *start* and *end*. All points within 25 meters of a station are excluded (since we know bikes are at the stations anyway).
 
 The primary purpose of this function is to automate the heat map generating process so that anyone can call the function. We now transition into some of the findings that we found by calling this function. The next session will provide several demonstrations on how to use the function.
 
 # Findings
 
 ```{r}
-northampton2 <- plot_heatmap(mykey = key,
+northampton1 <- plot_heatmap(mykey = key,
                      zoom = 15,
-                     data = july2020,
+                     data = august2020,
                      lat = 42.32840,
                      long = -72.63548,
                      radius = 0.007,
                      mapradius = 0.001,
-                     start = "2020-07-01",
-                     end = "2020-07-31") +
-  labs(title = "Northampton in the July of 2020")
+                     start = "2020-08-01",
+                     end = "2020-08-30") +
+  labs(title = "Northampton in the August of 2020")
 
-northampton2
+northampton1
 ```
 
 ```{r}
 northampton3 <- plot_heatmap(mykey = key,
                      zoom = 15,
-                     data = july2019,
+                     data = august2019,
                      lat = 42.32840,
                      long = -72.63548,
                      radius = 0.007,
                      mapradius = 0.001,
-                     start = "2019-07-01",
-                     end = "2019-07-31") +
-  labs(title = "Northampton in the July of 2019")
+                     start = "2019-08-01",
+                     end = "2019-08-30") +
+  labs(title = "Northampton in the August of 2019")
 
 northampton3
 ```
 
-We see a lot more traffic in the July of 2019 than the July of 2020, most likely due to the pandemic.
+We see a lot more traffic in the July of 2019 than the July of 2020, most likely due to the pandemic. Stations are denoted by a yellow star. We plot everything else in red.
 
 ```{r}
 amherst <- plot_heatmap(mykey = key,
@@ -172,10 +172,37 @@ amherst2 <- plot_heatmap(mykey = key,
 
 amherst2
 
+amherst3 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2018,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2018-07-01",
+                     end = "2018-07-31") +
+  labs(title = "Amherst in July 2018")
+
+amherst3
+
 ```
 
 The same pattern occurs in Amherst.
 
+```{r}
+northampton_shopping <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2019,
+                     lat = 42.341193,
+                     long = -72.642944,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-07-01",
+                     end = "2019-07-31") +
+  labs(title = "Big Y Shopping Center in Northampton")
+
+northampton_shopping
+```
 
 # Animation
 
