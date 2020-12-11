@@ -1,0 +1,224 @@
+---
+title: "Heat Maps for BookDown"
+author: "Maggie Wu"
+date: "12/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(valleybikeData)
+library(ggmap)
+library(spatialrisk)
+library(geosphere)
+library(raster)
+library(lubridate)
+```
+
+In our project, one of our motivating questions was where bike users consistently frequented. In addition to identifying busy date ranges of travel, this is useful for determining popular routes and locations that could be identified as potential sponsors.
+
+We have created several tools and have automated the creation of heat maps. Below, there are several functions that all work in synthesis to create the heat map visualizations. We follow this with several demonstrations of how to call these functions to formulate interesting patterns that we found in the data.
+
+
+# Getting Set Up
+
+We credit Stamen Maps and the Google API for providing us with the map images--one will need a valid Google API key to run the visualizations.
+
+Here, we first provide the code to read in a key.
+
+```{r}
+key <- readLines("apikey.txt")
+register_google(key)
+has_google_key()
+```
+
+
+## Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station
+
+```{r}
+#data processing function
+get_heatmap_data <- function(data, long, lat, radius, start, end){
+  #pass in a subset of the data
+  start_date <- as_date(start)
+  end_date <- as_date(end)
+  sub_data <- data %>% filter(longitude <= (long + radius), longitude >= (long - radius),
+                              latitude <= (lat + radius), latitude >= (lat - radius),
+                              start_date <= time, end_date >= time)
+  sub_stations <- stations %>% filter(longitude <= max(sub_data$longitude) & longitude >= min(sub_data$longitude) &
+                                        latitude <= max(sub_data$latitude) & latitude >= min(sub_data$longitude))
+  #finds distances between stations and points
+  distances <- pointDistance(cbind(sub_stations$longitude, sub_stations$latitude),
+                             cbind(sub_data$longitude, sub_data$latitude), lonlat=TRUE)
+  tdistances <- as.data.frame(t(distances)) #transpose it
+  distances3 <- tdistances %>% mutate("remove" = ifelse(apply(tdistances < 25, 1, any), 1, 0))
+  #does not include points within 25 meters of each station
+  distances3 <- distances3 %>% dplyr::select(remove)
+  sub_data <- cbind(sub_data, distances3)
+  sub_data <- sub_data %>% filter(remove == 0)
+  return(sub_data)
+}
+```
+
+## Function for Obtaining the Base Map
+
+```{r}
+getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL, r) {
+  register_google(key)
+  if (!has_google_key()) {
+    print("Please provide a valid google API key.")
+    return()
+  }
+  PopRange <- c(
+    min(dataset$longitude - r, na.rm = T),
+    min(dataset$latitude - r, na.rm = T),
+    max(dataset$longitude + r, na.rm = T),
+    max(dataset$latitude + r, na.rm = T)
+  )
+  basemap <- get_map(location = PopRange, source = "stamen", maptype = "toner", zoom = zoom)
+  basemap
+  return(basemap)
+}
+```
+
+
+## Main Plotting Function
+
+```{r}
+plot_heatmap <- function(mykey = NULL, zoom = "auto", data, lat, long, radius,
+                         mapradius, start, end) {
+  station_sub <- stations %>% filter(longitude >= (long-radius) & longitude <= (long+radius),
+                               latitude >= (lat-radius) & latitude <= (lat+radius))
+  mapdata <- get_heatmap_data(data, long, lat, radius, start, end)
+  basemap <-getbasemap(key = mykey, zoom = zoom, dataset = mapdata, r = mapradius)
+  route_map <- ggmap(basemap) +
+    geom_point(aes(x = longitude, y = latitude),  color = "red", alpha = 0.009,
+               size = 0.035, data = mapdata) +
+    theme(legend.position = "none")+
+  geom_point(aes(x = longitude, y = latitude), size = 4, color = "orange", data = station_sub, shape = 8)
+  route_map
+}
+
+```
+
+
+## Using the Function
+
+The user should only be concerned with calling the `plot_heatmap` function (the others are helper functions). The user can specify several inputs: a longitude and latitude of the location should be passed into the *lat* and *long* arguments as the center of an area of interest. The boundary from the central location should be specified with the *radius* argument, with the value being in terms of geocoordinates. The *mapradius* argument should also be specified. Finally, one must pass in a data set into *data* and a date range into *start* and *end*.
+
+The primary purpose of this function is to automate the heat map generating process so that anyone can call the function. We now transition into some of the findings that we found by calling this function. The next session will provide several demonstrations on how to use the function.
+
+# Findings
+
+```{r}
+northampton2 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2020,
+                     lat = 42.32840,
+                     long = -72.63548,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2020-07-01",
+                     end = "2020-07-31") +
+  labs(title = "Northampton in the July of 2020")
+
+northampton2
+```
+
+```{r}
+northampton3 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2019,
+                     lat = 42.32840,
+                     long = -72.63548,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-07-01",
+                     end = "2019-07-31") +
+  labs(title = "Northampton in the July of 2019")
+
+northampton3
+```
+
+We see a lot more traffic in the July of 2019 than the July of 2020, most likely due to the pandemic.
+
+```{r}
+amherst <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2020,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2020-07-01",
+                     end = "2020-07-31") +
+  labs(title = "Amherst in July 2020")
+
+amherst
+
+amherst2 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2019,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-07-01",
+                     end = "2019-07-31") +
+  labs(title = "Amherst in July 2019")
+
+amherst2
+
+```
+
+The same pattern occurs in Amherst.
+
+
+# Animation
+
+
+We also created an animation of an intersection in downtown Northampton.
+
+```{r}
+library(gganimate)
+
+october2019 <- october2019 %>% mutate("month" = "October 2019")
+november2019 <- november2019 %>% mutate("month" = "November 2019")
+june2020 <- june2020 %>% mutate("month" = "June 2020")
+july2020 <- july2020 %>% mutate("month" = "July 2020")
+august2020 <- august2020 %>% mutate("month" = "August 2020")
+
+dataall <- rbind(october2019, november2019, june2020, july2020, august2020) 
+              
+northampton2 <- get_map(location = c(left = -72.632453, bottom = 42.318369, right = -72.62490, top = 42.323489), source = "stamen", maptype = "terrain", zoom = 17)
+
+dataall <- dataall %>% filter(longitude >= -72.632453 & longitude <= -72.62490,
+                               latitude >= 42.318369 & latitude <= 42.323489) %>% 
+                              mutate("monthfct" = as.factor(month))
+
+
+dataall <- dataall %>% mutate(monthfct = fct_relevel(monthfct, c("october2019", "november2019", "june2020", "july2020", "august2020")))
+
+animap <- ggmap(northampton2)+
+  geom_point(aes(x = longitude, y = latitude), color = "#f54287", alpha = 0.01,
+             size = 0.03, data = dataall)
+animap
+
+nohogif <- animap+
+   transition_states(
+    monthfct,
+    transition_length = 1,
+    state_length = 3) +
+   ease_aes('bounce-in-out') +
+  labs(subtitle = "{closest_state}",
+       x = "longitude",
+       y = "latitude",
+       title = "Northampton Bike Traffic",
+       caption = "Source: ValleyBike. Bike trackers collected coordinate data 
+       every five seconds. 1363614 observations across two years are shown here.")
+nohogif
+```
+
