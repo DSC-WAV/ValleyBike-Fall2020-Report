@@ -11,12 +11,17 @@ library(sparkline)
 library(gridExtra)
 ```
 
-While we have explored visualizations of many trips that are aggregated through heatmaps, it is also important to visualize trips on an individual user level to gain more insight about valleybike users. Each individual has their own patterns and reasons for riding the bike, and being able to capture that story will help us better understand who uses valleybike and why.
+Expanding on this discussion of demographic information, we can combine this along with the trip visualization component that graham had presented earlier to create an indepth analysis of individual users. 
 
-We created a function that generates a 'report' for a given individual user that displays up to 16 of their trips, along with summaries of when those trips were and how they are. At this detailed level, we can see if an individual was using valleybikes to make daily commutes, or if they were perhaps a tourist visiting the pioneer valley for the weekend. We can only infer based on riding patterns and cannot make any definite conclusions, but this summary can still prove to be valuable. 
 
-As an example, we can generate a report for a random Springfield user. The functions used to build the report are shown below. 
+Each individual has their own patterns and reasons for riding the bike, and being able to capture that story will help us better understand who uses valleybike and why.
 
+We created a function that generates a pdf 'report' for a given individual user that displays up to 16 of their trips, along with summaries of when those trips were and how they are. At this detailed level, we can see if an individual was using valleybikes to make daily commutes, or if they were perhaps a tourist visiting the pioneer valley for the weekend. We can only infer based on riding patterns and cannot make any definite conclusions, but this summary can still prove to be valuable. 
+
+
+As an example, we can generate a report for a random Northampton user. The functions used to build the report are shown below. 
+
+The pdf output can be accessed here: https://github.com/DSC-WAV/proj-valleyriders/blob/master/a29ec6c3-5c07-49e3-b462-31cb38c4df56.pdf
 ```{r, include = FALSE}
 users_elapsed <- readRDS("users_elapsed.Rds")
 users2020_cleaned <- readRDS("users2020_cleaned.Rds")
@@ -189,11 +194,10 @@ e<-ggmap(map2) +
 ```
 
 ```{r, message = FALSE, warning = FALSE}
-user_story("63dee55c-20e2-48bb-9c5f-7a0232f6b707")
+user_story("a29ec6c3-5c07-49e3-b462-31cb38c4df56")
 ```
 
-The function will create a pdf summary for the given user. That pdf can be accessed here: https://github.com/DSC-WAV/proj-valleyriders/blob/master/63dee55c-20e2-48bb-9c5f-7a0232f6b707.pdf
 
-We can see that this user, a 50-60 year old male, took frequent trips in the downtown springfield area from 2018-2019. Their top station was STCC and their trips occurred throughout the week. We can characterize this user as a frequent user.
+ Before we look at the trips this first page gives a summary of their demographics. We can see that they’re 60+, identify as female, and have a founding member membership. They’ve taken a total of 71 trips, and the median trip time is about 10 minutes. This table shows the overall summary of characteristics of their trips including the time / day of week/ and start and end station. Looking at the start times it looks like this individual is taking consistent monthly trips over the past year mainly on weekdays. What is compelling is the next visualization. This panel of trips shows almost the same progression of trip throughout the year. The duration of each of the trips is also very similar to one another.
 
-One topic of interest to the valleybike program is the feasibility of opening the stations in Springfield in 2021, as they were closed in 2020. Examples of frequently users like this individual show that there are regular users of the Springfield area that were potentially affected by the closure. 
+While we can’t say anything for certain, we could perhaps hypothesize that this user is a Northampton local taking a trip when the weather is nice, or maybe that they are running errands. We can run this function on any user in the valleybike system to observe their ridership habits and tell an interesting story! This analysis has a lot of potential especially when it comes to understanding who the users are. 
