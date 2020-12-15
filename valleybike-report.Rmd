@@ -499,8 +499,8 @@ knitr::opts_chunk$set(
   size = "small", # slightly smaller font for code
   comment = NA)
 
-key <- readLines("apikey.txt")
-register_google(key)
+#key <- readLines("apikey.txt")
+#register_google(key)
 
 source("all-secondary-stops.R")
 ```
@@ -509,7 +509,7 @@ source("all-secondary-stops.R")
 data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2019, october2019, november2019)
 ```
 
-```{r,echo=FALSE, messages=FALSE, warning=FALSE}
+```{r,echo=FALSE, messages=FALSE, warning=FALSE,eval=FALSE}
 #API key
 mykey <- readLines("apikey.txt") #insert your own key
 ```
@@ -809,8 +809,8 @@ knitr::opts_chunk$set(
   size = "small", # slightly smaller font for code
   comment = NA)
 
-key <- readLines("apikey.txt")
-register_google(key)
+#key <- readLines("apikey.txt")
+#register_google(key)
 
 source("all-secondary-stops.R")
 ```
@@ -821,7 +821,7 @@ data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2
 
 ```{r,echo=FALSE, messages=FALSE, warning=FALSE}
 #API key
-mykey <- readLines("apikey.txt") #insert your own key
+#mykey <- readLines("apikey.txt") #insert your own key
 ```
 
 ```{r,echo=FALSE}
