@@ -1,6 +1,6 @@
 # Jessica
 
-```{r setup, include = FALSE}
+```{r, include = FALSE}
 library(valleybikeData)
 library(tidyverse)
 library(lubridate)
@@ -22,7 +22,7 @@ We created a function that generates a pdf 'report' for a given individual user 
 As an example, we can generate a report for a random Northampton user. The functions used to build the report are shown below. 
 
 The pdf output can be accessed here: https://github.com/DSC-WAV/proj-valleyriders/blob/master/a29ec6c3-5c07-49e3-b462-31cb38c4df56.pdf
-```{r, include = FALSE}
+```{r, include = FALSE,eval=FALSE}
 users_elapsed <- readRDS("users_elapsed.Rds")
 users2020_cleaned <- readRDS("users2020_cleaned.Rds")
 users_elapsed <- users_elapsed %>%
@@ -193,7 +193,7 @@ e<-ggmap(map2) +
 }
 ```
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE,eval=FALSE}
 user_story("a29ec6c3-5c07-49e3-b462-31cb38c4df56")
 ```
 

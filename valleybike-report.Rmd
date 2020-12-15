@@ -1,0 +1,2073 @@
+--- 
+title: "DSC-WAV ValleyBike Project Report"
+author: |
+  | **PI:** Nicholas J. Horton (Amherst College)
+  | **Team:** Umaimah Ahmed, Kenny Chen, Graham Chickering, Chris Chukwura, Maria-Cristiana Gîrjău, Konstantin Larin, Maggie Wu, Jessica Yu
+date: "Fall 2020"
+site: bookdown::bookdown_site
+output: bookdown::gitbook
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+---
+
+# Project Description
+
+
+
+<!--chapter:end:index.Rmd-->
+
+# Data Import and Processing
+
+
+
+<!--chapter:end:01-data-import-and-processing.Rmd-->
+
+# Utility Functions
+
+<!--chapter:end:02-utility-functions.Rmd-->
+
+# Introduction
+
+Valleybike is a bike rental service with over 50 stations across the Pioneer Valley. Working with Wayne Feiden, we aimed to generate interesting insights about valleybike users and patterns of ridership from 2018 to 2020. With over 100,000 trips and 10,000 users, we worked with messy and large datasets to help answer three main questions of interest: (1) Where is the optimal location to put new bike stations? (2) What does ridership and usage look like in low-income areas in the valley? (3) What kind of stories can be crafted in order to help obtain future sponsorships?
+
+In order to answer those questions, we narrowed our analysis down to two main areas: riders and rides. We explored various ways to summarize trips through heatmaps and also extracted additional details such as stops that occurred during trips. In terms of learning more about users, we obtained basic demographic information about riders and used that to investigate whether certain characteristics were associated with particular riding patterns and habits. In this report we share our analysis process and results that were obtained. 
+
+<!--chapter:end:03-Introduction.Rmd-->
+
+# Jessica
+
+```{r, include = FALSE}
+library(valleybikeData)
+library(tidyverse)
+library(lubridate)
+library(ggmap)
+library(knitr)
+library(kableExtra)
+library(sparkline)
+library(gridExtra)
+```
+
+Expanding on this discussion of demographic information, we can combine this along with the trip visualization component that graham had presented earlier to create an indepth analysis of individual users. 
+
+
+Each individual has their own patterns and reasons for riding the bike, and being able to capture that story will help us better understand who uses valleybike and why.
+
+We created a function that generates a pdf 'report' for a given individual user that displays up to 16 of their trips, along with summaries of when those trips were and how they are. At this detailed level, we can see if an individual was using valleybikes to make daily commutes, or if they were perhaps a tourist visiting the pioneer valley for the weekend. We can only infer based on riding patterns and cannot make any definite conclusions, but this summary can still prove to be valuable. 
+
+
+As an example, we can generate a report for a random Northampton user. The functions used to build the report are shown below. 
+
+The pdf output can be accessed here: https://github.com/DSC-WAV/proj-valleyriders/blob/master/a29ec6c3-5c07-49e3-b462-31cb38c4df56.pdf
+```{r, include = FALSE,eval=FALSE}
+users_elapsed <- readRDS("users_elapsed.Rds")
+users2020_cleaned <- readRDS("users2020_cleaned.Rds")
+users_elapsed <- users_elapsed %>%
+  left_join(users2020_cleaned, by ="user_id")
+
+users_elapsed %>%
+  filter(location == "Springfield") %>%
+  arrange(desc(trips))
+```
+
+```{r, eval = FALSE}
+
+
+get_trips <- function(trip_ids) {
+  
+ ds <- trips %>%
+  filter(route_id %in% trip_ids)
+
+ ds <- ds %>% 
+  mutate(month = stringr::str_to_lower(lubridate::month(start_time, label =TRUE, abbr = FALSE)),
+         year = lubridate::year(start_time),
+         time = paste0(month,year))
+
+df<- map_df(.x = unique(ds$time), function(.x){
+  
+  return(data.frame(eval(as.name(.x)) %>% filter(route_id %in% ds$route_id )))
+} )
+
+return(df)
+}
+
+
+```
+
+```{r, eval = FALSE}
+
+
+top_station_per_trips <- function(trip_ids){
+  
+  user_trip <- trips %>%
+    filter(route_id %in% trip_ids)
+  
+   return(as.data.frame(tally(as.vector(as.matrix(user_trip[, 
+                                      c("start_station", "end_station")])))) %>%
+    arrange(desc(Freq)) %>%
+    head(1) %>%
+    left_join(stations, by = c("X" = "name")))
+  
+}
+
+
+
+```
+
+
+```{r,  eval = FALSE}
+
+user_story <- function(userid) {
+  set.seed(2020)
+
+  ds <- users_elapsed %>%
+    filter(user_id == userid)
+
+  user_trip <- trips %>%
+    filter(duration > 120, user_id == 
+             userid)
+  
+  user_trip <- user_trip %>%
+    mutate(duration = paste(round(duration/60),"minutes"))
+
+  # TOP STATION 1:
+  
+  top_station1 <- top_station_per_trips(user_trip$route_id)
+  
+  trips_from_top_station1 <- user_trip %>%
+    filter(start_station == top_station1$X | end_station == top_station1$X)
+  
+  if (nrow(trips_from_top_station1) > 16) {
+    sample_trip1 <- trips_from_top_station1 %>%
+      sample_n(16)
+  } else {
+    sample_trip1 <- trips_from_top_station1
+  }
+
+  sample_df1 <- get_trips(sample_trip1$route_id) %>%
+    group_by(route_id) %>%
+    mutate(total = as.vector(tally(route_id)), row = row_number()) %>%
+    left_join(user_trip, by = "route_id") %>%
+    mutate(r = row/ total)
+
+map_borders <- c(bottom  = min(sample_df1$latitude)  , 
+                 top     = max(sample_df1$latitude) ,
+                 left    = min(sample_df1$longitude) ,
+                 right   = max(sample_df1$longitude) )
+  
+    map <- get_map(location = c(lon =top_station1$longitude , lat =top_station1$latitude ), source = "stamen", zoom = 14)
+
+
+a <- t(ds)
+b <- trips_from_top_station1 %>%head(20) %>% select(bike,start_time,end_time,start_station,end_station, duration) %>% mutate(day = lubridate::wday(start_time, label = TRUE))
+
+c <- ggmap(map) +
+    geom_point(aes(x = longitude, y = latitude, color = r), data = sample_df1, size = .5) +
+    facet_wrap(~ start_time + end_time +start_station + end_station + duration, labeller= label_both) +
+    guides(alpha = FALSE) +
+    xlab("Longitude") +
+    ylab("Latitude") +
+    ggtitle(paste("Trips For User",ds$user_id),
+      subtitle = paste("Top Station:", top_station1$X, "Trips from/to this station: ", top_station1$Freq)
+    ) + theme(axis.text.x = element_text(size = 6)) + theme(strip.text.x = element_text(size = 6))+ scale_color_gradient(breaks = c(0.2,.8), labels = c("Beginning", "End"), name = "Trip Progression") 
+
+  
+# TOP STATION 2:
+`%notin%` <- Negate(`%in%`)
+
+trip2 <- user_trip %>% 
+  filter(route_id %notin% trips_from_top_station1$route_id) 
+
+  top_station2 <- top_station_per_trips(trip2$route_id)
+
+trips_from_top_station2 <- user_trip %>%
+    filter(start_station == top_station2$X | end_station == top_station2$X,
+           route_id %notin% trips_from_top_station1$route_id)
+
+  if (nrow(trips_from_top_station2) > 16) {
+    sample_trip2 <- trips_from_top_station2 %>%
+      sample_n(16)
+  } else {
+    sample_trip2 <- trips_from_top_station2
+  }
+
+if (dim(sample_trip2)[1] > 0) {
+  
+  sample_df2 <- get_trips(sample_trip2$route_id) %>%
+    group_by(route_id) %>%
+    mutate(total = as.vector(tally(route_id)), row = row_number()) %>%
+    left_join(user_trip, by = "route_id") %>%
+    mutate(r = row/ total)
+
+map_borders2 <- c(bottom  = min(sample_df2$latitude)  , 
+                 top     = max(sample_df2$latitude) ,
+                 left    = min(sample_df2$longitude) ,
+                 right   = max(sample_df2$longitude) )
+  
+    map2 <- get_map(location = c(lon = top_station2$longitude, lat = top_station2$latitude), source = "stamen", zoom = 14)
+    
+d<- trips_from_top_station2 %>%
+  head(20) %>% 
+  mutate(day = lubridate::wday(start_time, label = TRUE))%>% select(bike,start_time,end_time,start_station,duration, end_station, day)
+  
+
+e<-ggmap(map2) +
+    geom_point(aes(x = longitude, y = latitude, color = r), data = sample_df2, size = .5) +
+    facet_wrap(~ start_time + end_time +start_station + end_station + duration , labeller= label_both) +
+    guides(alpha = FALSE) +
+    xlab("Longitude") +
+    ylab("Latitude") +
+    ggtitle(paste("Trips For User",ds$user_id),
+      subtitle = paste("2nd Top Station:", top_station2$X, "Trips from/to this station: ", top_station2$Freq)
+    ) + theme(axis.text.x = element_text(size = 6)) + theme(strip.text.x = element_text(size = 6))+ scale_color_gradient(breaks = c(0.2,.8), labels = c("Beginning", "End"), name = "Trip Progression")
+    
+ return(list(a,b,c,d,e))
+}else{
+
+  
+ return(list(a,b,c))
+}
+}
+```
+
+```{r, message = FALSE, warning = FALSE,eval=FALSE}
+user_story("a29ec6c3-5c07-49e3-b462-31cb38c4df56")
+```
+
+
+ Before we look at the trips this first page gives a summary of their demographics. We can see that they’re 60+, identify as female, and have a founding member membership. They’ve taken a total of 71 trips, and the median trip time is about 10 minutes. This table shows the overall summary of characteristics of their trips including the time / day of week/ and start and end station. Looking at the start times it looks like this individual is taking consistent monthly trips over the past year mainly on weekdays. What is compelling is the next visualization. This panel of trips shows almost the same progression of trip throughout the year. The duration of each of the trips is also very similar to one another.
+
+While we can’t say anything for certain, we could perhaps hypothesize that this user is a Northampton local taking a trip when the weather is nice, or maybe that they are running errands. We can run this function on any user in the valleybike system to observe their ridership habits and tell an interesting story! This analysis has a lot of potential especially when it comes to understanding who the users are. 
+
+<!--chapter:end:04-Jessica-UserStories.Rmd-->
+
+#04.5 Station Summaries
+
+
+Before we try to look at where the bikes are going, we can look at where they start and end. Since the bikes are allowed to be docked at any station (and not just from where they started), there is a lot of value in seeing the relationship in start and ending stations.
+
+We created a function that automatically generates reports that calculates several summary statistics such as when stations came online and went offline, proportion of short trips (less than one minute), average ride time between stations and counting rides between pairs of stations.
+
+This first table shows the overall most used stations in Northampton in 2020 (Table 36 page 18).
+https://github.com/DSC-WAV/proj-valleyrides/blob/master/station-reports/reports/NorthamptonReport.pdf
+
+This next table shows the overall most popular pairs of start/end stations in Northampton in 2020. This is also a useful reference to keep in mind where the most active areas are, and is interesting to see that the common pairs are not people just taking a loop around. They might be using it as means from one place to another.
+https://github.com/DSC-WAV/proj-valleyrides/blob/master/station-reports/reports/NorthamptonReport.pdf (Table 51 page 25)
+
+Here we have two tables describing the top destination stations for Pulaski Park in 2018 vs 2020. For the most part, we can see that the top 3 destination stations stayed the same, but we should note when the stations become active each year was different so a direct comparison cannot be made. 
+https://github.com/DSC-WAV/proj-valleyrides/blob/master/station-reports/reports/NorthamptonReport.pdf (Table 10 page 6)
+https://github.com/DSC-WAV/proj-valleyrides/blob/master/station-reports/reports/NorthamptonReport.pdf (Table 44 page 22)
+
+Using our function, we created many tables like this one for all the communities in the valley which can be used for comparison for year to year. 
+
+
+<!--chapter:end:04.5-Jessica-stationsummaries.Rmd-->
+
+# Trips to Nowhere Overview
+
+## Motivation
+
+Most ValleBike Users take trips between working stations. However, some trips end at a location unconnected to any specific station. The cause of this lies in a large number of potential factors. Some of these trips represent the bikes that were taken for repairs. A lot of the trips represent secondary stops, where a bike will stay at the location for a relatively short period of time before the same user rides on it again to their final destination or makes a trip back to the original station. Secondary stops will be discussed in more detail in the next section, but this chapter focuses on providing a general overview of how common these trips are, looks at a small subset of trips whose end locations don't correspond to a specific station to identify how close they are to preexisting stations, and provides a resource to look over all the trips that don't end at a station.
+
+```{r loadpackages, include=FALSE}
+library(valleybikeData)
+library(tibble)
+library(dplyr)
+library(mdsr)
+library(tidyverse)
+library(fuzzyjoin)
+library(kableExtra)
+library(ggmap)
+library(leaflet)
+```
+
+## General Summary 
+
+```{r, warning = FALSE, message = FALSE}
+l_bound <- -74
+r_bound <- -71
+b_bound <- 42
+t_bound <- 43
+
+max_duration <- 4 * 60 * 60 # maximum valid duration of 4 hours
+min_duration <- 2 * 60 # minimum valid duration of 2 minutes
+
+trips_cleaned_end <- trips %>%
+  select(-start_station, -start_longitude, -start_latitude) %>%
+  rename(station = "end_station", longitude = "end_longitude", latitude = "end_latitude")
+
+trips_NA <- trips_cleaned_end %>%
+  filter(is.na(station) & between(duration, min_duration, max_duration) &
+    between(latitude, b_bound, t_bound) & between(longitude, l_bound, r_bound)) %>%
+  mutate(year = lubridate::year(start_time))
+
+
+knitr::kable(rbind(trips_NA %>% 
+        group_by(year) %>%
+        summarise(Count=n()),c("Total", nrow(trips_NA))), 
+          caption = "Number of Trips that End at No Established Station by Year")
+```
+
+This summary includes trips between June 2018 and start of October, 2020. In total, there are 8022 trips that fit the criteria of being a trip that does not end at a specified station, over half of them in 2019. However, since the data for 2018 and 2020 are only for a part of the year and not all stations were active in 2020, this metric does not tell us about trends in the proportion of such trips over time.
+
+## Proportion of Trips That Don't Rnd At an Identified Station Over Time 
+
+```{r, warning = FALSE, echo = FALSE, message = FALSE}
+trips_to_NA <- trips %>% filter(is.na(end_station) & !is.na(start_station))
+cutoff <- 5000
+cleaned_trips_NA2 <- trips_to_NA %>% filter(duration < cutoff, duration > 120, duration < 4*60*60)
+
+NA_user <- trips_to_NA %>%
+  group_by(user_id) %>%
+  tally(sort = TRUE)
+list_non_super_NA_users <- filter(NA_user, n < 20)$user_id
+cleaned_trips_NA3 <- cleaned_trips_NA2 %>% filter(user_id %in% list_non_super_NA_users)
+
+trips_per_day <- trips %>%
+  mutate(start_date = cut.POSIXt(start_time, "day")) %>%
+  count(start_date)
+
+cleaned_trips_NA3_count <- cleaned_trips_NA3 %>%
+  mutate(start_date = cut.POSIXt(start_time, "day")) %>%
+  count(start_date) %>%
+  rename(na_per_day = n) %>%
+  left_join(trips_per_day) %>%
+  mutate(start_date = as.POSIXct(start_date, "")) %>%
+  filter(na_per_day / n < 0.2)
+```
+
+```{r, warning = FALSE}
+ggplot(data = cleaned_trips_NA3_count) +
+  geom_bar(aes(x = start_date, y = na_per_day / n), stat = "identity") +
+  labs(title = "Plot of Normalized Rides to NA Chronologically") +
+  xlab("Ride Start Date") +
+  ylab("Proportion of all rides that are from a station to NA")
+```
+
+The plot above specifically measures the proportion of trips each day that qualify as trips to NA station. Among the days when there is trip data, we see that only around 2-3% of trips each day don't end at a specified station. However, on some days, the proportion increases to over 5% and even close to 10%. The biggest spikes occur in 2018, which may be explained by the fact that there were fewer trips when ValleyBike was just starting.
+
+## Close Look at Trips to NA in Springfield, June-July 2019
+
+The trips are from South End/Main Street and Mercy Medical Center stations in Springfield between June 1st-July 13, 2019. The time and stations were chosen arbitrarily to provide specific examples of trips that start at a station, but don't end at any station.
+
+```{r register, echo = FALSE}
+ggmap::register_google("AIzaSyD_HDAWszwjUbeNFv2QHB9LvgmMMV13GIk")
+```
+
+```{r accessdata, cache = TRUE}
+min_date <- as.POSIXct("2019-06-01 00:05:00")
+max_date <- as.POSIXct("2019-07-14 00:05:00")
+station_city <- stations %>%
+  select(name, city)
+
+get_day_NA_trips <- function(min, max, stations_list) {
+  to_return <- trips %>%
+    filter(
+      is.na(end_station),
+      !is.na(start_station),
+      (start_time > min & start_time < max & start_station %in% stations_list)
+    )
+  return(to_return)
+}
+
+NA_trips_SE_MMCC <-
+  get_day_NA_trips(
+    min_date,
+    max_date,
+    c("South End/Main Street", "Mercy Medical Center Station")
+  ) %>%
+  mutate(
+    start_time = start_time - 5 * 60 * 60,
+    start_date = cut.POSIXt(start_time, "day")
+  )
+```
+
+```{r pivot_trips}
+long_NA <- NA_trips_SE_MMCC %>%
+  pivot_longer(
+    cols = c(
+      start_latitude, end_latitude, start_longitude,
+      end_longitude, start_time, end_time
+    ),
+    names_to = c("col", ".value"), names_sep = "_"
+  )
+```
+
+```{r}
+check_nearest_3dec <- fuzzyjoin::difference_inner_join(NA_trips_SE_MMCC, valleybikeData::stations,
+  by = c("end_latitude" = "latitude", "end_longitude" = "longitude"),
+  max_dist = 0.001
+)
+
+NA_close_to_station_Springfield <- check_nearest_3dec %>% count(name, city, sort = TRUE) %>% 
+               rename("Closest Station" = name, "Number of Trips" = n)
+
+knitr::kable(rbind(NA_close_to_station_Springfield, c("NA", "Springfield",
+          nrow(NA_trips_SE_MMCC) - nrow(check_nearest_3dec))), 
+          caption = "Table of the Closest Stations to Trips to NA in June-July 2019, 2 Springfield Stations")
+```
+
+Looking at the table of nearest stations to the end locations of these trips, we see that most of the trips for this data can be mapped to Kenefick Park station in Springfield, with 1 each to Baystate Health/Main Street and 1 to South End/Main Street. There are no stations that map to several stations. 9 stations were further than 100m from any station and thus were not connected to any station.
+
+```{r}
+sample_trips <- june2019 %>%
+  filter(route_id %in% NA_trips_SE_MMCC$route_id[1:4] |
+    route_id %in% NA_trips_SE_MMCC$route_id[6:17])
+sample_trips <- sample_trips %>% mutate(route_id = as.factor(route_id))
+```
+
+```{r, cache = TRUE, message = FALSE}
+area_small_Spring <- get_map(c(
+  left = -72.630,
+  bottom = 42.05, right = -72.5, top = 42.15
+),
+maptype = "terrain"
+)
+```
+
+```{r, fig.width = 10, fig.height = 10}
+ggmap(area_small_Spring, extent = "normal") +
+  geom_point(aes(x = longitude, y = latitude), data = sample_trips) +
+  facet_wrap(~route_id) +
+  guides(alpha = FALSE) +
+  xlab("Longitude") +
+  ylab("Latitude") +
+  ggtitle("Trips to NA from South End and Mercy Medical")
+```
+
+If we plot a sample of 16 trips to visualize them, we see that they tend to be relatively direct, with some exceptions. In addition, the common destination for a lot of trips is the same location close to Kenefick Park, which is reasonable since most of the trips were close to that location.
+
+## Interactive Map of Trip End Points That Are Not Stations 
+
+```{r}
+yCol <- colorFactor(palette = "Set2", trips_NA$year)
+
+leaflet(trips_NA) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    color = ~ yCol(year)
+  ) %>%
+  addLegend("bottomright",
+    pal = yCol, values = trips_NA$year,
+    title = "Year of Trip to No Identified Station",
+    opacity = 1
+  )
+```
+
+A full interactive map with all end locations that end at NA is provided. A map of secondary stops, included in the next section, provides more specific information and analysis.
+
+<!--chapter:end:05-Trips_NA_Konstantin.Rmd-->
+
+# Leaflet - Graham
+
+## Leaflet Plots 
+
+When focusing on trying to help answer the question of where are riders going, in order to identify where to potentially put new stations, the leaflet plots become extremely useful when used in combination with the heatmap plots. Whereas the heatmap plots provide the information on the routes and locations that rides concentrate, leaflet plots can be much more helpful when trying to look into where exactly one when along their trip, which can be very helpful when trying to identify different user stories.  
+
+
+To do this we ended up creating a function that now allows a user to put in different variables of interest in order to create the heatmap or leaflet plot of their choosing. To plot, the user can specify their desired map type (heat map or leaflet plot), a starting or stop station or both, a desired date range (within the same calendar year) of data, and a max number of rides if desired. This will allow one to be able to quickly be able to compare routes between different stations, comparing across years or months or any desired time interval, see which routes are being used most often for any given station or pair of stations. With these functions that we created, it makes it so someone who does not have sort of statistics or computer science background can now input any station, date, or number of rides they want and have it return the desired plot that they want.
+
+In particular, the leaflet plots now show you the specific routes that individual trips took, and you can choose the number of rides you want to see. When looking at the plot, each color represents a different ride. When looking at the plot you can follow and look at where exactly someone traveled along their trip, and see exactly which roads and paths they turned on to. With the functions we created to, this could allow one to possible put in just a starting station and see where bikes got dropped off, or an ending station and see what stations started at, or how one got to the desired starting and stopping station.
+
+These leaflet plots work great when combined with the heat map plots, because while the heat map plots do a great job of highlighting where all rides are going and the main routes they are taking, they do not show where trips are exactly traveling to. This is where the leaflet plots can be used to show exactly where a small number of trips are going and combine that information with the information gained from the heat maps.
+
+```{r, include=FALSE, echo=FALSE, message=FALSE}
+library(dplyr)
+library(emoGG)
+library(ggmap)
+library(ggnewscale)
+library(ggplot2)
+library(kableExtra)
+library(leaflet)
+library(lubridate)
+library(tidyverse)
+library(valleybikeData)
+
+# Tweaks to adjust code chunk font size
+chunk_hook <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- chunk_hook(x, options)
+  ifelse(options$size != "normalsize", 
+         paste0("\n \\", options$size, "\n\n", x, "\n\n \\normalsize"), x)
+})
+
+knitr::opts_chunk$set(
+  tidy = FALSE, # display code as typed
+  size = "small", # slightly smaller font for code
+  comment = NA)
+
+key <- readLines("apikey.txt")
+register_google(key)
+
+source("all-secondary-stops.R")
+```
+
+```{r,echo=FALSE, message=FALSE}
+data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2019, october2019, november2019)
+```
+
+```{r,echo=FALSE, messages=FALSE, warning=FALSE}
+#API key
+mykey <- readLines("apikey.txt") #insert your own key
+```
+
+## Functions for Visuals
+```{r}
+##this is the main function
+create_visualization <- function(maptype = NULL, starting_station = NULL, stop_station = NULL, num_rides = 25, dataset = NULL,
+                                 start_date = NULL, end_date = NULL,key = NULL, zoom = NULL) {
+  ## want to set a max number of rides
+  rides <- get_rides(start_date, end_date, dataset)
+  set.seed(27)
+  if (is.null(maptype)) {
+    print("You need to choose a map type")
+    return()
+  }
+  else if (maptype == "Leaflet") {
+    create_leaflet(starting_station, stop_station, num_rides, dataset = rides)
+  }
+  else if (maptype == "Heatmap") {
+    ## need to put in correct inputs for create_heatmap
+    create_heatmap(starting_station = starting_station, stop_station=stop_station, mykey = key, zoom = zoom, dataset = rides)
+  }
+}
+```
+
+
+```{r}
+get_rides <- function(start_date = NULL, end_date = NULL, dataset = NULL) {
+  #glimpse(dataset)
+  if(is.null(start_date) | is.null(end_date)){
+    print("please enter a start and stop date")
+    one_day<-dataset %>% left_join(trips, route_id = route_id)
+    glimpse(one_day)
+    return(one_day)
+  }
+  else{
+    #print("got to here")
+    start_date <- as_date(start_date)
+    end_date <- as_date(end_date)
+    #print(start_date)
+    one_day <- dataset %>% 
+       left_join(trips, route_id = route_id) %>% 
+       mutate(ride_date = as_date(time)) %>%
+       filter(start_date <= ride_date, end_date >= ride_date) 
+    #glimpse(one_day)
+    return(one_day)
+
+  }
+}
+```
+
+
+```{r}
+create_leaflet <- function(starting_station = starting_station, stop_station = stop_station, num_rides = num_rides,
+                           dataset = dataset) {
+  routes <- get_trips(starting_station, stop_station, num_rides, dataset)
+  #glimpse(routes)
+  factpal <- color_ramp(routes, num_rides)
+  route_map <- leaflet(routes) %>%
+    addTiles() %>% 
+    addProviderTiles(providers$CartoDB.Positron)  %>% 
+    addCircleMarkers(
+      lng = ~longitude,
+      lat = ~latitude, radius = 0.2, color = ~ factpal(route_id)
+    )
+  route_map
+}
+```
+
+```{r}
+get_trips <- function(starting_station, stop_station, num_rides, dataset) {
+  #glimpse(dataset)
+  if ((!is.null(starting_station)) & (is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(start_station == starting_station)
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    return(sample_routes)
+  }
+  if ((is.null(starting_station)) & (!is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(end_station == stop_station)
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    return(sample_routes)
+  }
+  else {
+    trip_routes <- dataset %>%
+      filter(start_station == starting_station & end_station == stop_station)
+    
+    sample_rides <- trip_routes %>%
+      select(route_id) %>%
+      unique()
+    if (nrow(sample_rides) < num_rides) {
+      sample_rides <- sample_rides
+    }
+    else {
+      sample_rides <- trip_routes %>%
+        select(route_id) %>%
+        unique() %>%
+        sample_n(num_rides)
+    }
+    sample_routes <- trip_routes %>% filter(route_id %in% sample_rides$route_id)
+    #sample_routes <- trip_routes %>% filter(route_id %in% sample_rides[, 1])
+    #glimpse(sample_routes)
+    return(sample_routes)
+  }
+}
+
+```
+
+```{r}
+color_ramp <- function(routes, num_rides) {
+  colors <- colorRampPalette(c("red", "orange1","pink", "lightskyblue", "lightgoldenrod1", "deepskyblue", "sienna1"))(num_rides)
+  factpal <- colorFactor(
+    palette = colors,
+    domain = routes$route_id
+  )
+  return(factpal)
+}
+```
+
+
+```{r}
+create_heatmap <- function(starting_station=NULL, stop_station=NULL, mykey = NULL, zoom = NULL, location = NULL, dataset = NULL) {
+  routes <- get_stations(starting_station, stop_station, dataset)
+  print(get_trip_count(routes))
+  basemap <-getbasemap(key = mykey, zoom = zoom, dataset = routes)
+  route_map <- ggmap(basemap) +
+    geom_point(aes(x = longitude, y = latitude),  color = "#FF3201", alpha = 0.009,
+      size = 0.03, data = routes) +
+    theme(legend.position = "none")
+  route_map
+  #get_trip_count(routes)
+}
+```
+
+```{r,echo=FALSE}
+get_trip_count<-function(dataset=NULL){
+    trip_num<-dataset %>%
+    select(route_id) %>% unique()
+  x<-paste("Number of trips:", nrow(trip_num), sep="")
+  return(x)
+}
+```
+
+
+```{r}
+getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL) {
+  register_google(key)
+  if (!has_google_key()) {
+    print("Please provide a valid google API key.")
+    return()
+  }
+  PopRange<-c(min(dataset$longitude, na.rm=T),
+              min(dataset$latitude, na.rm=T),
+              max(dataset$longitude, na.rm=T),
+              max(dataset$latitude, na.rm=T)
+              )
+  basemap <- get_map(location = PopRange, source = "stamen", maptype = "terrain", zoom=zoom)
+  return(basemap)
+}
+```
+
+
+```{r}
+get_stations<- function(starting_station=NULL, stop_station=NULL, dataset=NULL) {
+  if ((!is.null(starting_station)) & (is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(start_station == starting_station)
+    return(trip_routes)
+  }
+  else if ((is.null(starting_station)) & (!is.null(stop_station))) {
+    trip_routes <- dataset %>% filter(end_station == stop_station)
+    return(trip_routes)
+  }
+  else {
+    trip_routes <- dataset %>% filter(start_station == starting_station & end_station == stop_station)
+     return(trip_routes)
+  }
+}
+```
+
+\newpage
+
+## Leaflet Plots
+-Each different color is a unique ride. 
+
+-If one zooms in and looks at the different colors, one can follow the exact paths and routes each bike took.
+
+-These are more beneficial when the number of rides is smaller since its easier to distinguish where the routes are going themselves. 
+
+
+#### Leaflet of 1 Ride starting and ending at Florence Center
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Florence Center",
+                     stop_station="Florence Center",
+                     num_rides=1,
+                     start_date = "2019-01-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+
+This shows an example of where one trip that started and ended at Florence center went
+
+#### Leaflet of 5 Rides starting and ending at Jackson Street
+```{r, warning=FALSE, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Jackson Street",
+                     stop_station = "Jackson Street",
+                     num_rides= 5,
+                     start_date = "2019-01-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+This is 5 rides that started and ended at Jackson Street and where they traveled to.
+
+#### Leaflet of 5 Ride starting at Florence Center and ending at Jackson Street
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Florence Center",
+                     stop_station= "Jackson Street",
+                     num_rides=5,
+                     start_date = "2019-03-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+This is 5 rides that started at Florence Center and ended at Jackson Street and where they traveled to.
+
+#### Leaflet of 10 Rides starting at the Basketball Hall of Fame
+
+```{r, message=FALSE}
+create_visualization(maptype = "Leaflet", 
+                     starting_station = "Basketball Hall of Fame",
+                     num_rides=10,
+                     start_date = "2019-03-01",
+                     end_date = "2019-12-30", dataset = data2019)
+```
+
+(One can also look at the visualizations/heatmaps-and-leaflet folder to see more leaflet and heatmap plots)
+
+<!--chapter:end:06-Leaflet_Graham.Rmd-->
+
+# Secondary Stops- Graham
+
+## Secondary Stops 
+
+One other key question we wanted to focus on  was identifying and focusing on secondary stops, or those that start a ride at a certain station, stopped the bike somewhere that wasn't a station, and then started up a ride with the same bike shortly after continuing on in their route. The insights gained from looking into these types of rides could give especially helpful information on where to potentially put in new stations, since we would be identifying locations where people are stopping their rides frequently.
+
+After identifying the 5 rides that had secondary stops in the middle of the rides, we then focused on visualizing the rides themselves and where the stops took place. This involved for each of the separate rides, plotting an icon where each of the stops took place as well as where the starting and stop stations are. This also involved plotting the two separate trips, the part before the stop and the part after the stop, on a map to identify exactly where the routes themselves go. This can allow one to identify exactly where the stop took place and this can lead to future work where we look into more rides to identify where a lot of these secondary stops are taking place, in order to potentially identify locations for future stations to be put in. 
+
+One of the last parts of for this task involved building a table thats connected to the rides themselves. Since it sometimes can be hard to identify where exactly the starting and ending locations of the trips themselves, by pairing this with the information provided by the table, we can start to look identify not only where the routes themselves went, but can look into how long the user stopped for and how longs the total trip was. All this information can be used to paint a more complete picture of the rides themselves and be able to gain insights on who the type of rider might be any why they might be stopping in the location they end up stopping in.
+
+
+```{r, include=FALSE, echo=FALSE, message=FALSE}
+library(dplyr)
+library(emoGG)
+library(ggmap)
+library(ggnewscale)
+library(ggplot2)
+library(kableExtra)
+library(leaflet)
+library(lubridate)
+library(tidyverse)
+library(valleybikeData)
+
+# Tweaks to adjust code chunk font size
+chunk_hook <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- chunk_hook(x, options)
+  ifelse(options$size != "normalsize", 
+         paste0("\n \\", options$size, "\n\n", x, "\n\n \\normalsize"), x)
+})
+
+knitr::opts_chunk$set(
+  tidy = FALSE, # display code as typed
+  size = "small", # slightly smaller font for code
+  comment = NA)
+
+key <- readLines("apikey.txt")
+register_google(key)
+
+source("all-secondary-stops.R")
+```
+
+```{r,echo=FALSE, message=FALSE}
+data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2019, october2019, november2019)
+```
+
+```{r,echo=FALSE, messages=FALSE, warning=FALSE}
+#API key
+mykey <- readLines("apikey.txt") #insert your own key
+```
+
+```{r,echo=FALSE}
+too_many <- users %>%
+  filter(trips > 1000) %>%
+  pull("user_id")
+```
+
+```{r,echo=FALSE}
+secondary <- trips %>% 
+  filter(
+    duration > 120,
+    duration < 4 * 60 * 60,
+    !(user_id %in% too_many),
+    (is.na(end_station) | is.na(start_station))
+  ) %>%
+  group_by(bike, user_id) %>%
+  mutate(
+    row = row_number(),
+    max_row = max(row),
+  ) %>%
+  filter(
+    max_row >= 2
+  ) %>%
+  ungroup() %>%
+  arrange(bike)
+
+stops <- secondary %>% 
+  filter(
+    max_row == 2,
+    !(is.na(start_station) & is.na(end_station))) %>%
+  mutate(start = stringr::str_sub(start_station, 1, 10),  # shorten stations
+         end = stringr::str_sub(end_station, 1, 10)
+  ) %>% 
+  select(start, end, route_id, start_time, bike, user_id, max_row, duration) %>%
+  data.frame() %>% 
+  head(100)
+```
+
+\newpage
+
+```{r,echo=FALSE}
+stops <- secondary %>% 
+  filter(
+    max_row == 2,
+    !(is.na(start_station) & is.na(end_station))
+  ) %>%
+  select(start_station, end_station, route_id, start_time, bike, user_id, max_row, duration) %>%
+  head(100)
+```
+
+```{r}
+get_base_map <- function(zoom, dataset) {
+  
+  if (!has_google_key()) {
+    stop("Please provide a valid Google API key.")
+  }
+  
+  sides <- diff(range(dataset$latitude)) / 2
+  
+  boundary <- c(
+    min(dataset$longitude - sides, na.rm = T),
+    min(dataset$latitude - 0.003, na.rm = T),
+    max(dataset$longitude + sides, na.rm = T),
+    max(dataset$latitude + 0.003, na.rm = T)
+  )
+  
+  base_map <- get_map(location = boundary, zoom = zoom, source = "google")
+  
+  return(base_map)
+}
+```
+
+```{r}
+plot_stop_emoji <- function(dataset) {
+  p1 <- geom_emoji(data = dataset,aes(longitude, latitude), emoji = "1f6d1", size = 0.05)
+  return(p1)
+}
+
+plot_start_station_emoji <- function(dataset) {
+  
+  data <- dataset %>%
+    select(start_station, route_id) %>%
+    drop_na(start_station) %>%
+    mutate(name = start_station) %>%
+    left_join(stations, by = "name")
+  
+  p2 <- geom_emoji(data = data, aes(longitude, latitude), emoji = "2b50", size = 0.05)
+  
+  return(p2)
+}
+
+plot_end_station_emoji <- function(dataset) {
+  
+  data <- dataset %>%
+    select(end_station, route_id) %>%
+    drop_na(end_station) %>%
+    mutate(name = end_station) %>%
+    left_join(stations, by = "name")
+  
+  p3 <- geom_emoji(data = data, aes(longitude + 0.0005, latitude + 0.0005), emoji = "2733", 
+                   size = 0.05)
+  
+  return(p3)
+}
+```
+
+```{r}
+plot_stops <- function(starting_station, stop_station, api_key, zoom = "auto", location, dataset) {
+  
+  register_google(api_key)
+  
+  base_map <- get_base_map(zoom = zoom, dataset = dataset)
+  
+  start_route <- dataset %>%
+    filter(!is.na(start_station))
+  
+  end_route <- dataset %>%
+    filter(!is.na(end_station))
+  
+  p1 <- plot_start_station_emoji(dataset)
+  p2 <- plot_end_station_emoji(dataset)
+  
+  route_map <- ggmap(base_map) + 
+    geom_point(aes(x = longitude, y = latitude, color = prop_trip_completed), data = start_route) +
+    scale_color_gradient(low = "lightblue", high = "blue") +
+    labs(color = "Prop. Trip Completed") +
+    new_scale_color() +
+    geom_point(aes(x = longitude + 0.0007, y = latitude, color = prop_trip_completed), 
+               data = end_route) +
+    scale_color_gradient(low = "darkblue", high = "gray") +
+    labs(x = "Longitude", y = "Latitude", color = "Prop. Trip Completed") +
+    theme(legend.position = "bottom")
+  
+  stops <- subset(dataset, stop == "Yes")
+  
+  if (nrow(stops) > 0) {
+    p3 <- plot_stop_emoji(dataset = stops)
+    route_map <- route_map + p3 + p1 + p2 
+    route_map
+  } else {
+    route_map + p1 + p2 
+  }
+}
+```
+
+```{r}
+get_table_data <- function(dataset = NULL) {
+  
+  start_table <- dataset %>%
+    ungroup() %>% 
+    select(start_station) %>% 
+    filter(!is.na(start_station)) %>% 
+    unique()
+  
+  end_table <- dataset %>% 
+    ungroup() %>% 
+    select(end_station) %>% 
+    filter(!is.na(end_station)) %>% 
+    unique()
+
+  table1 <- dataset %>%
+    mutate(end_times = max(time), start_times = min(time), total_times = end_times - start_times) %>%
+    select(start_times, end_times, total_times) %>%
+    unique() %>%
+    arrange(start_times)
+
+  table2 <- table1 %>%
+    ungroup() %>%
+    mutate(
+      start_time = start_times[1],
+      end_time = end_times[2],
+      total_trip_time = end_time - start_time,
+      stop_duration = start_times[2] - end_times[1]
+    ) %>%
+    select(start_time,end_time, total_trip_time, stop_duration) %>%
+    unique()
+  
+  table2$total_trip_time <- round(table2$total_trip_time, 2)
+  table2$stop_duration <- round(table2$stop_duration, 2)
+  
+  combined_tables <- cbind(start_table, end_table, table2)
+
+  combined_tables <- combined_tables %>%
+    kable(booktabs = TRUE, col.names = c("Start Station", "End Station", "Start Time", 
+                        "End Time", "Trip Duration", "Stop Duration")) %>%
+    kable_styling(latex_options = c("HOLD_position"), font_size = 8)
+  
+  return(combined_tables)
+}
+```
+
+\newpage
+### User 1 (Trips 12-13)
+
+```{r, warning=FALSE, message=FALSE}
+user_1 <- stops %>%
+  select(start_station, end_station, route_id, user_id) %>%
+  filter(route_id == "route_08_2020@cb1c957a-a5b9-493a-b327-b7f2cfa66a0e" | 
+           route_id == "route_08_2020@79b103d7-e94a-4a06-b32c-1d5fb3fb7967") %>%
+  left_join(august2020, route_id = route_id) %>% 
+  group_by(route_id) %>%
+  mutate(
+    row = row_number(),
+    num_rows = max(row),
+    prop_trip_completed = row / num_rows
+  ) %>% 
+  arrange(route_id, prop_trip_completed)
+
+user_1$stop <- "No"
+user_1$stop[118] <- "Yes"
+user_1$stop[361] <- "Yes"
+
+user_1_part_1 <- filter(user_1, route_id == "route_08_2020@cb1c957a-a5b9-493a-b327-b7f2cfa66a0e")
+user_1_part_2 <- filter(user_1, route_id == "route_08_2020@79b103d7-e94a-4a06-b32c-1d5fb3fb7967")
+
+get_table_data(dataset = user_1)
+
+plot_stops(api_key = key, zoom = 14, dataset = user_1)
+
+#plot_stops(api_key = key, zoom = 15, dataset = user_1_part_1)
+
+#plot_stops(api_key = key, zoom = 15, dataset = user_1_part_2)
+```
+
+### User 2 (Trips 26-27)
+
+```{r, warning=FALSE, message=FALSE}
+user_2 <- stops %>%
+  select(start_station, end_station, route_id, user_id) %>%
+  filter(route_id == "route_06_2019@d019efa8-b176-41eb-a8c3-79f6862d8877" | 
+           route_id == "route_06_2019@b543b889-9973-4240-9e6c-dd28784f4915") %>%
+  left_join(june2019, route_id = route_id) %>%
+  group_by(route_id) %>%
+  mutate(
+    row = row_number(),
+    num_rows = max(row),
+    prop_trip_completed = row / num_rows
+  ) %>%
+  arrange(route_id, prop_trip_completed)
+
+user_2$stop <- "No"
+user_2$stop[1276] <- "Yes"
+user_2$stop[1511] <- "Yes"
+
+user_2_part_1 <- filter(user_2, route_id == "route_06_2019@d019efa8-b176-41eb-a8c3-79f6862d8877")
+user_2_part_2 <- filter(user_2, route_id == "route_06_2019@b543b889-9973-4240-9e6c-dd28784f4915")
+
+get_table_data(dataset = user_2)
+
+plot_stops(api_key = key, zoom = 12, dataset = user_2)
+plot_stops(api_key = key, zoom = 16, dataset = user_2_part_1)
+#plot_stops(api_key = key, zoom = 12, dataset = user_2_part_2)
+```
+
+\newpage
+### User 3 (Trips 41-42)
+
+```{r, warning=FALSE, message=FALSE}
+user_3 <- stops %>%
+  select(start_station, end_station, route_id, user_id) %>%
+  filter(route_id == "route_05_2019@2f6fef2d-632e-41db-913d-51a195bfb8c1" | 
+           route_id == "route_05_2019@46e30988-fe99-4959-9c25-fad252667539") %>%
+  left_join(may2019, route_id = route_id) %>%
+  group_by(route_id) %>%
+  mutate(
+    row = row_number(),
+    num_rows = max(row),
+    prop_trip_completed = row / num_rows
+  ) %>%
+  arrange(route_id, prop_trip_completed)
+
+user_3$stop <- "No"
+user_3$stop[649] <- "Yes"
+user_3$stop[1128] <- "Yes"
+
+user_3_part_1 <- filter(user_3, route_id == "route_05_2019@2f6fef2d-632e-41db-913d-51a195bfb8c1")
+
+user_3_part_2 <- filter(user_3, route_id == "route_05_2019@46e30988-fe99-4959-9c25-fad252667539")
+
+get_table_data(dataset = user_3)
+
+plot_stops(api_key = key, zoom = 13, dataset = user_3)
+
+#plot_stops(api_key = key, zoom = 14, dataset = user_3_part_1)
+
+#plot_stops(api_key = key, zoom = 14, dataset = user_3_part_2)
+```
+
+\newpage
+### User 4 (Trips 52-53)
+
+```{r, warning=FALSE, message=FALSE}
+user_4 <- stops %>%
+  select(start_station, end_station, route_id, user_id) %>%
+  filter(route_id == "route_07_2019@acfb26e9-9d3e-40bf-b219-21a1399016b0" | 
+           route_id == "route_07_2019@0f0457cc-c4c8-4939-a509-f1e93f5b867e") %>%
+  left_join(july2019, route_id = route_id) %>%
+  group_by(route_id) %>%
+  mutate(
+    row = row_number(),
+    num_rows = max(row),
+    prop_trip_completed = row / num_rows
+  ) %>%
+  arrange(route_id, prop_trip_completed)
+
+ user_4$stop <- "No"
+ user_4$stop[75] <- "Yes"
+ user_4$stop[191] <- "Yes"
+
+user_4_part_1 <- filter(user_4, route_id == "route_07_2019@acfb26e9-9d3e-40bf-b219-21a1399016b0")
+
+user_4_part_2 <- filter(user_4, route_id == "route_07_2019@0f0457cc-c4c8-4939-a509-f1e93f5b867e")
+
+get_table_data(dataset = user_4)
+
+plot_stops(api_key = key, zoom = 15, dataset = user_4)
+
+#plot_stops(api_key = key, zoom = 15, dataset = user_4_part_1)
+
+#plot_stops(api_key = key, zoom = 15, dataset = user_4_part_2)
+```
+
+\newpage
+### User 5 (Trips 88-89)
+
+```{r, warning=FALSE, message=FALSE}
+user_5 <- stops %>%
+  select(start_station, end_station, route_id, user_id) %>%
+  filter(route_id == "route_09_2019@4c3978dd-48ec-4ca7-9af2-e08518e66b7c" | 
+           route_id == "route_09_2019@91e61182-d511-4a4e-bbe1-86acb8e08483") %>%
+  left_join(september2019, route_id = route_id) %>%
+  group_by(route_id) %>%
+  mutate(
+    row = row_number(),
+    num_rows = max(row),
+    prop_trip_completed = row / num_rows
+  ) %>%
+  arrange(route_id, prop_trip_completed)
+
+user_5$stop <- "No"
+user_5$stop[511] <- "Yes"
+user_5$stop[763] <- "Yes"
+
+user_5_part_1 <- filter(user_5, route_id == "route_09_2019@4c3978dd-48ec-4ca7-9af2-e08518e66b7c")
+
+user_5_part_2 <- filter(user_5, route_id == "route_09_2019@91e61182-d511-4a4e-bbe1-86acb8e08483")
+
+get_table_data(dataset = user_5)
+
+plot_stops(api_key = key, zoom = 12, dataset = user_5)
+
+#plot_stops(api_key = key, zoom = 14, dataset = user_5_part_1)
+
+plot_stops(api_key = key, zoom = 14, dataset = user_5_part_2)
+```
+## All Secondary Stops
+```{r, echo=FALSE, message=FALSE, warning=FALSE}
+register_google(key)
+
+source("all-secondary-stops.R")
+```
+
+
+### Static Visualization of All Stops
+
+```{r, fig.height=12, fig.width=12, message=FALSE}
+center <- c(lon = (max(stops$longitude) + min(stops$longitude)) / 2,
+            lat = (max(stops$latitude) + min(stops$latitude)) / 2)
+
+map <- get_map(location = center, zoom = 11)
+
+ggmap(map, base_layer = ggplot(stops, aes(x = longitude, y = latitude))) +
+  geom_point(size = 4, alpha = 0.7, color = "red", shape = 18) +
+  labs(x = "Longitude", y = "Latitude")
+```
+
+### Static Visualization of Stops by City
+
+```{r, fig.height=15, fig.width=10, message=FALSE}
+cities <- c("Springfield", "Northampton", "Holyoke", "Amherst", "South Hadley", "Easthampton")
+
+city_plots <- lapply(cities, function(city) {
+
+  city_center <- geocode(paste0(city, ", MA"))
+
+  stops <- stops %>%
+    rowwise() %>%
+    filter(geosphere::distVincentyEllipsoid(c(city_center$lon, city_center$lat), c(longitude, latitude)) <= 3000)
+  
+  map_center <- c(lon = (max(stops$longitude) + min(stops$longitude)) / 2,
+                  lat = (max(stops$latitude) + min(stops$latitude)) / 2)
+
+  map <- get_map(location = map_center, zoom = 13)
+
+  ggmap(map, base_layer = ggplot(stops, aes(x = longitude, y = latitude))) +
+    geom_point(size = 3, alpha = 0.7, color = "red", shape = 18) +
+    labs(x = "Longitude", y = "Latitude", title = paste("Stops in", city))
+})
+
+cowplot::plot_grid(plotlist = city_plots, ncol = 2)
+```
+
+### Interactive Visualization of All Stops
+
+```{r, fig.width=9.5, fig.height=6}
+leaflet(stops) %>%
+  addTiles() %>%
+  addMarkers(
+    lng = ~longitude,
+    lat = ~latitude,
+    popup = ~paste("Duration:", duration, "mins"),
+    icon = icons(iconUrl = "resources/pin.png", iconWidth = 30, iconHeight = 30)
+  )
+```
+
+
+
+<!--chapter:end:06.5-Secondary_Stops_Graham.Rmd-->
+
+---
+title: "Heat Maps for BookDown"
+author: "Maggie Wu"
+date: "12/7/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(valleybikeData)
+library(ggmap)
+library(spatialrisk)
+library(geosphere)
+library(raster)
+library(lubridate)
+```
+
+In our project, one of our motivating questions was where bike users consistently frequented. In addition to identifying busy date ranges of travel, this is useful for determining popular routes and locations that could be identified as potential sponsors.
+
+We have created several tools and have automated the creation of heat maps. Below, there are several functions that all work in synthesis to create the heat map visualizations. We follow this with several demonstrations of how to call these functions to formulate interesting patterns that we found in the data.
+
+
+# Getting Set Up
+
+We credit Stamen Maps and the Google API for providing us with the map images--one will need a valid Google API key to run the visualizations.
+
+Here, we first provide the code to read in a key.
+
+```{r}
+key <- readLines("apikey.txt")
+register_google(key)
+has_google_key()
+```
+
+
+## Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station
+
+```{r}
+#data processing function
+get_heatmap_data <- function(data, long, lat, radius, start, end){
+  #pass in a subset of the data
+  start_date <- as_date(start)
+  end_date <- as_date(end)
+  sub_data <- data %>% filter(longitude <= (long + radius), longitude >= (long - radius),
+                              latitude <= (lat + radius), latitude >= (lat - radius),
+                              start_date <= time, end_date >= time)
+  sub_stations <- stations %>% filter(longitude <= max(sub_data$longitude) & longitude >= min(sub_data$longitude) &
+                                        latitude <= max(sub_data$latitude) & latitude >= min(sub_data$longitude))
+  #finds distances between stations and points
+  distances <- pointDistance(cbind(sub_stations$longitude, sub_stations$latitude),
+                             cbind(sub_data$longitude, sub_data$latitude), lonlat=TRUE)
+  tdistances <- as.data.frame(t(distances)) #transpose it
+  distances3 <- tdistances %>% mutate("remove" = ifelse(apply(tdistances < 25, 1, any), 1, 0))
+  #does not include points within 25 meters of each station
+  distances3 <- distances3 %>% dplyr::select(remove)
+  sub_data <- cbind(sub_data, distances3)
+  sub_data <- sub_data %>% filter(remove == 0)
+  return(sub_data)
+}
+```
+
+## Function for Obtaining the Base Map
+
+```{r}
+getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL, r) {
+  register_google(key)
+  if (!has_google_key()) {
+    print("Please provide a valid google API key.")
+    return()
+  }
+  PopRange <- c(
+    min(dataset$longitude - r, na.rm = T),
+    min(dataset$latitude - r, na.rm = T),
+    max(dataset$longitude + r, na.rm = T),
+    max(dataset$latitude + r, na.rm = T)
+  )
+  basemap <- get_map(location = PopRange, source = "stamen", maptype = "toner", zoom = zoom)
+  basemap
+  return(basemap)
+}
+```
+
+
+## Main Plotting Function
+
+```{r}
+plot_heatmap <- function(mykey = NULL, zoom = "auto", data, lat, long, radius,
+                         mapradius, start, end) {
+  station_sub <- stations %>% filter(longitude >= (long-radius) & longitude <= (long+radius),
+                               latitude >= (lat-radius) & latitude <= (lat+radius))
+  mapdata <- get_heatmap_data(data, long, lat, radius, start, end)
+  basemap <-getbasemap(key = mykey, zoom = zoom, dataset = mapdata, r = mapradius)
+  route_map <- ggmap(basemap) +
+    geom_point(aes(x = longitude, y = latitude),  color = "red", alpha = 0.009,
+               size = 0.035, data = mapdata) +
+    theme(legend.position = "none")+
+  geom_point(aes(x = longitude, y = latitude), size = 4, color = "orange", data = station_sub, shape = 8)
+  route_map
+}
+
+```
+
+
+## Using the Function
+
+The user should only be concerned with calling the `plot_heatmap` function (the others are helper functions). The user can specify several inputs: a longitude and latitude of the location should be passed into the *lat* and *long* arguments as the center of an area of interest. The boundary from the central location should be specified with the *radius* argument, with the value being in terms of geocoordinates. The *mapradius* argument should also be specified. Finally, one must pass in a data set into *data* and a date range into *start* and *end*. All points within 25 meters of a station are excluded (since we know bikes are at the stations anyway).
+
+The primary purpose of this function is to automate the heat map generating process so that anyone can call the function. We now transition into some of the findings that we found by calling this function. The next session will provide several demonstrations on how to use the function.
+
+# Findings
+
+```{r}
+northampton1 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = august2020,
+                     lat = 42.32840,
+                     long = -72.63548,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2020-08-01",
+                     end = "2020-08-30") +
+  labs(title = "Northampton in the August of 2020")
+
+northampton1
+```
+
+```{r}
+northampton3 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = august2019,
+                     lat = 42.32840,
+                     long = -72.63548,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-08-01",
+                     end = "2019-08-30") +
+  labs(title = "Northampton in the August of 2019")
+
+northampton3
+```
+
+We see a lot more traffic in the July of 2019 than the July of 2020, most likely due to the pandemic. Stations are denoted by a yellow star. We plot everything else in red.
+
+```{r}
+amherst <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2020,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2020-07-01",
+                     end = "2020-07-31") +
+  labs(title = "Amherst in July 2020")
+
+amherst
+
+amherst2 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2019,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-07-01",
+                     end = "2019-07-31") +
+  labs(title = "Amherst in July 2019")
+
+amherst2
+
+amherst3 <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2018,
+                     lat = 42.376021,
+                     long = -72.519724,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2018-07-01",
+                     end = "2018-07-31") +
+  labs(title = "Amherst in July 2018")
+
+amherst3
+
+```
+
+The same pattern occurs in Amherst.
+
+```{r}
+northampton_shopping <- plot_heatmap(mykey = key,
+                     zoom = 15,
+                     data = july2019,
+                     lat = 42.341193,
+                     long = -72.642944,
+                     radius = 0.007,
+                     mapradius = 0.001,
+                     start = "2019-07-01",
+                     end = "2019-07-31") +
+  labs(title = "Big Y Shopping Center in Northampton")
+
+northampton_shopping
+```
+
+# Animation
+
+
+We also created an animation of an intersection in downtown Northampton.
+
+```{r}
+library(gganimate)
+
+october2019 <- october2019 %>% mutate("month" = "October 2019")
+november2019 <- november2019 %>% mutate("month" = "November 2019")
+june2020 <- june2020 %>% mutate("month" = "June 2020")
+july2020 <- july2020 %>% mutate("month" = "July 2020")
+august2020 <- august2020 %>% mutate("month" = "August 2020")
+
+dataall <- rbind(october2019, november2019, june2020, july2020, august2020) 
+              
+northampton2 <- get_map(location = c(left = -72.632453, bottom = 42.318369, right = -72.62490, top = 42.323489), source = "stamen", maptype = "terrain", zoom = 17)
+
+dataall <- dataall %>% filter(longitude >= -72.632453 & longitude <= -72.62490,
+                               latitude >= 42.318369 & latitude <= 42.323489) %>% 
+                              mutate("monthfct" = as.factor(month))
+
+
+dataall <- dataall %>% mutate(monthfct = fct_relevel(monthfct, c("october2019", "november2019", "june2020", "july2020", "august2020")))
+
+animap <- ggmap(northampton2)+
+  geom_point(aes(x = longitude, y = latitude), color = "#f54287", alpha = 0.01,
+             size = 0.03, data = dataall)
+animap
+
+nohogif <- animap+
+   transition_states(
+    monthfct,
+    transition_length = 1,
+    state_length = 3) +
+   ease_aes('bounce-in-out') +
+  labs(subtitle = "{closest_state}",
+       x = "longitude",
+       y = "latitude",
+       title = "Northampton Bike Traffic",
+       caption = "Source: ValleyBike. Bike trackers collected coordinate data 
+       every five seconds. 1363614 observations across two years are shown here.")
+nohogif
+```
+
+
+<!--chapter:end:06.75-Heat_Maps.Rmd-->
+
+
+```{r, include=FALSE}
+library(valleybikeData)
+library(tidyverse)
+library(curl)
+```
+
+# Demographic Exploration of ValleyBike Users
+
+## Motivations and Initial Summary
+
+The motivation behind this project is that it has only recently become possible to obtain demographic data of ValleyBike users and connect it to the existing data on the number of trips. Thus, it has become possible to gather information on whether different demographic factors influence frequency and duration of trips. This can help ValleyBike leadership understand who exactly are its largest clients and what they use the bikes for, which can then influence the location of future stations and other changes to the ValleyBike structure.
+
+In total, there are 16589 users and 112011 trips by those users from June 2018 to October 2020. Trips shorter than 2 minutes or longer than 4 hours were excluded from this analysis. The central question of this project is what patterns we can glean from different demographic information about users, as well as some of the trip characteristics that haven't been explore before, e.g. # of trips by hour and whether the day of the trip falls on a weekend/holiday. For this project, all trips shorter than 2 minutes and longer than 4 hours are excluded from the dataset.
+
+
+```{r, echo = FALSE, message=FALSE,warning=FALSE}
+users2020 <- readr::read_csv(curl("https://raw.githubusercontent.com/DSC-WAV/proj-valleyriders/master/data/users_2020_10.csv?token=ANCR62LHPFUAQPVKBTFBOFK73JU22")) %>%
+  mutate(
+    membership_start = lubridate::parse_date_time(membership_start, "YmdHMS"),
+    membership_end = lubridate::parse_date_time(membership_end, "YmdHMS")
+  ) %>%
+  select(-X1)
+
+get_other <- function(ds) {
+  categories <- c(
+    "Missing", "Agawam", "Belchertown", "Boston", "Chicopee", "East Longmeadow", "Enfield, CT",
+    "Granby", "Hadley", "Leverett", "Ludlow", "New York City", "South Hadley", "Southampton",
+    "Sunderland", "West Springfield", "Westfield"
+  )
+
+  for (i in 1:length(ds$location)) {
+    if (str_detect(ds$location[i], "Other") | ds$location[i] %in% categories) {
+      ds$location[i] <- "Other"
+    }
+  }
+  return(ds)
+}
+users2020_cleaned <- get_other(users2020)
+
+users2020_cleaned <- users2020_cleaned %>%
+  mutate(
+    age_group = ifelse(age_group == "<=23", "18-23", age_group),
+    gender = case_when(
+      is.na(gender) | gender == "o" ~ "Missing",
+      gender == "f" ~ "Female",
+      gender == "m" ~ "Male"
+    )
+  )
+
+max_duration <- 4 * 60 * 60 # max valid duration (in seconds)
+min_duration <- 2 * 60 # minimum valid duration (in seconds)
+trips_cleaned <- trips %>%
+  filter(duration >= min_duration, duration <= max_duration)
+
+trips_combined <- left_join(trips_cleaned, users2020_cleaned, by = "user_id")
+
+trips_cleaned <- trips_combined %>%
+  filter(!is.na(location)) 
+
+holidates <- lubridate::ymd(c(
+  "2018-07-04", "2019-07-04", "2020-07-04",
+  "2018-09-03", "2019-09-02", "2020-09-07",
+  "2018-05-28", "2019-05-27", "2020-05-25"
+))
+trips_cleaned_users <- trips_cleaned %>%
+  mutate(duration = duration/60, 
+         type_of_day = ifelse(lubridate::wday(start_time,
+    label = TRUE
+  ) == "Sat" | lubridate::wday(start_time,
+    label = TRUE
+  ) == "Sun" | cut.POSIXt(
+    start_time,
+    "day"
+  ) %in% holidates, "Weekend/Holiday", "Workday"))
+
+
+duration_by_user <- trips_cleaned_users %>%
+  group_by(user_id) %>%
+  summarize(med_duration = median(duration))
+
+summary_by_user <- left_join(duration_by_user, users2020_cleaned, by = "user_id")
+
+trips_cleaned_users <- trips_cleaned_users %>%
+  mutate(Hour = lubridate::hour(start_time))
+```
+
+
+\newpage
+## Tables and Plots of Trips by User Age
+
+```{r, warning = FALSE, message=FALSE, fig.height= 6, fig.width = 8, echo = FALSE}
+age_table <- users2020_cleaned %>% summarise(age_group) %>% count(age_group) %>%
+  rename('Age Group' = age_group, 'Count_user' = n) %>%
+  mutate(`Proportion of Users` = round(Count_user/sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>% group_by(user_id, age_group) %>% summarise(trip_number = n())
+
+median_ages <- tempo %>% 
+  group_by(age_group) %>% 
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename('Age Group' = age_group)
+
+trip_age_table <- trips_cleaned_users %>% 
+  summarise(age_group, `Median Duration` = median(duration)) %>% 
+  count(age_group) %>%
+  rename('Age Group' = age_group, 'Count_trip' = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip/sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_age_table <- trips_cleaned_users %>% 
+  group_by(age_group) %>% 
+  summarise(`Median Trip Duration, mins` = round(median(duration),2)) %>%
+  rename('Age Group' = age_group)
+
+
+age_table_comb <- full_join(age_table, trip_age_table, by = "Age Group") %>% 
+  full_join(median_ages, by = "Age Group") %>%
+  mutate(`Avg Number of Trips per User`  = round(Count_trip/Count_user,2)) %>%
+  select(-Count_trip, -Count_user) %>% 
+  full_join(duration_age_table, by = "Age Group") 
+
+age_table_comb[7, "Proportion of Trips"] <- 1
+age_table_comb[7, "Median Trip Duration, mins"] <- median(round(trips_cleaned_users$duration, 2))
+age_table_comb[7, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(age_table_comb %>% arrange(`Age Group`), 
+             caption = "Trip Summary By User Age")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24,colour='black', fill='gray') + 
+  facet_wrap(~age_group) +
+  ylab("Number of Trips by Hour") +
+  ggtitle("Histogram of Trips per Hour by Age Group")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour, y =
+                       (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), 
+                 bins = 24,colour='black', fill='gray') + 
+  facet_wrap(~age_group) +
+  ylab("Number of Trips per Hour Normalized by Age Group") +
+  ggtitle("Histogram of Trips per Hour Normalized by Age Group")
+```
+
+By age, we see that most users are either 18-23 or 23-30. Proportion of trips and proportion of users are very close for all groups. Although average numbers of trips per user differ, a comparison with the medians shows that this is mostly caused by a few users who take a large number of trips, while the median is only 2-3 trips. It appears that the youngest group (18-23) take the shortest trips with the median of 17.8 minutes, while users in older groups take trips of 20 minutes or longer. This may reflect a self-selection effect, where the older users who still bike are more dedicated to it than an average individual of that age.
+
+For this and future subsections, the second plot of trips per hour is normalized to account for different sizes of the groups. However, smaller groups will tend to have bigger shifts hour-to-hour on that plot. Overall, there doesn't seem to be much difference in terms of different age groups, aside from the older users exhibiting a sharper drop in usage after 7pm. The usage starts to increase around 6-8 and reaches its peak in the afternoon and early evening.
+
+\newpage
+
+## Tables and Plots by Gender
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+
+gender_table <- users2020_cleaned %>% 
+  summarise(gender) %>% 
+  count(gender) %>%
+  rename(Gender = gender, 'Count_user' = n) %>%
+  mutate(`Proportion of Users` = round(Count_user/sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>% group_by(user_id, gender) %>% summarise(trip_number = n())
+
+median_ages <- tempo %>% 
+  group_by(gender) %>% 
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename(Gender = gender)
+
+trip_gender_table <- trips_cleaned_users %>% 
+  summarise(gender) %>% 
+  count(gender) %>%
+  rename(Gender = gender, 'Count_trip' = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip/sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_gender_table <- trips_cleaned_users %>% 
+  group_by(gender) %>% 
+  summarise(`Median Trip Duration, mins` = round(median(duration),2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename(Gender = gender)
+
+gender_table_comb <- full_join(gender_table, trip_gender_table, 
+                                 by = "Gender") %>%
+  full_join(median_ages, by = "Gender") %>%
+  mutate(`Avg Number of Trips per User`  = round(Count_trip/Count_user,2)) %>%
+  select(-Count_trip, -Count_user) 
+
+gender_table_comb <- full_join(duration_gender_table, 
+                                 gender_table_comb, by = "Gender")
+gender_table_comb[4, 
+            "Median Trip Duration, mins"] <- 
+median(round(trips_cleaned_users$duration, 2))
+
+gender_table_comb[4, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(gender_table_comb[, c(1,3,4,5,6, 2)], 
+             caption = "Trip Summary By User Gender")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24,colour='black', fill='gray') + 
+  facet_grid(rows = vars(gender)) +
+  ylab("Number of Trips by User Gender") +
+  ggtitle("Histogram of Trips per Hour by Gender")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour, y = 
+            (..count..)/tapply(..count..,..PANEL..,sum)[..PANEL..]), 
+  bins = 24, colour='black', fill='gray') + 
+  facet_grid(rows = vars(gender)) +
+  ylab("Number of Trips by Gender of User (Normalized by Location)") +
+  ggtitle("Histogram of Trips per Hour by Gender (Normalized by Location)")
+
+```
+
+It is important to note that, although 73% of ValleyBike registered users have not stated their gender, only 45% of all trips were taken by these users. Known female and male users, on the other hand, are only 7% and 20% of all users, but complete 13% and 42% of all trips, respectively. Male and female users generally take more trips than users whose gender is missing, but the length of their trips is slightly shorter, with medians of 17 and 18 minutes compared to 22.6 minutes.
+
+The users who do not include their gender in the profile. As shown in a future section, the "Missing" category serves as a reflection of users with specific account type, who bike less, but for longer periods.
+
+\newpage
+
+## Tables by Gender and Age
+
+```{r, warning= FALSE,  message=FALSE, echo = FALSE}
+gender_age_table <- table(summary_by_user$age_group, summary_by_user$gender)
+knitr::kable(gender_age_table, caption = "Summary Table of Counts by Gender and Age")
+
+dem_table <- users2020_cleaned %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  summarise(dem_type) %>%
+  count(dem_type) %>%
+  rename("Demographic Group" = dem_type, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 3)) %>%
+  janitor::adorn_totals("row")
+
+tempo_dem <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  group_by(user_id, dem_type) %>%
+  summarise(trip_number = n())
+
+median_dem <- tempo_dem %>%
+  group_by(dem_type) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("Demographic Group" = dem_type)
+
+trip_dem_table <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  summarise(dem_type, `Median Duration` = median(duration)) %>%
+  count(dem_type) %>%
+  rename("Demographic Group" = dem_type, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_dem_table <- trips_cleaned_users %>%
+  mutate(dem_type = paste(gender, age_group, sep = " ")) %>%
+  group_by(dem_type) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  rename("Demographic Group" = dem_type)
+
+
+dem_table_comb <- full_join(dem_table, trip_dem_table, by = "Demographic Group") %>%
+  full_join(median_dem, by = "Demographic Group") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user) %>%
+  full_join(duration_dem_table, by = "Demographic Group")
+
+dem_table_comb[19, "Proportion of Users"] <- 1
+dem_table_comb[19, "Proportion of Trips"] <- 1
+dem_table_comb[19, "Median Trip Duration, mins"] <- median(round(trips_cleaned_users$duration, 2))
+dem_table_comb[19, "Median Number of Trips Per User"] <- median(tempo_dem$trip_number)
+
+knitr::kable(dem_table_comb %>% arrange(`Demographic Group`),
+  caption = "Trip Summary By User Age and Gender"
+)
+```
+
+If we look at both gender and age, we see that the patterns of the number of trips per user and median trip durations differ by gender. The oldest user group (60+) takes the fewest trips for all three categories. However, the reverse is not always the case. While the median number of trips for younger male users is the highest, middle age female users tend to take more trips than the younger female users, while for the "Missing" group, the median is almost flat. However, since the female age group is the smallest, their summary numbers are more likely to fluctuate than the numbers for the larger male and missing groups. For trip durations, the oldest users take either average length trips (for males) or the longest trips (for females and especially for the missing group). Although the youngest users in male and missing categories take the shortest trips, the female bikers are on the high end, with median trip duration of 19.5 minutes, longer than 18-23 users in the other two groups and the second longest trip duration among female age groups. However, female users 23-30 have the shortest median trip duration out of all groups, which implies that the effect is caused by in-group variability and not by gender-specific biking trends. Since a significant number of trips involves secondary stops, the median duration would be higher if round trips with a stop get counted as one trip, while the average number of trips would be correspondingly lower.
+
+## Tables and Plots by User Location
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+location_table <- users2020_cleaned %>%
+  summarise(location) %>%
+  count(location) %>%
+  rename(Location = location, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>%
+  group_by(user_id, location) %>%
+  summarise(trip_number = n())
+
+median_ages <- tempo %>%
+  group_by(location) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("Location" = location)
+
+trips_location_table <- trips_cleaned_users %>%
+  summarise(location) %>%
+  count(location) %>%
+  rename(Location = location, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_location_table <- trips_cleaned_users %>%
+  group_by(location) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename(Location = location)
+
+location_table_comb <- full_join(location_table, trips_location_table,
+  by = "Location"
+) %>%
+  full_join(median_ages, by = "Location") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user)
+
+location_table_comb <- full_join(duration_location_table,
+  location_table_comb,
+  by = "Location"
+)
+location_table_comb[
+  7,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+
+location_table_comb[7, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(location_table_comb[, c(1, 3, 4, 5, 6, 2)],
+  caption = "Trip Summary By User Location"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_wrap(~location) +
+  ylab("Number of Trips by User Location") +
+  ggtitle("Histogram of Trips per Hour by User Location")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_wrap(~location) +
+  ylab("Number of Trips by Location (Normalized by Location)") +
+  ggtitle("Histogram of Trips per Hour by User Location (Normalized by Location)")
+```
+
+User location represents the location of the home address inputted at the creation of the account. Other category includes all addresses outside of the top 5, which are listed separately. Thus, "Other" category would include both tourists from areas such as Boston and New York and those living in towns in the Pioneer Valley, such as Hadley. One of the most interesting findings of the table is that, despite 74% of user locations falling under "Other", only 49% of trips are taken by those users, with the 5 towns with the greatest number of users accounting for the share of trips that is twice as big as their share of users. Although there exists some variation by town, users in the listed towns take more and shorter trips than user in "Other" category. This would be the case if the users with "Other" location used bikes for occasional recreation, while users in towns with several ValleyBike stations were more likely to use them for shorter purpose-driven trips around town.
+
+\newpage
+
+## Tables and Plots by User Type
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+type_table <- users2020_cleaned %>%
+  summarise(dtype) %>%
+  count(dtype) %>%
+  rename("User Account Type" = dtype, "Count_user" = n) %>%
+  mutate(`Proportion of Users` = round(Count_user / sum(Count_user), 2)) %>%
+  janitor::adorn_totals("row")
+
+tempo <- trips_cleaned_users %>%
+  group_by(user_id, dtype) %>%
+  summarise(trip_number = n())
+
+median_ages <- tempo %>%
+  group_by(dtype) %>%
+  summarize(`Median Number of Trips Per User` = median(trip_number)) %>%
+  rename("User Account Type" = dtype)
+
+trip_type_table <- trips_cleaned_users %>%
+  summarise(dtype) %>%
+  count(dtype) %>%
+  rename("User Account Type" = dtype, "Count_trip" = n) %>%
+  mutate(`Proportion of Trips` = round(Count_trip / sum(Count_trip), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_type_table <- trips_cleaned_users %>%
+  group_by(dtype) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename("User Account Type" = dtype)
+
+type_table_comb <- full_join(type_table, trip_type_table,
+  by = "User Account Type"
+) %>%
+  full_join(median_ages, by = "User Account Type") %>%
+  mutate(`Avg Number of Trips per User` = round(Count_trip / Count_user, 2)) %>%
+  select(-Count_trip, -Count_user)
+
+type_table_comb <- full_join(duration_type_table,
+  type_table_comb,
+  by = "User Account Type"
+)
+type_table_comb[
+  4,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+type_table_comb[4, "Median Number of Trips Per User"] <- median(tempo$trip_number)
+
+knitr::kable(type_table_comb[, c(1, 3, 4, 5, 6, 2)],
+  caption = "Trip Summary By User Account Type"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_grid(rows = vars(dtype)) +
+  ylab("Number of Trips by User Account Type") +
+  ggtitle("Histogram of Trips per Hour by User Account Type")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_grid(rows = vars(dtype)) +
+  ylab("Proportion of Trips by User Account Type (Normalized per Account Type)") +
+  ggtitle("Histogram of Trips per Hour Normalized by User Account Type")
+```
+
+This table focuses on different types of accounts. While "MobileUserEntity" is by far the largest in terms of both users and trips, "IndividualUserEntity" users take over twice as many trips, with a median trip being shorter than for a median "MobileUserEntity" user's trip. This is similar to a pattern exhibited by Male and Female vs. Missing divide for gender, which is not an accident for this dataset, as we'll see later.
+
+\newpage
+## Tables and Plots by Whether the Trip is on a Workday
+
+```{r, warning= FALSE, fig.height= 6, fig.width = 8, message=FALSE, echo = FALSE}
+day_table <- trips_cleaned_users %>%
+  summarise(type_of_day) %>%
+  count(type_of_day) %>%
+  rename("Type of Day" = type_of_day, "Count" = n) %>%
+  mutate(`Proportion of Trips` = round(Count / sum(Count), 2)) %>%
+  janitor::adorn_totals("row")
+
+duration_day_table <- trips_cleaned_users %>%
+  group_by(type_of_day) %>%
+  summarise(`Median Trip Duration, mins` = round(median(duration), 2)) %>%
+  arrange(`Median Trip Duration, mins`) %>%
+  rename("Type of Day" = type_of_day)
+
+day_table_comb <- full_join(duration_day_table,
+  day_table,
+  by = "Type of Day"
+) %>%
+  select(-Count)
+
+day_table_comb[
+  3,
+  "Median Trip Duration, mins"
+] <-
+  median(round(trips_cleaned_users$duration, 2))
+
+knitr::kable(day_table_comb[, c(1, 3, 2)],
+  caption = "Trip Summary By Type of Day"
+)
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(x = Hour), bins = 24, colour = "black", fill = "gray") +
+  facet_grid(rows = vars(type_of_day)) +
+  ylab("Number of Trips by Whether Trip is on Weekend") +
+  ggtitle("Histogram of Trips per Hour by Whether The Trip is on a Workday")
+
+ggplot(trips_cleaned_users) +
+  geom_histogram(aes(
+    x = Hour, y =
+      (..count..) / tapply(..count.., ..PANEL.., sum)[..PANEL..]
+  ),
+  bins = 24, colour = "black", fill = "gray"
+  ) +
+  facet_grid(rows = vars(type_of_day)) +
+  ylab("Number of Trips by Whether Trip is on a Workday") +
+  ggtitle("Histogram of Trips per Hour by Whether The Trip is on a Workday")
+```
+
+It is important to note that, other than weekends, the holidays include Independence Day, Labor Day, and Memorial Day. We see that the peak bike usage plot shifts to the right on weekends, representing that people use bikes less in the morning on weekends and holidays. The fraction of the trips taken on weekends is 0.31, which is slightly higher than the expected $2/7 \approx$`r round(2/7, 2)`. In terms of duration, a median holiday trip is also longer than a median weekday trip, 23 vs 18 minutes.
+
+\newpage
+## Table Summary of Most Common Visited Stations by User Location
+
+Tables included below list the number of visited stations (as either a starting station or an end station). The proportion of trips variable is the proportion of all trips for users who put that place as their location which includes this station. Since trips are between two, usually different, locations, the total of the proportion of all trips may add up to > 1. We see that users living in one of the towns with ValleyBike stations tend to most commonly visit stations in that town, with stations from other towns usually outside of the list of top 10 stations. For users who put their locations as "Other", the most often visited stations are UMass-connected stations, and stations connected to town centers and transportation such as Amherst Town Hall and Northampton Train Stations. This strengthens the interpretation that many of these users come to a town with ValleyBike station through different means for a limited time and then use a bike to move around the area. The prevalence of NA stations for trips for all users likely stems from secondary stops.
+
+```{r, results='asis', warning = FALSE, message=FALSE, echo = FALSE}
+trips_cleaned_p1 <- trips_cleaned %>%
+  select(-end_station) %>%
+  rename(station = "start_station")
+trips_cleaned_p2 <- trips_cleaned %>%
+  select(-start_station) %>%
+  rename(station = "end_station")
+
+trips_cleaned_stations <- rbind(trips_cleaned_p1, trips_cleaned_p2)
+
+locations <- unique(trips_cleaned_stations$location)
+station_cities <- stations %>% select(name, city)
+
+for (i in 1:(length(locations) - 1)) {
+  temp <- trips_cleaned_stations %>% filter(location == locations[i])
+  total_n_trips <- nrow(trips_cleaned %>%
+    filter(location == locations[i]))
+  temp_city <- temp %>%
+    group_by(station) %>%
+    tally(sort = TRUE) %>%
+    top_n(20, wt = n) %>%
+    left_join(station_cities, by = c("station" = "name")) %>%
+    rename(`total number of trips` = n) %>%
+    mutate(`proportion of trips` = round(`total number of trips` / total_n_trips, 3))
+
+  temp2 <- knitr::kable(temp_city[c(1, 3, 2, 4)],
+    caption = paste("User Location: ", locations[i], sep = "")
+  )
+  cat("\n\n\\pagebreak\n")
+  print(temp2)
+}
+```
+
+\newpage
+
+## Other Tables
+
+
+```{r}
+table(summary_by_user$dtype, summary_by_user$membership_type)
+table(summary_by_user$membership_type, summary_by_user$gender)
+```
+
+These tables show distribution of `dtype` variable by the other membership type and gender. We see that "ORU" and "OccasionalUserEntity" are identical, while "IRU" mostly corresponds to "IndividualUserEntity" and "MRU" to "MobileUserEntity". In addition, almost all users with gender listed as "Missing" fall into "MRU" account category, potentially explaining differences in usage patterns as stemming partially from the account type.
+
+```{r}
+gender_loc_table <- table(summary_by_user$location, summary_by_user$gender)
+gender_loc_table
+```
+
+```{r}
+ftable(round(prop.table(gender_loc_table, margin = 1), 3))
+```
+
+The gender distribution of users from different locations is generally similar, with "Missing" overrepresented or users with "Other" location and underrepresented for users from Springfield and Northampton. Males are overrepresented over females compared to the rest of the locations for user from Holyoke and locations listed as "Other."
+
+```{r}
+table(summary_by_user$location, summary_by_user$dtype)
+```
+
+```{r}
+table(summary_by_user$location, summary_by_user$membership_type)
+```
+
+```{r}
+table(summary_by_user$age_group, summary_by_user$dtype)
+```
+
+The fact that all users with "OccasionalUserEntity" accounts fall into "Other" location category and 50-60 age group highlights that this is a very specific type of account and user that could be potentially removed to focus on the more representative users.
+
+```{r, message = FALSE, warning = FALSE}
+knitr::kable(table(summary_by_user$membership_name, summary_by_user$dtype))
+```
+
+```{r, message = FALSE, warning = FALSE}
+knitr::kable(table(summary_by_user$membership_name, summary_by_user$membership_type)) %>%
+  kableExtra::column_spec(1, "2in")
+```
+The last two plots expand on different types of memberships. However, due to the number of options for "membership_name" variable, "dtype" and "membership_type" are most likely the more relevant variables.
+
+<!--chapter:end:07-Konstantin_Demo_Section.Rmd-->
+
+`r if (knitr:::is_html_output()) '
+# References {-}
+'`
+
+<!--chapter:end:08-references.Rmd-->
+
