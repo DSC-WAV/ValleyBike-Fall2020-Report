@@ -1,4 +1,9 @@
-# Secondary Stops- Graham
+---
+output:
+  pdf_document: default
+  html_document: default
+---
+# Secondary Stops
 
 ## Secondary Stops 
 
@@ -34,8 +39,8 @@ knitr::opts_chunk$set(
   size = "small", # slightly smaller font for code
   comment = NA)
 
-#key <- readLines("apikey.txt")
-#register_google(key)
+key <- readLines("apikey.txt")
+register_google(key)
 
 source("all-secondary-stops.R")
 ```
@@ -46,7 +51,7 @@ data2019 <- rbind(april2019, may2019, june2019, july2019, august2019, september2
 
 ```{r,echo=FALSE, messages=FALSE, warning=FALSE}
 #API key
-#mykey <- readLines("apikey.txt") #insert your own key
+mykey <- readLines("apikey.txt") #insert your own key
 ```
 
 ```{r,echo=FALSE}

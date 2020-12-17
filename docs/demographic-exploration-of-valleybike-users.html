@@ -1,0 +1,1757 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>10 Demographic Exploration of ValleyBike Users | DSC-WAV ValleyBike Project Report</title>
+  <meta name="description" content="10 Demographic Exploration of ValleyBike Users | DSC-WAV ValleyBike Project Report" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="10 Demographic Exploration of ValleyBike Users | DSC-WAV ValleyBike Project Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="10 Demographic Exploration of ValleyBike Users | DSC-WAV ValleyBike Project Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="getting-set-up.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSC-WAV ValleyBike Project</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Project Description</a></li>
+<li class="chapter" data-level="2" data-path="data-import-and-processing.html"><a href="data-import-and-processing.html"><i class="fa fa-check"></i><b>2</b> Data Import and Processing</a></li>
+<li class="chapter" data-level="3" data-path="utility-functions.html"><a href="utility-functions.html"><i class="fa fa-check"></i><b>3</b> Utility Functions</a></li>
+<li class="chapter" data-level="4" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="jessica.html"><a href="jessica.html"><i class="fa fa-check"></i><b>5</b> Jessica</a></li>
+<li class="chapter" data-level="6" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html"><i class="fa fa-check"></i><b>6</b> Trips to Nowhere Overview</a><ul>
+<li class="chapter" data-level="6.1" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#motivation"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#general-summary"><i class="fa fa-check"></i><b>6.2</b> General Summary</a></li>
+<li class="chapter" data-level="6.3" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#proportion-of-trips-that-dont-rnd-at-an-identified-station-over-time"><i class="fa fa-check"></i><b>6.3</b> Proportion of Trips That Don’t Rnd At an Identified Station Over Time</a></li>
+<li class="chapter" data-level="6.4" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#close-look-at-trips-to-na-in-springfield-june-july-2019"><i class="fa fa-check"></i><b>6.4</b> Close Look at Trips to NA in Springfield, June-July 2019</a></li>
+<li class="chapter" data-level="6.5" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#interactive-map-of-trip-end-points-that-are-not-stations"><i class="fa fa-check"></i><b>6.5</b> Interactive Map of Trip End Points That Are Not Stations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="leaflet-graham.html"><a href="leaflet-graham.html"><i class="fa fa-check"></i><b>7</b> Leaflet - Graham</a><ul>
+<li class="chapter" data-level="7.1" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots"><i class="fa fa-check"></i><b>7.1</b> Leaflet Plots</a></li>
+<li class="chapter" data-level="7.2" data-path="leaflet-graham.html"><a href="leaflet-graham.html#functions-for-visuals"><i class="fa fa-check"></i><b>7.2</b> Functions for Visuals</a></li>
+<li class="chapter" data-level="7.3" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots-1"><i class="fa fa-check"></i><b>7.3</b> Leaflet Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html"><i class="fa fa-check"></i><b>8</b> Secondary Stops- Graham</a><ul>
+<li class="chapter" data-level="8.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#secondary-stops"><i class="fa fa-check"></i><b>8.1</b> Secondary Stops</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-1-trips-12-13"><i class="fa fa-check"></i><b>8.1.1</b> User 1 (Trips 12-13)</a></li>
+<li class="chapter" data-level="8.1.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-2-trips-26-27"><i class="fa fa-check"></i><b>8.1.2</b> User 2 (Trips 26-27)</a></li>
+<li class="chapter" data-level="8.1.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-3-trips-41-42"><i class="fa fa-check"></i><b>8.1.3</b> User 3 (Trips 41-42)</a></li>
+<li class="chapter" data-level="8.1.4" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-4-trips-52-53"><i class="fa fa-check"></i><b>8.1.4</b> User 4 (Trips 52-53)</a></li>
+<li class="chapter" data-level="8.1.5" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-5-trips-88-89"><i class="fa fa-check"></i><b>8.1.5</b> User 5 (Trips 88-89)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#all-secondary-stops"><i class="fa fa-check"></i><b>8.2</b> All Secondary Stops</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.1</b> Static Visualization of All Stops</a></li>
+<li class="chapter" data-level="8.2.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-stops-by-city"><i class="fa fa-check"></i><b>8.2.2</b> Static Visualization of Stops by City</a></li>
+<li class="chapter" data-level="8.2.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#interactive-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.3</b> Interactive Visualization of All Stops</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="getting-set-up.html"><a href="getting-set-up.html"><i class="fa fa-check"></i><b>9</b> Getting Set Up</a><ul>
+<li class="chapter" data-level="9.1" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-processing-heat-map-data-and-subtracting-points-within-a-certain-distance-from-the-station"><i class="fa fa-check"></i><b>9.1</b> Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station</a></li>
+<li class="chapter" data-level="9.2" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-obtaining-the-base-map"><i class="fa fa-check"></i><b>9.2</b> Function for Obtaining the Base Map</a></li>
+<li class="chapter" data-level="9.3" data-path="getting-set-up.html"><a href="getting-set-up.html#main-plotting-function"><i class="fa fa-check"></i><b>9.3</b> Main Plotting Function</a></li>
+<li class="chapter" data-level="9.4" data-path="getting-set-up.html"><a href="getting-set-up.html#using-the-function"><i class="fa fa-check"></i><b>9.4</b> Using the Function</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html"><i class="fa fa-check"></i><b>10</b> Demographic Exploration of ValleyBike Users</a><ul>
+<li class="chapter" data-level="10.1" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#motivations-and-initial-summary"><i class="fa fa-check"></i><b>10.1</b> Motivations and Initial Summary</a></li>
+<li class="chapter" data-level="10.2" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-of-trips-by-user-age"><i class="fa fa-check"></i><b>10.2</b> Tables and Plots of Trips by User Age</a></li>
+<li class="chapter" data-level="10.3" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-gender"><i class="fa fa-check"></i><b>10.3</b> Tables and Plots by Gender</a></li>
+<li class="chapter" data-level="10.4" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-by-gender-and-age"><i class="fa fa-check"></i><b>10.4</b> Tables by Gender and Age</a></li>
+<li class="chapter" data-level="10.5" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-location"><i class="fa fa-check"></i><b>10.5</b> Tables and Plots by User Location</a></li>
+<li class="chapter" data-level="10.6" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-type"><i class="fa fa-check"></i><b>10.6</b> Tables and Plots by User Type</a></li>
+<li class="chapter" data-level="10.7" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-whether-the-trip-is-on-a-workday"><i class="fa fa-check"></i><b>10.7</b> Tables and Plots by Whether the Trip is on a Workday</a></li>
+<li class="chapter" data-level="10.8" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#table-summary-of-most-common-visited-stations-by-user-location"><i class="fa fa-check"></i><b>10.8</b> Table Summary of Most Common Visited Stations by User Location</a></li>
+<li class="chapter" data-level="10.9" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#other-tables"><i class="fa fa-check"></i><b>10.9</b> Other Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSC-WAV ValleyBike Project Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="demographic-exploration-of-valleybike-users" class="section level1">
+<h1><span class="header-section-number">10</span> Demographic Exploration of ValleyBike Users</h1>
+<div id="motivations-and-initial-summary" class="section level2">
+<h2><span class="header-section-number">10.1</span> Motivations and Initial Summary</h2>
+<p>The motivation behind this project is that it has only recently become possible to obtain demographic data of ValleyBike users and connect it to the existing data on the number of trips. Thus, it has become possible to gather information on whether different demographic factors influence frequency and duration of trips. This can help ValleyBike leadership understand who exactly are its largest clients and what they use the bikes for, which can then influence the location of future stations and other changes to the ValleyBike structure.</p>
+<p>In total, there are 16589 users and 112011 trips by those users from June 2018 to October 2020. Trips shorter than 2 minutes or longer than 4 hours were excluded from this analysis. The central question of this project is what patterns we can glean from different demographic information about users, as well as some of the trip characteristics that haven’t been explore before, e.g. # of trips by hour and whether the day of the trip falls on a weekend/holiday. For this project, all trips shorter than 2 minutes and longer than 4 hours are excluded from the dataset.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="tables-and-plots-of-trips-by-user-age" class="section level2">
+<h2><span class="header-section-number">10.2</span> Tables and Plots of Trips by User Age</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-3">Table 10.1: </span>Trip Summary By User Age</caption>
+<thead>
+<tr class="header">
+<th align="left">Age Group</th>
+<th align="right">Proportion of Users</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Number of Trips Per User</th>
+<th align="right">Avg Number of Trips per User</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">18-23</td>
+<td align="right">0.37</td>
+<td align="right">0.38</td>
+<td align="right">3</td>
+<td align="right">7.41</td>
+<td align="right">17.83</td>
+</tr>
+<tr class="even">
+<td align="left">23-30</td>
+<td align="right">0.26</td>
+<td align="right">0.21</td>
+<td align="right">2</td>
+<td align="right">5.61</td>
+<td align="right">20.33</td>
+</tr>
+<tr class="odd">
+<td align="left">30-40</td>
+<td align="right">0.16</td>
+<td align="right">0.18</td>
+<td align="right">2</td>
+<td align="right">8.36</td>
+<td align="right">20.89</td>
+</tr>
+<tr class="even">
+<td align="left">40-50</td>
+<td align="right">0.08</td>
+<td align="right">0.10</td>
+<td align="right">2</td>
+<td align="right">8.73</td>
+<td align="right">19.42</td>
+</tr>
+<tr class="odd">
+<td align="left">50-60</td>
+<td align="right">0.08</td>
+<td align="right">0.09</td>
+<td align="right">2</td>
+<td align="right">7.97</td>
+<td align="right">22.57</td>
+</tr>
+<tr class="even">
+<td align="left">60+</td>
+<td align="right">0.05</td>
+<td align="right">0.03</td>
+<td align="right">2</td>
+<td align="right">4.91</td>
+<td align="right">24.00</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">2</td>
+<td align="right">7.12</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-3-1.png" width="768" /><img src="valleybike-report_files/figure-html/unnamed-chunk-3-2.png" width="768" /></p>
+<p>By age, we see that most users are either 18-23 or 23-30. Proportion of trips and proportion of users are very close for all groups. Although average numbers of trips per user differ, a comparison with the medians shows that this is mostly caused by a few users who take a large number of trips, while the median is only 2-3 trips. It appears that the youngest group (18-23) take the shortest trips with the median of 17.8 minutes, while users in older groups take trips of 20 minutes or longer. This may reflect a self-selection effect, where the older users who still bike are more dedicated to it than an average individual of that age.</p>
+<p>For this and future subsections, the second plot of trips per hour is normalized to account for different sizes of the groups. However, smaller groups will tend to have bigger shifts hour-to-hour on that plot. Overall, there doesn’t seem to be much difference in terms of different age groups, aside from the older users exhibiting a sharper drop in usage after 7pm. The usage starts to increase around 6-8 and reaches its peak in the afternoon and early evening.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="tables-and-plots-by-gender" class="section level2">
+<h2><span class="header-section-number">10.3</span> Tables and Plots by Gender</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-4">Table 10.2: </span>Trip Summary By User Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">Gender</th>
+<th align="right">Proportion of Users</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Number of Trips Per User</th>
+<th align="right">Avg Number of Trips per User</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Male</td>
+<td align="right">0.20</td>
+<td align="right">0.44</td>
+<td align="right">4</td>
+<td align="right">15.80</td>
+<td align="right">17.17</td>
+</tr>
+<tr class="even">
+<td align="left">Female</td>
+<td align="right">0.07</td>
+<td align="right">0.13</td>
+<td align="right">3</td>
+<td align="right">13.81</td>
+<td align="right">18.33</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing</td>
+<td align="right">0.73</td>
+<td align="right">0.43</td>
+<td align="right">2</td>
+<td align="right">4.16</td>
+<td align="right">22.58</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">2</td>
+<td align="right">7.12</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-4-1.png" width="768" /><img src="valleybike-report_files/figure-html/unnamed-chunk-4-2.png" width="768" /></p>
+<p>It is important to note that, although 73% of ValleyBike registered users have not stated their gender, only 45% of all trips were taken by these users. Known female and male users, on the other hand, are only 7% and 20% of all users, but complete 13% and 42% of all trips, respectively. Male and female users generally take more trips than users whose gender is missing, but the length of their trips is slightly shorter, with medians of 17 and 18 minutes compared to 22.6 minutes.</p>
+<p>The users who do not include their gender in the profile. As shown in a future section, the “Missing” category serves as a reflection of users with specific account type, who bike less, but for longer periods.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="tables-by-gender-and-age" class="section level2">
+<h2><span class="header-section-number">10.4</span> Tables by Gender and Age</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 10.3: </span>Summary Table of Counts by Gender and Age</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Female</th>
+<th align="right">Male</th>
+<th align="right">Missing</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>18-23</td>
+<td align="right">205</td>
+<td align="right">860</td>
+<td align="right">4294</td>
+</tr>
+<tr class="even">
+<td>23-30</td>
+<td align="right">206</td>
+<td align="right">686</td>
+<td align="right">2899</td>
+</tr>
+<tr class="odd">
+<td>30-40</td>
+<td align="right">167</td>
+<td align="right">521</td>
+<td align="right">1534</td>
+</tr>
+<tr class="even">
+<td>40-50</td>
+<td align="right">115</td>
+<td align="right">296</td>
+<td align="right">704</td>
+</tr>
+<tr class="odd">
+<td>50-60</td>
+<td align="right">121</td>
+<td align="right">280</td>
+<td align="right">733</td>
+</tr>
+<tr class="even">
+<td>60+</td>
+<td align="right">82</td>
+<td align="right">199</td>
+<td align="right">297</td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><span id="tab:unnamed-chunk-5">Table 10.3: </span>Trip Summary By User Age and Gender</caption>
+<thead>
+<tr class="header">
+<th align="left">Demographic Group</th>
+<th align="right">Proportion of Users</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Number of Trips Per User</th>
+<th align="right">Avg Number of Trips per User</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Female 18-23</td>
+<td align="right">0.014</td>
+<td align="right">0.01</td>
+<td align="right">3.0</td>
+<td align="right">6.68</td>
+<td align="right">21.17</td>
+</tr>
+<tr class="even">
+<td align="left">Female 23-30</td>
+<td align="right">0.015</td>
+<td align="right">0.02</td>
+<td align="right">3.0</td>
+<td align="right">11.10</td>
+<td align="right">13.42</td>
+</tr>
+<tr class="odd">
+<td align="left">Female 30-40</td>
+<td align="right">0.012</td>
+<td align="right">0.03</td>
+<td align="right">4.0</td>
+<td align="right">17.20</td>
+<td align="right">20.00</td>
+</tr>
+<tr class="even">
+<td align="left">Female 40-50</td>
+<td align="right">0.010</td>
+<td align="right">0.03</td>
+<td align="right">4.0</td>
+<td align="right">23.01</td>
+<td align="right">16.92</td>
+</tr>
+<tr class="odd">
+<td align="left">Female 50-60</td>
+<td align="right">0.009</td>
+<td align="right">0.03</td>
+<td align="right">4.0</td>
+<td align="right">21.55</td>
+<td align="right">20.92</td>
+</tr>
+<tr class="even">
+<td align="left">Female 60+</td>
+<td align="right">0.007</td>
+<td align="right">0.01</td>
+<td align="right">2.5</td>
+<td align="right">5.42</td>
+<td align="right">22.83</td>
+</tr>
+<tr class="odd">
+<td align="left">Male 18-23</td>
+<td align="right">0.058</td>
+<td align="right">0.15</td>
+<td align="right">6.0</td>
+<td align="right">18.31</td>
+<td align="right">15.43</td>
+</tr>
+<tr class="even">
+<td align="left">Male 23-30</td>
+<td align="right">0.047</td>
+<td align="right">0.08</td>
+<td align="right">5.0</td>
+<td align="right">11.83</td>
+<td align="right">17.05</td>
+</tr>
+<tr class="odd">
+<td align="left">Male 30-40</td>
+<td align="right">0.036</td>
+<td align="right">0.10</td>
+<td align="right">4.0</td>
+<td align="right">19.86</td>
+<td align="right">18.42</td>
+</tr>
+<tr class="even">
+<td align="left">Male 40-50</td>
+<td align="right">0.021</td>
+<td align="right">0.05</td>
+<td align="right">3.0</td>
+<td align="right">15.57</td>
+<td align="right">17.50</td>
+</tr>
+<tr class="odd">
+<td align="left">Male 50-60</td>
+<td align="right">0.020</td>
+<td align="right">0.05</td>
+<td align="right">3.0</td>
+<td align="right">15.81</td>
+<td align="right">20.46</td>
+</tr>
+<tr class="even">
+<td align="left">Male 60+</td>
+<td align="right">0.016</td>
+<td align="right">0.02</td>
+<td align="right">3.0</td>
+<td align="right">9.51</td>
+<td align="right">19.00</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing 18-23</td>
+<td align="right">0.295</td>
+<td align="right">0.22</td>
+<td align="right">2.0</td>
+<td align="right">5.32</td>
+<td align="right">19.75</td>
+</tr>
+<tr class="even">
+<td align="left">Missing 23-30</td>
+<td align="right">0.203</td>
+<td align="right">0.11</td>
+<td align="right">2.0</td>
+<td align="right">3.78</td>
+<td align="right">23.83</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing 30-40</td>
+<td align="right">0.107</td>
+<td align="right">0.05</td>
+<td align="right">2.0</td>
+<td align="right">3.50</td>
+<td align="right">25.42</td>
+</tr>
+<tr class="even">
+<td align="left">Missing 40-50</td>
+<td align="right">0.051</td>
+<td align="right">0.02</td>
+<td align="right">2.0</td>
+<td align="right">3.26</td>
+<td align="right">27.17</td>
+</tr>
+<tr class="odd">
+<td align="left">Missing 50-60</td>
+<td align="right">0.054</td>
+<td align="right">0.02</td>
+<td align="right">2.0</td>
+<td align="right">2.60</td>
+<td align="right">27.83</td>
+</tr>
+<tr class="even">
+<td align="left">Missing 60+</td>
+<td align="right">0.025</td>
+<td align="right">0.01</td>
+<td align="right">1.0</td>
+<td align="right">1.76</td>
+<td align="right">34.42</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">1.000</td>
+<td align="right">1.00</td>
+<td align="right">2.0</td>
+<td align="right">7.12</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p>If we look at both gender and age, we see that the patterns of the number of trips per user and median trip durations differ by gender. The oldest user group (60+) takes the fewest trips for all three categories. However, the reverse is not always the case. While the median number of trips for younger male users is the highest, middle age female users tend to take more trips than the younger female users, while for the “Missing” group, the median is almost flat. However, since the female age group is the smallest, their summary numbers are more likely to fluctuate than the numbers for the larger male and missing groups. For trip durations, the oldest users take either average length trips (for males) or the longest trips (for females and especially for the missing group). Although the youngest users in male and missing categories take the shortest trips, the female bikers are on the high end, with median trip duration of 19.5 minutes, longer than 18-23 users in the other two groups and the second longest trip duration among female age groups. However, female users 23-30 have the shortest median trip duration out of all groups, which implies that the effect is caused by in-group variability and not by gender-specific biking trends. Since a significant number of trips involves secondary stops, the median duration would be higher if round trips with a stop get counted as one trip, while the average number of trips would be correspondingly lower.</p>
+</div>
+<div id="tables-and-plots-by-user-location" class="section level2">
+<h2><span class="header-section-number">10.5</span> Tables and Plots by User Location</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-6">Table 10.4: </span>Trip Summary By User Location</caption>
+<thead>
+<tr class="header">
+<th align="left">Location</th>
+<th align="right">Proportion of Users</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Number of Trips Per User</th>
+<th align="right">Avg Number of Trips per User</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Amherst</td>
+<td align="right">0.07</td>
+<td align="right">0.12</td>
+<td align="right">4</td>
+<td align="right">12.53</td>
+<td align="right">12.58</td>
+</tr>
+<tr class="even">
+<td align="left">Northampton</td>
+<td align="right">0.07</td>
+<td align="right">0.19</td>
+<td align="right">4</td>
+<td align="right">18.63</td>
+<td align="right">16.25</td>
+</tr>
+<tr class="odd">
+<td align="left">Other</td>
+<td align="right">0.74</td>
+<td align="right">0.49</td>
+<td align="right">2</td>
+<td align="right">4.71</td>
+<td align="right">21.25</td>
+</tr>
+<tr class="even">
+<td align="left">Holyoke</td>
+<td align="right">0.05</td>
+<td align="right">0.09</td>
+<td align="right">4</td>
+<td align="right">13.80</td>
+<td align="right">21.92</td>
+</tr>
+<tr class="odd">
+<td align="left">Springfield</td>
+<td align="right">0.05</td>
+<td align="right">0.08</td>
+<td align="right">3</td>
+<td align="right">11.30</td>
+<td align="right">25.67</td>
+</tr>
+<tr class="even">
+<td align="left">Easthampton</td>
+<td align="right">0.02</td>
+<td align="right">0.03</td>
+<td align="right">4</td>
+<td align="right">7.89</td>
+<td align="right">26.25</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">2</td>
+<td align="right">7.12</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-6-1.png" width="768" /><img src="valleybike-report_files/figure-html/unnamed-chunk-6-2.png" width="768" /></p>
+<p>User location represents the location of the home address inputted at the creation of the account. Other category includes all addresses outside of the top 5, which are listed separately. Thus, “Other” category would include both tourists from areas such as Boston and New York and those living in towns in the Pioneer Valley, such as Hadley. One of the most interesting findings of the table is that, despite 74% of user locations falling under “Other”, only 49% of trips are taken by those users, with the 5 towns with the greatest number of users accounting for the share of trips that is twice as big as their share of users. Although there exists some variation by town, users in the listed towns take more and shorter trips than user in “Other” category. This would be the case if the users with “Other” location used bikes for occasional recreation, while users in towns with several ValleyBike stations were more likely to use them for shorter purpose-driven trips around town.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="tables-and-plots-by-user-type" class="section level2">
+<h2><span class="header-section-number">10.6</span> Tables and Plots by User Type</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-7">Table 10.5: </span>Trip Summary By User Account Type</caption>
+<thead>
+<tr class="header">
+<th align="left">User Account Type</th>
+<th align="right">Proportion of Users</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Number of Trips Per User</th>
+<th align="right">Avg Number of Trips per User</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">IndividualUserEntity</td>
+<td align="right">0.12</td>
+<td align="right">0.29</td>
+<td align="right">4</td>
+<td align="right">17.75</td>
+<td align="right">15.83</td>
+</tr>
+<tr class="even">
+<td align="left">MobileUserEntity</td>
+<td align="right">0.87</td>
+<td align="right">0.70</td>
+<td align="right">2</td>
+<td align="right">5.74</td>
+<td align="right">21.42</td>
+</tr>
+<tr class="odd">
+<td align="left">OccasionalUserEntity</td>
+<td align="right">0.01</td>
+<td align="right">0.01</td>
+<td align="right">1</td>
+<td align="right">2.66</td>
+<td align="right">26.83</td>
+</tr>
+<tr class="even">
+<td align="left">Total</td>
+<td align="right">1.00</td>
+<td align="right">1.00</td>
+<td align="right">2</td>
+<td align="right">7.12</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-7-1.png" width="768" /><img src="valleybike-report_files/figure-html/unnamed-chunk-7-2.png" width="768" /></p>
+<p>This table focuses on different types of accounts. While “MobileUserEntity” is by far the largest in terms of both users and trips, “IndividualUserEntity” users take over twice as many trips, with a median trip being shorter than for a median “MobileUserEntity” user’s trip. This is similar to a pattern exhibited by Male and Female vs. Missing divide for gender, which is not an accident for this dataset, as we’ll see later.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="tables-and-plots-by-whether-the-trip-is-on-a-workday" class="section level2">
+<h2><span class="header-section-number">10.7</span> Tables and Plots by Whether the Trip is on a Workday</h2>
+<table>
+<caption><span id="tab:unnamed-chunk-8">Table 10.6: </span>Trip Summary By Type of Day</caption>
+<thead>
+<tr class="header">
+<th align="left">Type of Day</th>
+<th align="right">Proportion of Trips</th>
+<th align="right">Median Trip Duration, mins</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Workday</td>
+<td align="right">0.68</td>
+<td align="right">17.98</td>
+</tr>
+<tr class="even">
+<td align="left">Weekend/Holiday</td>
+<td align="right">0.32</td>
+<td align="right">23.08</td>
+</tr>
+<tr class="odd">
+<td align="left">Total</td>
+<td align="right">1.00</td>
+<td align="right">19.67</td>
+</tr>
+</tbody>
+</table>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-8-1.png" width="768" /><img src="valleybike-report_files/figure-html/unnamed-chunk-8-2.png" width="768" /></p>
+<p>It is important to note that, other than weekends, the holidays include Independence Day, Labor Day, and Memorial Day. We see that the peak bike usage plot shifts to the right on weekends, representing that people use bikes less in the morning on weekends and holidays. The fraction of the trips taken on weekends is 0.31, which is slightly higher than the expected $2/7 $0.29. In terms of duration, a median holiday trip is also longer than a median weekday trip, 23 vs 18 minutes.</p>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="table-summary-of-most-common-visited-stations-by-user-location" class="section level2">
+<h2><span class="header-section-number">10.8</span> Table Summary of Most Common Visited Stations by User Location</h2>
+<p>Tables included below list the number of visited stations (as either a starting station or an end station). The proportion of trips variable is the proportion of all trips for users who put that place as their location which includes this station. Since trips are between two, usually different, locations, the total of the proportion of all trips may add up to &gt; 1. We see that users living in one of the towns with ValleyBike stations tend to most commonly visit stations in that town, with stations from other towns usually outside of the list of top 10 stations. For users who put their locations as “Other”, the most often visited stations are UMass-connected stations, and stations connected to town centers and transportation such as Amherst Town Hall and Northampton Train Stations. This strengthens the interpretation that many of these users come to a town with ValleyBike station through different means for a limited time and then use a bike to move around the area. The prevalence of NA stations for trips for all users likely stems from secondary stops.</p>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 10.7: </span>User Location: Other</caption>
+<thead>
+<tr class="header">
+<th align="left">station</th>
+<th align="left">city</th>
+<th align="right">total number of trips</th>
+<th align="right">proportion of trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">UMass Southwest</td>
+<td align="left">Amherst</td>
+<td align="right">9241</td>
+<td align="right">0.161</td>
+</tr>
+<tr class="even">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">8026</td>
+<td align="right">0.140</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Knowlton</td>
+<td align="left">Amherst</td>
+<td align="right">6371</td>
+<td align="right">0.111</td>
+</tr>
+<tr class="even">
+<td align="left">Amherst Town Hall</td>
+<td align="left">Amherst</td>
+<td align="right">5998</td>
+<td align="right">0.104</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Haigis Mall</td>
+<td align="left">Amherst</td>
+<td align="right">5891</td>
+<td align="right">0.103</td>
+</tr>
+<tr class="even">
+<td align="left">Northampton Train Station</td>
+<td align="left">Northampton</td>
+<td align="right">5003</td>
+<td align="right">0.087</td>
+</tr>
+<tr class="odd">
+<td align="left">Kendrick Park</td>
+<td align="left">Amherst</td>
+<td align="right">3970</td>
+<td align="right">0.069</td>
+</tr>
+<tr class="even">
+<td align="left">South End/Main Street</td>
+<td align="left">Springfield</td>
+<td align="right">3878</td>
+<td align="right">0.067</td>
+</tr>
+<tr class="odd">
+<td align="left">North Pleasant Street</td>
+<td align="left">Amherst</td>
+<td align="right">3490</td>
+<td align="right">0.061</td>
+</tr>
+<tr class="even">
+<td align="left">Mackenzie Field</td>
+<td align="left">Holyoke</td>
+<td align="right">3384</td>
+<td align="right">0.059</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Central Residential Area</td>
+<td align="left">Amherst</td>
+<td align="right">3064</td>
+<td align="right">0.053</td>
+</tr>
+<tr class="even">
+<td align="left">Main Street/Bridge Street</td>
+<td align="left">Northampton</td>
+<td align="right">3012</td>
+<td align="right">0.052</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass ILC</td>
+<td align="left">Amherst</td>
+<td align="right">2917</td>
+<td align="right">0.051</td>
+</tr>
+<tr class="even">
+<td align="left">Pulaski Park/Downtown</td>
+<td align="left">Northampton</td>
+<td align="right">2749</td>
+<td align="right">0.048</td>
+</tr>
+<tr class="odd">
+<td align="left">State St/Mass Central Rail Trail</td>
+<td align="left">Northampton</td>
+<td align="right">2689</td>
+<td align="right">0.047</td>
+</tr>
+<tr class="even">
+<td align="left">Florence Center</td>
+<td align="left">Northampton</td>
+<td align="right">2515</td>
+<td align="right">0.044</td>
+</tr>
+<tr class="odd">
+<td align="left">Main Street/Court House</td>
+<td align="left">Northampton</td>
+<td align="right">2481</td>
+<td align="right">0.043</td>
+</tr>
+<tr class="even">
+<td align="left">Holyoke Medical Center Station</td>
+<td align="left">Holyoke</td>
+<td align="right">2438</td>
+<td align="right">0.042</td>
+</tr>
+<tr class="odd">
+<td align="left">Live Well Springfield Station</td>
+<td align="left">Springfield</td>
+<td align="right">2367</td>
+<td align="right">0.041</td>
+</tr>
+<tr class="even">
+<td align="left">Court Square</td>
+<td align="left">Springfield</td>
+<td align="right">2214</td>
+<td align="right">0.039</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 10.7: </span>User Location: Northampton</caption>
+<thead>
+<tr class="header">
+<th align="left">station</th>
+<th align="left">city</th>
+<th align="right">total number of trips</th>
+<th align="right">proportion of trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Northampton Train Station</td>
+<td align="left">Northampton</td>
+<td align="right">5002</td>
+<td align="right">0.217</td>
+</tr>
+<tr class="even">
+<td align="left">Pulaski Park/Downtown</td>
+<td align="left">Northampton</td>
+<td align="right">4682</td>
+<td align="right">0.204</td>
+</tr>
+<tr class="odd">
+<td align="left">State St/Mass Central Rail Trail</td>
+<td align="left">Northampton</td>
+<td align="right">4642</td>
+<td align="right">0.202</td>
+</tr>
+<tr class="even">
+<td align="left">Florence Center</td>
+<td align="left">Northampton</td>
+<td align="right">3979</td>
+<td align="right">0.173</td>
+</tr>
+<tr class="odd">
+<td align="left">Jackson Street</td>
+<td align="left">Northampton</td>
+<td align="right">3207</td>
+<td align="right">0.139</td>
+</tr>
+<tr class="even">
+<td align="left">Northampton High School</td>
+<td align="left">Northampton</td>
+<td align="right">3024</td>
+<td align="right">0.131</td>
+</tr>
+<tr class="odd">
+<td align="left">Village Hill/State Hospital</td>
+<td align="left">Northampton</td>
+<td align="right">2763</td>
+<td align="right">0.120</td>
+</tr>
+<tr class="even">
+<td align="left">Main Street/Court House</td>
+<td align="left">Northampton</td>
+<td align="right">2391</td>
+<td align="right">0.104</td>
+</tr>
+<tr class="odd">
+<td align="left">Florence Bank Station</td>
+<td align="left">Northampton</td>
+<td align="right">2356</td>
+<td align="right">0.102</td>
+</tr>
+<tr class="even">
+<td align="left">Main Street/Bridge Street</td>
+<td align="left">Northampton</td>
+<td align="right">2351</td>
+<td align="right">0.102</td>
+</tr>
+<tr class="odd">
+<td align="left">YMCA/Childs Park</td>
+<td align="left">Northampton</td>
+<td align="right">1785</td>
+<td align="right">0.078</td>
+</tr>
+<tr class="even">
+<td align="left">John M Greene Hall/Smith College</td>
+<td align="left">Northampton</td>
+<td align="right">1622</td>
+<td align="right">0.071</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">1523</td>
+<td align="right">0.066</td>
+</tr>
+<tr class="even">
+<td align="left">Forbes Library</td>
+<td align="left">Northampton</td>
+<td align="right">1394</td>
+<td align="right">0.061</td>
+</tr>
+<tr class="odd">
+<td align="left">Amherst Town Hall</td>
+<td align="left">Amherst</td>
+<td align="right">953</td>
+<td align="right">0.041</td>
+</tr>
+<tr class="even">
+<td align="left">Cooley Dickinson Health Care</td>
+<td align="left">Northampton</td>
+<td align="right">647</td>
+<td align="right">0.028</td>
+</tr>
+<tr class="odd">
+<td align="left">Rail Trail @ Millside Park</td>
+<td align="left">Easthampton</td>
+<td align="right">637</td>
+<td align="right">0.028</td>
+</tr>
+<tr class="even">
+<td align="left">UMass Haigis Mall</td>
+<td align="left">Amherst</td>
+<td align="right">612</td>
+<td align="right">0.027</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Knowlton</td>
+<td align="left">Amherst</td>
+<td align="right">386</td>
+<td align="right">0.017</td>
+</tr>
+<tr class="even">
+<td align="left">UMass Southwest</td>
+<td align="left">Amherst</td>
+<td align="right">383</td>
+<td align="right">0.017</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 10.7: </span>User Location: Holyoke</caption>
+<thead>
+<tr class="header">
+<th align="left">station</th>
+<th align="left">city</th>
+<th align="right">total number of trips</th>
+<th align="right">proportion of trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mackenzie Field</td>
+<td align="left">Holyoke</td>
+<td align="right">3592</td>
+<td align="right">0.326</td>
+</tr>
+<tr class="even">
+<td align="left">Holyoke Medical Center Station</td>
+<td align="left">Holyoke</td>
+<td align="right">3452</td>
+<td align="right">0.313</td>
+</tr>
+<tr class="odd">
+<td align="left">The Pedlar Station/Crosier Field</td>
+<td align="left">Holyoke</td>
+<td align="right">2960</td>
+<td align="right">0.269</td>
+</tr>
+<tr class="even">
+<td align="left">South Holyoke</td>
+<td align="left">Holyoke</td>
+<td align="right">1950</td>
+<td align="right">0.177</td>
+</tr>
+<tr class="odd">
+<td align="left">Pleasant Station</td>
+<td align="left">Holyoke</td>
+<td align="right">1607</td>
+<td align="right">0.146</td>
+</tr>
+<tr class="even">
+<td align="left">Downtown</td>
+<td align="left">Holyoke</td>
+<td align="right">1521</td>
+<td align="right">0.138</td>
+</tr>
+<tr class="odd">
+<td align="left">Depot Square</td>
+<td align="left">Holyoke</td>
+<td align="right">1368</td>
+<td align="right">0.124</td>
+</tr>
+<tr class="even">
+<td align="left">Springdale Park</td>
+<td align="left">Holyoke</td>
+<td align="right">1029</td>
+<td align="right">0.093</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">565</td>
+<td align="right">0.051</td>
+</tr>
+<tr class="even">
+<td align="left">Eink Station</td>
+<td align="left">Holyoke</td>
+<td align="right">454</td>
+<td align="right">0.041</td>
+</tr>
+<tr class="odd">
+<td align="left">Northampton Train Station</td>
+<td align="left">Northampton</td>
+<td align="right">429</td>
+<td align="right">0.039</td>
+</tr>
+<tr class="even">
+<td align="left">Pulaski Park/Downtown</td>
+<td align="left">Northampton</td>
+<td align="right">272</td>
+<td align="right">0.025</td>
+</tr>
+<tr class="odd">
+<td align="left">State St/Mass Central Rail Trail</td>
+<td align="left">Northampton</td>
+<td align="right">185</td>
+<td align="right">0.017</td>
+</tr>
+<tr class="even">
+<td align="left">Rail Trail @ Union Street</td>
+<td align="left">Easthampton</td>
+<td align="right">177</td>
+<td align="right">0.016</td>
+</tr>
+<tr class="odd">
+<td align="left">Rail Trail @ Millside Park</td>
+<td align="left">Easthampton</td>
+<td align="right">170</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="even">
+<td align="left">Holyoke Community College</td>
+<td align="left">Holyoke</td>
+<td align="right">168</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="odd">
+<td align="left">Florence Center</td>
+<td align="left">Northampton</td>
+<td align="right">156</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="even">
+<td align="left">John M Greene Hall/Smith College</td>
+<td align="left">Northampton</td>
+<td align="right">153</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="odd">
+<td align="left">Jackson Street</td>
+<td align="left">Northampton</td>
+<td align="right">147</td>
+<td align="right">0.013</td>
+</tr>
+<tr class="even">
+<td align="left">City Hall</td>
+<td align="left">Easthampton</td>
+<td align="right">134</td>
+<td align="right">0.012</td>
+</tr>
+<tr class="odd">
+<td align="left">Florence Bank Station</td>
+<td align="left">Northampton</td>
+<td align="right">134</td>
+<td align="right">0.012</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 10.7: </span>User Location: Amherst</caption>
+<thead>
+<tr class="header">
+<th align="left">station</th>
+<th align="left">city</th>
+<th align="right">total number of trips</th>
+<th align="right">proportion of trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">North Pleasant Street</td>
+<td align="left">Amherst</td>
+<td align="right">4558</td>
+<td align="right">0.327</td>
+</tr>
+<tr class="even">
+<td align="left">Amherst Town Hall</td>
+<td align="left">Amherst</td>
+<td align="right">3128</td>
+<td align="right">0.224</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Knowlton</td>
+<td align="left">Amherst</td>
+<td align="right">2997</td>
+<td align="right">0.215</td>
+</tr>
+<tr class="even">
+<td align="left">Kendrick Park</td>
+<td align="left">Amherst</td>
+<td align="right">2657</td>
+<td align="right">0.190</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">2351</td>
+<td align="right">0.168</td>
+</tr>
+<tr class="even">
+<td align="left">UMass Haigis Mall</td>
+<td align="left">Amherst</td>
+<td align="right">2306</td>
+<td align="right">0.165</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Southwest</td>
+<td align="left">Amherst</td>
+<td align="right">2105</td>
+<td align="right">0.151</td>
+</tr>
+<tr class="even">
+<td align="left">East Hadley Road</td>
+<td align="left">Amherst</td>
+<td align="right">1812</td>
+<td align="right">0.130</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass ILC</td>
+<td align="left">Amherst</td>
+<td align="right">1592</td>
+<td align="right">0.114</td>
+</tr>
+<tr class="even">
+<td align="left">Northampton Train Station</td>
+<td align="left">Northampton</td>
+<td align="right">696</td>
+<td align="right">0.050</td>
+</tr>
+<tr class="odd">
+<td align="left">UMass Central Residential Area</td>
+<td align="left">Amherst</td>
+<td align="right">655</td>
+<td align="right">0.047</td>
+</tr>
+<tr class="even">
+<td align="left">State St/Mass Central Rail Trail</td>
+<td align="left">Northampton</td>
+<td align="right">481</td>
+<td align="right">0.034</td>
+</tr>
+<tr class="odd">
+<td align="left">Pulaski Park/Downtown</td>
+<td align="left">Northampton</td>
+<td align="right">437</td>
+<td align="right">0.031</td>
+</tr>
+<tr class="even">
+<td align="left">Jackson Street</td>
+<td align="left">Northampton</td>
+<td align="right">432</td>
+<td align="right">0.031</td>
+</tr>
+<tr class="odd">
+<td align="left">Main Street/Bridge Street</td>
+<td align="left">Northampton</td>
+<td align="right">422</td>
+<td align="right">0.030</td>
+</tr>
+<tr class="even">
+<td align="left">Main Street/Court House</td>
+<td align="left">Northampton</td>
+<td align="right">419</td>
+<td align="right">0.030</td>
+</tr>
+<tr class="odd">
+<td align="left">Village Hill/State Hospital</td>
+<td align="left">Northampton</td>
+<td align="right">206</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="even">
+<td align="left">John M Greene Hall/Smith College</td>
+<td align="left">Northampton</td>
+<td align="right">121</td>
+<td align="right">0.009</td>
+</tr>
+<tr class="odd">
+<td align="left">Forbes Library</td>
+<td align="left">Northampton</td>
+<td align="right">102</td>
+<td align="right">0.007</td>
+</tr>
+<tr class="even">
+<td align="left">Florence Center</td>
+<td align="left">Northampton</td>
+<td align="right">65</td>
+<td align="right">0.005</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+<table>
+<caption><span id="tab:unnamed-chunk-9">Table 10.7: </span>User Location: Springfield</caption>
+<thead>
+<tr class="header">
+<th align="left">station</th>
+<th align="left">city</th>
+<th align="right">total number of trips</th>
+<th align="right">proportion of trips</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Mason Square Library</td>
+<td align="left">Springfield</td>
+<td align="right">3144</td>
+<td align="right">0.326</td>
+</tr>
+<tr class="even">
+<td align="left">South End/Main Street</td>
+<td align="left">Springfield</td>
+<td align="right">2538</td>
+<td align="right">0.263</td>
+</tr>
+<tr class="odd">
+<td align="left">NA</td>
+<td align="left">NA</td>
+<td align="right">2384</td>
+<td align="right">0.247</td>
+</tr>
+<tr class="even">
+<td align="left">Live Well Springfield Station</td>
+<td align="left">Springfield</td>
+<td align="right">2123</td>
+<td align="right">0.220</td>
+</tr>
+<tr class="odd">
+<td align="left">Mercy Medical Center Station</td>
+<td align="left">Springfield</td>
+<td align="right">1398</td>
+<td align="right">0.145</td>
+</tr>
+<tr class="even">
+<td align="left">Court Square</td>
+<td align="left">Springfield</td>
+<td align="right">1291</td>
+<td align="right">0.134</td>
+</tr>
+<tr class="odd">
+<td align="left">MGM Springfield</td>
+<td align="left">Springfield</td>
+<td align="right">859</td>
+<td align="right">0.089</td>
+</tr>
+<tr class="even">
+<td align="left">CFWM @ Stearns Square Station</td>
+<td align="left">Springfield</td>
+<td align="right">856</td>
+<td align="right">0.089</td>
+</tr>
+<tr class="odd">
+<td align="left">STCC - Springfield Armory</td>
+<td align="left">Springfield</td>
+<td align="right">816</td>
+<td align="right">0.085</td>
+</tr>
+<tr class="even">
+<td align="left">Baystate Health/Chestnut Street</td>
+<td align="left">Springfield</td>
+<td align="right">547</td>
+<td align="right">0.057</td>
+</tr>
+<tr class="odd">
+<td align="left">Basketball Hall of Fame</td>
+<td align="left">Springfield</td>
+<td align="right">500</td>
+<td align="right">0.052</td>
+</tr>
+<tr class="even">
+<td align="left">Holyoke Medical Center Station</td>
+<td align="left">Holyoke</td>
+<td align="right">302</td>
+<td align="right">0.031</td>
+</tr>
+<tr class="odd">
+<td align="left">Mackenzie Field</td>
+<td align="left">Holyoke</td>
+<td align="right">208</td>
+<td align="right">0.022</td>
+</tr>
+<tr class="even">
+<td align="left">Amherst Town Hall</td>
+<td align="left">Amherst</td>
+<td align="right">205</td>
+<td align="right">0.021</td>
+</tr>
+<tr class="odd">
+<td align="left">Northampton Train Station</td>
+<td align="left">Northampton</td>
+<td align="right">197</td>
+<td align="right">0.020</td>
+</tr>
+<tr class="even">
+<td align="left">Pulaski Park/Downtown</td>
+<td align="left">Northampton</td>
+<td align="right">144</td>
+<td align="right">0.015</td>
+</tr>
+<tr class="odd">
+<td align="left">Baystate Health/Main Street</td>
+<td align="left">Springfield</td>
+<td align="right">137</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="even">
+<td align="left">The Pedlar Station/Crosier Field</td>
+<td align="left">Holyoke</td>
+<td align="right">136</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="odd">
+<td align="left">Main Street/Bridge Street</td>
+<td align="left">Northampton</td>
+<td align="right">133</td>
+<td align="right">0.014</td>
+</tr>
+<tr class="even">
+<td align="left">South Holyoke</td>
+<td align="left">Holyoke</td>
+<td align="right">110</td>
+<td align="right">0.011</td>
+</tr>
+</tbody>
+</table>
+<div style="page-break-after: always;"></div>
+</div>
+<div id="other-tables" class="section level2">
+<h2><span class="header-section-number">10.9</span> Other Tables</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="demographic-exploration-of-valleybike-users.html#cb1-1"></a><span class="kw">table</span>(summary_by_user<span class="op">$</span>dtype, summary_by_user<span class="op">$</span>membership_type)</span></code></pre></div>
+<pre><code>##                       
+##                          IRU   MRU   ORU
+##   IndividualUserEntity  1518     0     0
+##   MobileUserEntity       346 12142     0
+##   OccasionalUserEntity     0     0   193</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="demographic-exploration-of-valleybike-users.html#cb3-1"></a><span class="kw">table</span>(summary_by_user<span class="op">$</span>membership_type, summary_by_user<span class="op">$</span>gender)</span></code></pre></div>
+<pre><code>##      
+##       Female  Male Missing
+##   IRU    639  1114     111
+##   MRU    257  1728   10157
+##   ORU      0     0     193</code></pre>
+<p>These tables show distribution of <code>dtype</code> variable by the other membership type and gender. We see that “ORU” and “OccasionalUserEntity” are identical, while “IRU” mostly corresponds to “IndividualUserEntity” and “MRU” to “MobileUserEntity”. In addition, almost all users with gender listed as “Missing” fall into “MRU” account category, potentially explaining differences in usage patterns as stemming partially from the account type.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="demographic-exploration-of-valleybike-users.html#cb5-1"></a>gender_loc_table &lt;-<span class="st"> </span><span class="kw">table</span>(summary_by_user<span class="op">$</span>location, summary_by_user<span class="op">$</span>gender)</span>
+<span id="cb5-2"><a href="demographic-exploration-of-valleybike-users.html#cb5-2"></a>gender_loc_table</span></code></pre></div>
+<pre><code>##              
+##               Female Male Missing
+##   Amherst         94  229     658
+##   Easthampton     30   63     241
+##   Holyoke         67  251     367
+##   Northampton    205  392     475
+##   Other          387 1649    8373
+##   Springfield    113  258     347</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="demographic-exploration-of-valleybike-users.html#cb7-1"></a><span class="kw">ftable</span>(<span class="kw">round</span>(<span class="kw">prop.table</span>(gender_loc_table, <span class="dt">margin =</span> <span class="dv">1</span>), <span class="dv">3</span>))</span></code></pre></div>
+<pre><code>##              Female  Male Missing
+##                                  
+## Amherst       0.096 0.233   0.671
+## Easthampton   0.090 0.189   0.722
+## Holyoke       0.098 0.366   0.536
+## Northampton   0.191 0.366   0.443
+## Other         0.037 0.158   0.804
+## Springfield   0.157 0.359   0.483</code></pre>
+<p>The gender distribution of users from different locations is generally similar, with “Missing” overrepresented or users with “Other” location and underrepresented for users from Springfield and Northampton. Males are overrepresented over females compared to the rest of the locations for user from Holyoke and locations listed as “Other.”</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="demographic-exploration-of-valleybike-users.html#cb9-1"></a><span class="kw">table</span>(summary_by_user<span class="op">$</span>location, summary_by_user<span class="op">$</span>dtype)</span></code></pre></div>
+<pre><code>##              
+##               IndividualUserEntity MobileUserEntity OccasionalUserEntity
+##   Amherst                      214              767                    0
+##   Easthampton                   54              280                    0
+##   Holyoke                      136              549                    0
+##   Northampton                  405              667                    0
+##   Other                        527             9689                  193
+##   Springfield                  182              536                    0</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="demographic-exploration-of-valleybike-users.html#cb11-1"></a><span class="kw">table</span>(summary_by_user<span class="op">$</span>location, summary_by_user<span class="op">$</span>membership_type)</span></code></pre></div>
+<pre><code>##              
+##                IRU  MRU  ORU
+##   Amherst      260  721    0
+##   Easthampton   62  272    0
+##   Holyoke      168  517    0
+##   Northampton  478  594    0
+##   Other        696 9520  193
+##   Springfield  200  518    0</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="demographic-exploration-of-valleybike-users.html#cb13-1"></a><span class="kw">table</span>(summary_by_user<span class="op">$</span>age_group, summary_by_user<span class="op">$</span>dtype)</span></code></pre></div>
+<pre><code>##        
+##         IndividualUserEntity MobileUserEntity OccasionalUserEntity
+##   18-23                  310             5049                    0
+##   23-30                  272             3519                    0
+##   30-40                  302             1920                    0
+##   40-50                  196              919                    0
+##   50-60                  241              700                  193
+##   60+                    197              381                    0</code></pre>
+<p>The fact that all users with “OccasionalUserEntity” accounts fall into “Other” location category and 50-60 age group highlights that this is a very specific type of account and user that could be potentially removed to focus on the more representative users.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="demographic-exploration-of-valleybike-users.html#cb15-1"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">table</span>(summary_by_user<span class="op">$</span>membership_name, summary_by_user<span class="op">$</span>dtype))</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">IndividualUserEntity</th>
+<th align="right">MobileUserEntity</th>
+<th align="right">OccasionalUserEntity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Access Pass</td>
+<td align="right">18</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Annual Membership</td>
+<td align="right">33</td>
+<td align="right">12</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Annual Pass\</td>
+<td align="right">31</td>
+<td align="right">9</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Corps Account</td>
+<td align="right">9</td>
+<td align="right">1</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Day Pass</td>
+<td align="right">0</td>
+<td align="right">4376</td>
+<td align="right">83</td>
+</tr>
+<tr class="even">
+<td>Founding Member</td>
+<td align="right">64</td>
+<td align="right">13</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Founding Member Pass</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Founding Member\</td>
+<td align="right">143</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Go Pass Mobile Upgrade</td>
+<td align="right">5</td>
+<td align="right">29</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Month Membership</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td>Month Pass</td>
+<td align="right">77</td>
+<td align="right">5</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Monthly Membership</td>
+<td align="right">94</td>
+<td align="right">388</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Monthly Membership Mobile Upgrade</td>
+<td align="right">2</td>
+<td align="right">6</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Monthly Pass\</td>
+<td align="right">0</td>
+<td align="right">230</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Pay Per Ride Pass</td>
+<td align="right">1034</td>
+<td align="right">7398</td>
+<td align="right">103</td>
+</tr>
+<tr class="even">
+<td>Student Annual Membership</td>
+<td align="right">5</td>
+<td align="right">7</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="demographic-exploration-of-valleybike-users.html#cb16-1"></a>knitr<span class="op">::</span><span class="kw">kable</span>(<span class="kw">table</span>(summary_by_user<span class="op">$</span>membership_name, summary_by_user<span class="op">$</span>membership_type)) <span class="op">%&gt;%</span></span>
+<span id="cb16-2"><a href="demographic-exploration-of-valleybike-users.html#cb16-2"></a><span class="st">  </span>kableExtra<span class="op">::</span><span class="kw">column_spec</span>(<span class="dv">1</span>, <span class="st">&quot;2in&quot;</span>)</span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">IRU</th>
+<th align="right">MRU</th>
+<th align="right">ORU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Access Pass</td>
+<td align="right">25</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Annual Membership</td>
+<td align="right">45</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Annual Pass\</td>
+<td align="right">40</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Corps Account</td>
+<td align="right">10</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Day Pass</td>
+<td align="right">0</td>
+<td align="right">4376</td>
+<td align="right">83</td>
+</tr>
+<tr class="even">
+<td>Founding Member</td>
+<td align="right">77</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Founding Member Pass</td>
+<td align="right">3</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Founding Member\</td>
+<td align="right">150</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Go Pass Mobile Upgrade</td>
+<td align="right">34</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Month Membership</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">7</td>
+</tr>
+<tr class="odd">
+<td>Month Pass</td>
+<td align="right">82</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Monthly Membership</td>
+<td align="right">168</td>
+<td align="right">314</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Monthly Membership Mobile Upgrade</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>Monthly Pass\</td>
+<td align="right">0</td>
+<td align="right">230</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>Pay Per Ride Pass</td>
+<td align="right">1210</td>
+<td align="right">7222</td>
+<td align="right">103</td>
+</tr>
+<tr class="even">
+<td>Student Annual Membership</td>
+<td align="right">12</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>The last two plots expand on differe</td>
+<td align="right">nt type</td>
+<td align="right">s of me</td>
+<td align="right">mberships. However, due to the number of options for “membership_name” variable, “dtype” and “membership_type” are most likely the more relevant variables.</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="getting-set-up.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/07-Konstantin_Demo_Section.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["valleybike-report.pdf", "valleybike-report.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

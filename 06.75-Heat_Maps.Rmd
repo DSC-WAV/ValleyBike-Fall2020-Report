@@ -2,9 +2,11 @@
 title: "Heat Maps for BookDown"
 author: "Maggie Wu"
 date: "12/7/2020"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
-
+# Heat Maps
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -30,7 +32,7 @@ We credit Stamen Maps and the Google API for providing us with the map images--o
 
 Here, we first provide the code to read in a key.
 
-```{r}
+```{r, message=FALSE}
 key <- readLines("apikey.txt")
 register_google(key)
 has_google_key()
@@ -39,7 +41,7 @@ has_google_key()
 
 ## Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 #data processing function
 get_heatmap_data <- function(data, long, lat, radius, start, end){
   #pass in a subset of the data
@@ -65,7 +67,7 @@ get_heatmap_data <- function(data, long, lat, radius, start, end){
 
 ## Function for Obtaining the Base Map
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL, r) {
   register_google(key)
   if (!has_google_key()) {
@@ -87,7 +89,7 @@ getbasemap <- function(key = NULL, zoom = "auto", dataset = NULL, r) {
 
 ## Main Plotting Function
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 plot_heatmap <- function(mykey = NULL, zoom = "auto", data, lat, long, radius,
                          mapradius, start, end) {
   station_sub <- stations %>% filter(longitude >= (long-radius) & longitude <= (long+radius),
@@ -113,7 +115,7 @@ The primary purpose of this function is to automate the heat map generating proc
 
 # Findings
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 northampton1 <- plot_heatmap(mykey = key,
                      zoom = 15,
                      data = august2020,
@@ -128,7 +130,7 @@ northampton1 <- plot_heatmap(mykey = key,
 northampton1
 ```
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 northampton3 <- plot_heatmap(mykey = key,
                      zoom = 15,
                      data = august2019,
@@ -145,7 +147,7 @@ northampton3
 
 We see a lot more traffic in the July of 2019 than the July of 2020, most likely due to the pandemic. Stations are denoted by a yellow star. We plot everything else in red.
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 amherst <- plot_heatmap(mykey = key,
                      zoom = 15,
                      data = july2020,
@@ -189,7 +191,7 @@ amherst3
 
 The same pattern occurs in Amherst.
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 northampton_shopping <- plot_heatmap(mykey = key,
                      zoom = 15,
                      data = july2019,
@@ -209,7 +211,7 @@ northampton_shopping
 
 We also created an animation of an intersection in downtown Northampton.
 
-```{r}
+```{r, message=FALSE,warning=FALSE}
 library(gganimate)
 
 october2019 <- october2019 %>% mutate("month" = "October 2019")

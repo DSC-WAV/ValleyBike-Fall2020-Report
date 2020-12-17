@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>11 Animation | DSC-WAV ValleyBike Project Report</title>
+  <meta name="description" content="11 Animation | DSC-WAV ValleyBike Project Report" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="11 Animation | DSC-WAV ValleyBike Project Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="11 Animation | DSC-WAV ValleyBike Project Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="findings.html"/>
+<link rel="next" href="demographic-exploration-of-valleybike-users.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSC-WAV ValleyBike Project</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Project Description</a></li>
+<li class="chapter" data-level="2" data-path="data-import-and-processing.html"><a href="data-import-and-processing.html"><i class="fa fa-check"></i><b>2</b> Data Import and Processing</a></li>
+<li class="chapter" data-level="3" data-path="utility-functions.html"><a href="utility-functions.html"><i class="fa fa-check"></i><b>3</b> Utility Functions</a></li>
+<li class="chapter" data-level="4" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="jessica.html"><a href="jessica.html"><i class="fa fa-check"></i><b>5</b> Jessica</a></li>
+<li class="chapter" data-level="6" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html"><i class="fa fa-check"></i><b>6</b> Trips to Nowhere Overview</a><ul>
+<li class="chapter" data-level="6.1" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#motivation"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#general-summary"><i class="fa fa-check"></i><b>6.2</b> General Summary</a></li>
+<li class="chapter" data-level="6.3" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#proportion-of-trips-that-dont-rnd-at-an-identified-station-over-time"><i class="fa fa-check"></i><b>6.3</b> Proportion of Trips That Don’t Rnd At an Identified Station Over Time</a></li>
+<li class="chapter" data-level="6.4" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#close-look-at-trips-to-na-in-springfield-june-july-2019"><i class="fa fa-check"></i><b>6.4</b> Close Look at Trips to NA in Springfield, June-July 2019</a></li>
+<li class="chapter" data-level="6.5" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#interactive-map-of-trip-end-points-that-are-not-stations"><i class="fa fa-check"></i><b>6.5</b> Interactive Map of Trip End Points That Are Not Stations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="leaflet-graham.html"><a href="leaflet-graham.html"><i class="fa fa-check"></i><b>7</b> Leaflet - Graham</a><ul>
+<li class="chapter" data-level="7.1" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots"><i class="fa fa-check"></i><b>7.1</b> Leaflet Plots</a></li>
+<li class="chapter" data-level="7.2" data-path="leaflet-graham.html"><a href="leaflet-graham.html#functions-for-visuals"><i class="fa fa-check"></i><b>7.2</b> Functions for Visuals</a></li>
+<li class="chapter" data-level="7.3" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots-1"><i class="fa fa-check"></i><b>7.3</b> Leaflet Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html"><i class="fa fa-check"></i><b>8</b> Secondary Stops- Graham</a><ul>
+<li class="chapter" data-level="8.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#secondary-stops"><i class="fa fa-check"></i><b>8.1</b> Secondary Stops</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-1-trips-12-13"><i class="fa fa-check"></i><b>8.1.1</b> User 1 (Trips 12-13)</a></li>
+<li class="chapter" data-level="8.1.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-2-trips-26-27"><i class="fa fa-check"></i><b>8.1.2</b> User 2 (Trips 26-27)</a></li>
+<li class="chapter" data-level="8.1.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-3-trips-41-42"><i class="fa fa-check"></i><b>8.1.3</b> User 3 (Trips 41-42)</a></li>
+<li class="chapter" data-level="8.1.4" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-4-trips-52-53"><i class="fa fa-check"></i><b>8.1.4</b> User 4 (Trips 52-53)</a></li>
+<li class="chapter" data-level="8.1.5" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-5-trips-88-89"><i class="fa fa-check"></i><b>8.1.5</b> User 5 (Trips 88-89)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#all-secondary-stops"><i class="fa fa-check"></i><b>8.2</b> All Secondary Stops</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.1</b> Static Visualization of All Stops</a></li>
+<li class="chapter" data-level="8.2.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-stops-by-city"><i class="fa fa-check"></i><b>8.2.2</b> Static Visualization of Stops by City</a></li>
+<li class="chapter" data-level="8.2.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#interactive-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.3</b> Interactive Visualization of All Stops</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="getting-set-up.html"><a href="getting-set-up.html"><i class="fa fa-check"></i><b>9</b> Getting Set Up</a><ul>
+<li class="chapter" data-level="9.1" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-processing-heat-map-data-and-subtracting-points-within-a-certain-distance-from-the-station"><i class="fa fa-check"></i><b>9.1</b> Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station</a></li>
+<li class="chapter" data-level="9.2" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-obtaining-the-base-map"><i class="fa fa-check"></i><b>9.2</b> Function for Obtaining the Base Map</a></li>
+<li class="chapter" data-level="9.3" data-path="getting-set-up.html"><a href="getting-set-up.html#main-plotting-function"><i class="fa fa-check"></i><b>9.3</b> Main Plotting Function</a></li>
+<li class="chapter" data-level="9.4" data-path="getting-set-up.html"><a href="getting-set-up.html#using-the-function"><i class="fa fa-check"></i><b>9.4</b> Using the Function</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="findings.html"><a href="findings.html"><i class="fa fa-check"></i><b>10</b> Findings</a></li>
+<li class="chapter" data-level="11" data-path="animation.html"><a href="animation.html"><i class="fa fa-check"></i><b>11</b> Animation</a></li>
+<li class="chapter" data-level="12" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html"><i class="fa fa-check"></i><b>12</b> Demographic Exploration of ValleyBike Users</a><ul>
+<li class="chapter" data-level="12.1" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#motivations-and-initial-summary"><i class="fa fa-check"></i><b>12.1</b> Motivations and Initial Summary</a></li>
+<li class="chapter" data-level="12.2" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-of-trips-by-user-age"><i class="fa fa-check"></i><b>12.2</b> Tables and Plots of Trips by User Age</a></li>
+<li class="chapter" data-level="12.3" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-gender"><i class="fa fa-check"></i><b>12.3</b> Tables and Plots by Gender</a></li>
+<li class="chapter" data-level="12.4" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-by-gender-and-age"><i class="fa fa-check"></i><b>12.4</b> Tables by Gender and Age</a></li>
+<li class="chapter" data-level="12.5" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-location"><i class="fa fa-check"></i><b>12.5</b> Tables and Plots by User Location</a></li>
+<li class="chapter" data-level="12.6" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-type"><i class="fa fa-check"></i><b>12.6</b> Tables and Plots by User Type</a></li>
+<li class="chapter" data-level="12.7" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-whether-the-trip-is-on-a-workday"><i class="fa fa-check"></i><b>12.7</b> Tables and Plots by Whether the Trip is on a Workday</a></li>
+<li class="chapter" data-level="12.8" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#table-summary-of-most-common-visited-stations-by-user-location"><i class="fa fa-check"></i><b>12.8</b> Table Summary of Most Common Visited Stations by User Location</a></li>
+<li class="chapter" data-level="12.9" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#other-tables"><i class="fa fa-check"></i><b>12.9</b> Other Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSC-WAV ValleyBike Project Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="animation" class="section level1">
+<h1><span class="header-section-number">11</span> Animation</h1>
+<p>We also created an animation of an intersection in downtown Northampton.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="animation.html#cb55-1"></a><span class="kw">library</span>(gganimate)</span></code></pre></div>
+<pre><code>## Warning: package &#39;gganimate&#39; was built under R version 4.0.2</code></pre>
+<pre><code>## 
+## Attaching package: &#39;gganimate&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:raster&#39;:
+## 
+##     animate</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb59-1"><a href="animation.html#cb59-1"></a>october2019 &lt;-<span class="st"> </span>october2019 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;month&quot;</span> =<span class="st"> &quot;October 2019&quot;</span>)</span>
+<span id="cb59-2"><a href="animation.html#cb59-2"></a>november2019 &lt;-<span class="st"> </span>november2019 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;month&quot;</span> =<span class="st"> &quot;November 2019&quot;</span>)</span>
+<span id="cb59-3"><a href="animation.html#cb59-3"></a>june2020 &lt;-<span class="st"> </span>june2020 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;month&quot;</span> =<span class="st"> &quot;June 2020&quot;</span>)</span>
+<span id="cb59-4"><a href="animation.html#cb59-4"></a>july2020 &lt;-<span class="st"> </span>july2020 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;month&quot;</span> =<span class="st"> &quot;July 2020&quot;</span>)</span>
+<span id="cb59-5"><a href="animation.html#cb59-5"></a>august2020 &lt;-<span class="st"> </span>august2020 <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;month&quot;</span> =<span class="st"> &quot;August 2020&quot;</span>)</span>
+<span id="cb59-6"><a href="animation.html#cb59-6"></a></span>
+<span id="cb59-7"><a href="animation.html#cb59-7"></a>dataall &lt;-<span class="st"> </span><span class="kw">rbind</span>(october2019, november2019, june2020, july2020, august2020) </span>
+<span id="cb59-8"><a href="animation.html#cb59-8"></a>              </span>
+<span id="cb59-9"><a href="animation.html#cb59-9"></a>northampton2 &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> <span class="kw">c</span>(<span class="dt">left =</span> <span class="fl">-72.632453</span>, <span class="dt">bottom =</span> <span class="fl">42.318369</span>, <span class="dt">right =</span> <span class="fl">-72.62490</span>, <span class="dt">top =</span> <span class="fl">42.323489</span>), <span class="dt">source =</span> <span class="st">&quot;stamen&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;terrain&quot;</span>, <span class="dt">zoom =</span> <span class="dv">17</span>)</span></code></pre></div>
+<pre><code>## Source : http://tile.stamen.com/terrain/17/39091/48497.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain/17/39092/48497.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain/17/39093/48497.png</code></pre>
+<pre><code>## Source : http://tile.stamen.com/terrain/17/39094/48497.png</code></pre>
+<pre><code>## Not Found (HTTP 404). Failed to aquire tile /terrain/17/39094/48497.png.
+## Source : http://tile.stamen.com/terrain/17/39091/48498.png
+## Source : http://tile.stamen.com/terrain/17/39092/48498.png
+## Source : http://tile.stamen.com/terrain/17/39093/48498.png
+## Source : http://tile.stamen.com/terrain/17/39094/48498.png
+## Source : http://tile.stamen.com/terrain/17/39091/48499.png
+## Source : http://tile.stamen.com/terrain/17/39092/48499.png
+## Source : http://tile.stamen.com/terrain/17/39093/48499.png
+## Source : http://tile.stamen.com/terrain/17/39094/48499.png</code></pre>
+<div class="sourceCode" id="cb65"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb65-1"><a href="animation.html#cb65-1"></a>dataall &lt;-<span class="st"> </span>dataall <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(longitude <span class="op">&gt;=</span><span class="st"> </span><span class="fl">-72.632453</span> <span class="op">&amp;</span><span class="st"> </span>longitude <span class="op">&lt;=</span><span class="st"> </span><span class="fl">-72.62490</span>,</span>
+<span id="cb65-2"><a href="animation.html#cb65-2"></a>                               latitude <span class="op">&gt;=</span><span class="st"> </span><span class="fl">42.318369</span> <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">&lt;=</span><span class="st"> </span><span class="fl">42.323489</span>) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb65-3"><a href="animation.html#cb65-3"></a><span class="st">                              </span><span class="kw">mutate</span>(<span class="st">&quot;monthfct&quot;</span> =<span class="st"> </span><span class="kw">as.factor</span>(month))</span>
+<span id="cb65-4"><a href="animation.html#cb65-4"></a></span>
+<span id="cb65-5"><a href="animation.html#cb65-5"></a></span>
+<span id="cb65-6"><a href="animation.html#cb65-6"></a>dataall &lt;-<span class="st"> </span>dataall <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="dt">monthfct =</span> <span class="kw">fct_relevel</span>(monthfct, <span class="kw">c</span>(<span class="st">&quot;october2019&quot;</span>, <span class="st">&quot;november2019&quot;</span>, <span class="st">&quot;june2020&quot;</span>, <span class="st">&quot;july2020&quot;</span>, <span class="st">&quot;august2020&quot;</span>)))</span></code></pre></div>
+<pre><code>## Warning: Problem with `mutate()` input `monthfct`.
+## x Unknown levels in `f`: october2019, november2019, june2020, july2020, august2020
+## ℹ Input `monthfct` is `fct_relevel(...)`.</code></pre>
+<pre><code>## Warning: Unknown levels in `f`: october2019, november2019, june2020, july2020,
+## august2020</code></pre>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="animation.html#cb68-1"></a>animap &lt;-<span class="st"> </span><span class="kw">ggmap</span>(northampton2)<span class="op">+</span></span>
+<span id="cb68-2"><a href="animation.html#cb68-2"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude), <span class="dt">color =</span> <span class="st">&quot;#f54287&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.01</span>,</span>
+<span id="cb68-3"><a href="animation.html#cb68-3"></a>             <span class="dt">size =</span> <span class="fl">0.03</span>, <span class="dt">data =</span> dataall)</span>
+<span id="cb68-4"><a href="animation.html#cb68-4"></a>animap</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="animation.html#cb69-1"></a>nohogif &lt;-<span class="st"> </span>animap<span class="op">+</span></span>
+<span id="cb69-2"><a href="animation.html#cb69-2"></a><span class="st">   </span><span class="kw">transition_states</span>(</span>
+<span id="cb69-3"><a href="animation.html#cb69-3"></a>    monthfct,</span>
+<span id="cb69-4"><a href="animation.html#cb69-4"></a>    <span class="dt">transition_length =</span> <span class="dv">1</span>,</span>
+<span id="cb69-5"><a href="animation.html#cb69-5"></a>    <span class="dt">state_length =</span> <span class="dv">3</span>) <span class="op">+</span></span>
+<span id="cb69-6"><a href="animation.html#cb69-6"></a><span class="st">   </span><span class="kw">ease_aes</span>(<span class="st">&#39;bounce-in-out&#39;</span>) <span class="op">+</span></span>
+<span id="cb69-7"><a href="animation.html#cb69-7"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">subtitle =</span> <span class="st">&quot;{closest_state}&quot;</span>,</span>
+<span id="cb69-8"><a href="animation.html#cb69-8"></a>       <span class="dt">x =</span> <span class="st">&quot;longitude&quot;</span>,</span>
+<span id="cb69-9"><a href="animation.html#cb69-9"></a>       <span class="dt">y =</span> <span class="st">&quot;latitude&quot;</span>,</span>
+<span id="cb69-10"><a href="animation.html#cb69-10"></a>       <span class="dt">title =</span> <span class="st">&quot;Northampton Bike Traffic&quot;</span>,</span>
+<span id="cb69-11"><a href="animation.html#cb69-11"></a>       <span class="dt">caption =</span> <span class="st">&quot;Source: ValleyBike. Bike trackers collected coordinate data </span></span>
+<span id="cb69-12"><a href="animation.html#cb69-12"></a><span class="st">       every five seconds. 1363614 observations across two years are shown here.&quot;</span>)</span>
+<span id="cb69-13"><a href="animation.html#cb69-13"></a>nohogif</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-10-1.gif" /><!-- --></p>
+
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="findings.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="demographic-exploration-of-valleybike-users.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06.75-Heat_Maps.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["valleybike-report.pdf", "valleybike-report.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

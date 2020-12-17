@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Getting Set Up | DSC-WAV ValleyBike Project Report</title>
+  <meta name="description" content="9 Getting Set Up | DSC-WAV ValleyBike Project Report" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Getting Set Up | DSC-WAV ValleyBike Project Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Getting Set Up | DSC-WAV ValleyBike Project Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="secondary-stops-graham.html"/>
+<link rel="next" href="findings.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSC-WAV ValleyBike Project</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Project Description</a></li>
+<li class="chapter" data-level="2" data-path="data-import-and-processing.html"><a href="data-import-and-processing.html"><i class="fa fa-check"></i><b>2</b> Data Import and Processing</a></li>
+<li class="chapter" data-level="3" data-path="utility-functions.html"><a href="utility-functions.html"><i class="fa fa-check"></i><b>3</b> Utility Functions</a></li>
+<li class="chapter" data-level="4" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="jessica.html"><a href="jessica.html"><i class="fa fa-check"></i><b>5</b> Jessica</a></li>
+<li class="chapter" data-level="6" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html"><i class="fa fa-check"></i><b>6</b> Trips to Nowhere Overview</a><ul>
+<li class="chapter" data-level="6.1" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#motivation"><i class="fa fa-check"></i><b>6.1</b> Motivation</a></li>
+<li class="chapter" data-level="6.2" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#general-summary"><i class="fa fa-check"></i><b>6.2</b> General Summary</a></li>
+<li class="chapter" data-level="6.3" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#proportion-of-trips-that-dont-rnd-at-an-identified-station-over-time"><i class="fa fa-check"></i><b>6.3</b> Proportion of Trips That Don’t Rnd At an Identified Station Over Time</a></li>
+<li class="chapter" data-level="6.4" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#close-look-at-trips-to-na-in-springfield-june-july-2019"><i class="fa fa-check"></i><b>6.4</b> Close Look at Trips to NA in Springfield, June-July 2019</a></li>
+<li class="chapter" data-level="6.5" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#interactive-map-of-trip-end-points-that-are-not-stations"><i class="fa fa-check"></i><b>6.5</b> Interactive Map of Trip End Points That Are Not Stations</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="leaflet-graham.html"><a href="leaflet-graham.html"><i class="fa fa-check"></i><b>7</b> Leaflet - Graham</a><ul>
+<li class="chapter" data-level="7.1" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots"><i class="fa fa-check"></i><b>7.1</b> Leaflet Plots</a></li>
+<li class="chapter" data-level="7.2" data-path="leaflet-graham.html"><a href="leaflet-graham.html#functions-for-visuals"><i class="fa fa-check"></i><b>7.2</b> Functions for Visuals</a></li>
+<li class="chapter" data-level="7.3" data-path="leaflet-graham.html"><a href="leaflet-graham.html#leaflet-plots-1"><i class="fa fa-check"></i><b>7.3</b> Leaflet Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html"><i class="fa fa-check"></i><b>8</b> Secondary Stops- Graham</a><ul>
+<li class="chapter" data-level="8.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#secondary-stops"><i class="fa fa-check"></i><b>8.1</b> Secondary Stops</a><ul>
+<li class="chapter" data-level="8.1.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-1-trips-12-13"><i class="fa fa-check"></i><b>8.1.1</b> User 1 (Trips 12-13)</a></li>
+<li class="chapter" data-level="8.1.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-2-trips-26-27"><i class="fa fa-check"></i><b>8.1.2</b> User 2 (Trips 26-27)</a></li>
+<li class="chapter" data-level="8.1.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-3-trips-41-42"><i class="fa fa-check"></i><b>8.1.3</b> User 3 (Trips 41-42)</a></li>
+<li class="chapter" data-level="8.1.4" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-4-trips-52-53"><i class="fa fa-check"></i><b>8.1.4</b> User 4 (Trips 52-53)</a></li>
+<li class="chapter" data-level="8.1.5" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#user-5-trips-88-89"><i class="fa fa-check"></i><b>8.1.5</b> User 5 (Trips 88-89)</a></li>
+</ul></li>
+<li class="chapter" data-level="8.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#all-secondary-stops"><i class="fa fa-check"></i><b>8.2</b> All Secondary Stops</a><ul>
+<li class="chapter" data-level="8.2.1" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.1</b> Static Visualization of All Stops</a></li>
+<li class="chapter" data-level="8.2.2" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#static-visualization-of-stops-by-city"><i class="fa fa-check"></i><b>8.2.2</b> Static Visualization of Stops by City</a></li>
+<li class="chapter" data-level="8.2.3" data-path="secondary-stops-graham.html"><a href="secondary-stops-graham.html#interactive-visualization-of-all-stops"><i class="fa fa-check"></i><b>8.2.3</b> Interactive Visualization of All Stops</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="getting-set-up.html"><a href="getting-set-up.html"><i class="fa fa-check"></i><b>9</b> Getting Set Up</a><ul>
+<li class="chapter" data-level="9.1" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-processing-heat-map-data-and-subtracting-points-within-a-certain-distance-from-the-station"><i class="fa fa-check"></i><b>9.1</b> Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station</a></li>
+<li class="chapter" data-level="9.2" data-path="getting-set-up.html"><a href="getting-set-up.html#function-for-obtaining-the-base-map"><i class="fa fa-check"></i><b>9.2</b> Function for Obtaining the Base Map</a></li>
+<li class="chapter" data-level="9.3" data-path="getting-set-up.html"><a href="getting-set-up.html#main-plotting-function"><i class="fa fa-check"></i><b>9.3</b> Main Plotting Function</a></li>
+<li class="chapter" data-level="9.4" data-path="getting-set-up.html"><a href="getting-set-up.html#using-the-function"><i class="fa fa-check"></i><b>9.4</b> Using the Function</a></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="findings.html"><a href="findings.html"><i class="fa fa-check"></i><b>10</b> Findings</a></li>
+<li class="chapter" data-level="11" data-path="animation.html"><a href="animation.html"><i class="fa fa-check"></i><b>11</b> Animation</a></li>
+<li class="chapter" data-level="12" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html"><i class="fa fa-check"></i><b>12</b> Demographic Exploration of ValleyBike Users</a><ul>
+<li class="chapter" data-level="12.1" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#motivations-and-initial-summary"><i class="fa fa-check"></i><b>12.1</b> Motivations and Initial Summary</a></li>
+<li class="chapter" data-level="12.2" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-of-trips-by-user-age"><i class="fa fa-check"></i><b>12.2</b> Tables and Plots of Trips by User Age</a></li>
+<li class="chapter" data-level="12.3" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-gender"><i class="fa fa-check"></i><b>12.3</b> Tables and Plots by Gender</a></li>
+<li class="chapter" data-level="12.4" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-by-gender-and-age"><i class="fa fa-check"></i><b>12.4</b> Tables by Gender and Age</a></li>
+<li class="chapter" data-level="12.5" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-location"><i class="fa fa-check"></i><b>12.5</b> Tables and Plots by User Location</a></li>
+<li class="chapter" data-level="12.6" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-type"><i class="fa fa-check"></i><b>12.6</b> Tables and Plots by User Type</a></li>
+<li class="chapter" data-level="12.7" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-whether-the-trip-is-on-a-workday"><i class="fa fa-check"></i><b>12.7</b> Tables and Plots by Whether the Trip is on a Workday</a></li>
+<li class="chapter" data-level="12.8" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#table-summary-of-most-common-visited-stations-by-user-location"><i class="fa fa-check"></i><b>12.8</b> Table Summary of Most Common Visited Stations by User Location</a></li>
+<li class="chapter" data-level="12.9" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#other-tables"><i class="fa fa-check"></i><b>12.9</b> Other Tables</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSC-WAV ValleyBike Project Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="getting-set-up" class="section level1">
+<h1><span class="header-section-number">9</span> Getting Set Up</h1>
+<p>We credit Stamen Maps and the Google API for providing us with the map images–one will need a valid Google API key to run the visualizations.</p>
+<p>Here, we first provide the code to read in a key.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="getting-set-up.html#cb24-1"></a>key &lt;-<span class="st"> </span><span class="kw">readLines</span>(<span class="st">&quot;apikey.txt&quot;</span>)</span>
+<span id="cb24-2"><a href="getting-set-up.html#cb24-2"></a><span class="kw">register_google</span>(key)</span>
+<span id="cb24-3"><a href="getting-set-up.html#cb24-3"></a><span class="kw">has_google_key</span>()</span></code></pre></div>
+<pre><code>## [1] TRUE</code></pre>
+<div id="function-for-processing-heat-map-data-and-subtracting-points-within-a-certain-distance-from-the-station" class="section level2">
+<h2><span class="header-section-number">9.1</span> Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station</h2>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="getting-set-up.html#cb26-1"></a><span class="co">#data processing function</span></span>
+<span id="cb26-2"><a href="getting-set-up.html#cb26-2"></a>get_heatmap_data &lt;-<span class="st"> </span><span class="cf">function</span>(data, long, lat, radius, start, end){</span>
+<span id="cb26-3"><a href="getting-set-up.html#cb26-3"></a>  <span class="co">#pass in a subset of the data</span></span>
+<span id="cb26-4"><a href="getting-set-up.html#cb26-4"></a>  start_date &lt;-<span class="st"> </span><span class="kw">as_date</span>(start)</span>
+<span id="cb26-5"><a href="getting-set-up.html#cb26-5"></a>  end_date &lt;-<span class="st"> </span><span class="kw">as_date</span>(end)</span>
+<span id="cb26-6"><a href="getting-set-up.html#cb26-6"></a>  sub_data &lt;-<span class="st"> </span>data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(longitude <span class="op">&lt;=</span><span class="st"> </span>(long <span class="op">+</span><span class="st"> </span>radius), longitude <span class="op">&gt;=</span><span class="st"> </span>(long <span class="op">-</span><span class="st"> </span>radius),</span>
+<span id="cb26-7"><a href="getting-set-up.html#cb26-7"></a>                              latitude <span class="op">&lt;=</span><span class="st"> </span>(lat <span class="op">+</span><span class="st"> </span>radius), latitude <span class="op">&gt;=</span><span class="st"> </span>(lat <span class="op">-</span><span class="st"> </span>radius),</span>
+<span id="cb26-8"><a href="getting-set-up.html#cb26-8"></a>                              start_date <span class="op">&lt;=</span><span class="st"> </span>time, end_date <span class="op">&gt;=</span><span class="st"> </span>time)</span>
+<span id="cb26-9"><a href="getting-set-up.html#cb26-9"></a>  sub_stations &lt;-<span class="st"> </span>stations <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(longitude <span class="op">&lt;=</span><span class="st"> </span><span class="kw">max</span>(sub_data<span class="op">$</span>longitude) <span class="op">&amp;</span><span class="st"> </span>longitude <span class="op">&gt;=</span><span class="st"> </span><span class="kw">min</span>(sub_data<span class="op">$</span>longitude) <span class="op">&amp;</span></span>
+<span id="cb26-10"><a href="getting-set-up.html#cb26-10"></a><span class="st">                                        </span>latitude <span class="op">&lt;=</span><span class="st"> </span><span class="kw">max</span>(sub_data<span class="op">$</span>latitude) <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">&gt;=</span><span class="st"> </span><span class="kw">min</span>(sub_data<span class="op">$</span>longitude))</span>
+<span id="cb26-11"><a href="getting-set-up.html#cb26-11"></a>  <span class="co">#finds distances between stations and points</span></span>
+<span id="cb26-12"><a href="getting-set-up.html#cb26-12"></a>  distances &lt;-<span class="st"> </span><span class="kw">pointDistance</span>(<span class="kw">cbind</span>(sub_stations<span class="op">$</span>longitude, sub_stations<span class="op">$</span>latitude),</span>
+<span id="cb26-13"><a href="getting-set-up.html#cb26-13"></a>                             <span class="kw">cbind</span>(sub_data<span class="op">$</span>longitude, sub_data<span class="op">$</span>latitude), <span class="dt">lonlat=</span><span class="ot">TRUE</span>)</span>
+<span id="cb26-14"><a href="getting-set-up.html#cb26-14"></a>  tdistances &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">t</span>(distances)) <span class="co">#transpose it</span></span>
+<span id="cb26-15"><a href="getting-set-up.html#cb26-15"></a>  distances3 &lt;-<span class="st"> </span>tdistances <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">mutate</span>(<span class="st">&quot;remove&quot;</span> =<span class="st"> </span><span class="kw">ifelse</span>(<span class="kw">apply</span>(tdistances <span class="op">&lt;</span><span class="st"> </span><span class="dv">25</span>, <span class="dv">1</span>, any), <span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb26-16"><a href="getting-set-up.html#cb26-16"></a>  <span class="co">#does not include points within 25 meters of each station</span></span>
+<span id="cb26-17"><a href="getting-set-up.html#cb26-17"></a>  distances3 &lt;-<span class="st"> </span>distances3 <span class="op">%&gt;%</span><span class="st"> </span>dplyr<span class="op">::</span><span class="kw">select</span>(remove)</span>
+<span id="cb26-18"><a href="getting-set-up.html#cb26-18"></a>  sub_data &lt;-<span class="st"> </span><span class="kw">cbind</span>(sub_data, distances3)</span>
+<span id="cb26-19"><a href="getting-set-up.html#cb26-19"></a>  sub_data &lt;-<span class="st"> </span>sub_data <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(remove <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb26-20"><a href="getting-set-up.html#cb26-20"></a>  <span class="kw">return</span>(sub_data)</span>
+<span id="cb26-21"><a href="getting-set-up.html#cb26-21"></a>}</span></code></pre></div>
+</div>
+<div id="function-for-obtaining-the-base-map" class="section level2">
+<h2><span class="header-section-number">9.2</span> Function for Obtaining the Base Map</h2>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="getting-set-up.html#cb27-1"></a>getbasemap &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">key =</span> <span class="ot">NULL</span>, <span class="dt">zoom =</span> <span class="st">&quot;auto&quot;</span>, <span class="dt">dataset =</span> <span class="ot">NULL</span>, r) {</span>
+<span id="cb27-2"><a href="getting-set-up.html#cb27-2"></a>  <span class="kw">register_google</span>(key)</span>
+<span id="cb27-3"><a href="getting-set-up.html#cb27-3"></a>  <span class="cf">if</span> (<span class="op">!</span><span class="kw">has_google_key</span>()) {</span>
+<span id="cb27-4"><a href="getting-set-up.html#cb27-4"></a>    <span class="kw">print</span>(<span class="st">&quot;Please provide a valid google API key.&quot;</span>)</span>
+<span id="cb27-5"><a href="getting-set-up.html#cb27-5"></a>    <span class="kw">return</span>()</span>
+<span id="cb27-6"><a href="getting-set-up.html#cb27-6"></a>  }</span>
+<span id="cb27-7"><a href="getting-set-up.html#cb27-7"></a>  PopRange &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb27-8"><a href="getting-set-up.html#cb27-8"></a>    <span class="kw">min</span>(dataset<span class="op">$</span>longitude <span class="op">-</span><span class="st"> </span>r, <span class="dt">na.rm =</span> T),</span>
+<span id="cb27-9"><a href="getting-set-up.html#cb27-9"></a>    <span class="kw">min</span>(dataset<span class="op">$</span>latitude <span class="op">-</span><span class="st"> </span>r, <span class="dt">na.rm =</span> T),</span>
+<span id="cb27-10"><a href="getting-set-up.html#cb27-10"></a>    <span class="kw">max</span>(dataset<span class="op">$</span>longitude <span class="op">+</span><span class="st"> </span>r, <span class="dt">na.rm =</span> T),</span>
+<span id="cb27-11"><a href="getting-set-up.html#cb27-11"></a>    <span class="kw">max</span>(dataset<span class="op">$</span>latitude <span class="op">+</span><span class="st"> </span>r, <span class="dt">na.rm =</span> T)</span>
+<span id="cb27-12"><a href="getting-set-up.html#cb27-12"></a>  )</span>
+<span id="cb27-13"><a href="getting-set-up.html#cb27-13"></a>  basemap &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> PopRange, <span class="dt">source =</span> <span class="st">&quot;stamen&quot;</span>, <span class="dt">maptype =</span> <span class="st">&quot;toner&quot;</span>, <span class="dt">zoom =</span> zoom)</span>
+<span id="cb27-14"><a href="getting-set-up.html#cb27-14"></a>  basemap</span>
+<span id="cb27-15"><a href="getting-set-up.html#cb27-15"></a>  <span class="kw">return</span>(basemap)</span>
+<span id="cb27-16"><a href="getting-set-up.html#cb27-16"></a>}</span></code></pre></div>
+</div>
+<div id="main-plotting-function" class="section level2">
+<h2><span class="header-section-number">9.3</span> Main Plotting Function</h2>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="getting-set-up.html#cb28-1"></a>plot_heatmap &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">mykey =</span> <span class="ot">NULL</span>, <span class="dt">zoom =</span> <span class="st">&quot;auto&quot;</span>, data, lat, long, radius,</span>
+<span id="cb28-2"><a href="getting-set-up.html#cb28-2"></a>                         mapradius, start, end) {</span>
+<span id="cb28-3"><a href="getting-set-up.html#cb28-3"></a>  station_sub &lt;-<span class="st"> </span>stations <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">filter</span>(longitude <span class="op">&gt;=</span><span class="st"> </span>(long<span class="op">-</span>radius) <span class="op">&amp;</span><span class="st"> </span>longitude <span class="op">&lt;=</span><span class="st"> </span>(long<span class="op">+</span>radius),</span>
+<span id="cb28-4"><a href="getting-set-up.html#cb28-4"></a>                               latitude <span class="op">&gt;=</span><span class="st"> </span>(lat<span class="op">-</span>radius) <span class="op">&amp;</span><span class="st"> </span>latitude <span class="op">&lt;=</span><span class="st"> </span>(lat<span class="op">+</span>radius))</span>
+<span id="cb28-5"><a href="getting-set-up.html#cb28-5"></a>  mapdata &lt;-<span class="st"> </span><span class="kw">get_heatmap_data</span>(data, long, lat, radius, start, end)</span>
+<span id="cb28-6"><a href="getting-set-up.html#cb28-6"></a>  basemap &lt;-<span class="kw">getbasemap</span>(<span class="dt">key =</span> mykey, <span class="dt">zoom =</span> zoom, <span class="dt">dataset =</span> mapdata, <span class="dt">r =</span> mapradius)</span>
+<span id="cb28-7"><a href="getting-set-up.html#cb28-7"></a>  route_map &lt;-<span class="st"> </span><span class="kw">ggmap</span>(basemap) <span class="op">+</span></span>
+<span id="cb28-8"><a href="getting-set-up.html#cb28-8"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude),  <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.009</span>,</span>
+<span id="cb28-9"><a href="getting-set-up.html#cb28-9"></a>               <span class="dt">size =</span> <span class="fl">0.035</span>, <span class="dt">data =</span> mapdata) <span class="op">+</span></span>
+<span id="cb28-10"><a href="getting-set-up.html#cb28-10"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;none&quot;</span>)<span class="op">+</span></span>
+<span id="cb28-11"><a href="getting-set-up.html#cb28-11"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude), <span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">color =</span> <span class="st">&quot;orange&quot;</span>, <span class="dt">data =</span> station_sub, <span class="dt">shape =</span> <span class="dv">8</span>)</span>
+<span id="cb28-12"><a href="getting-set-up.html#cb28-12"></a>  route_map</span>
+<span id="cb28-13"><a href="getting-set-up.html#cb28-13"></a>}</span></code></pre></div>
+</div>
+<div id="using-the-function" class="section level2">
+<h2><span class="header-section-number">9.4</span> Using the Function</h2>
+<p>The user should only be concerned with calling the <code>plot_heatmap</code> function (the others are helper functions). The user can specify several inputs: a longitude and latitude of the location should be passed into the <em>lat</em> and <em>long</em> arguments as the center of an area of interest. The boundary from the central location should be specified with the <em>radius</em> argument, with the value being in terms of geocoordinates. The <em>mapradius</em> argument should also be specified. Finally, one must pass in a data set into <em>data</em> and a date range into <em>start</em> and <em>end</em>. All points within 25 meters of a station are excluded (since we know bikes are at the stations anyway).</p>
+<p>The primary purpose of this function is to automate the heat map generating process so that anyone can call the function. We now transition into some of the findings that we found by calling this function. The next session will provide several demonstrations on how to use the function.</p>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="secondary-stops-graham.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="findings.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06.75-Heat_Maps.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["valleybike-report.pdf", "valleybike-report.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

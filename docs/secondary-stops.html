@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>9 Secondary Stops | DSC-WAV ValleyBike Project Report</title>
+  <meta name="description" content="9 Secondary Stops | DSC-WAV ValleyBike Project Report" />
+  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="9 Secondary Stops | DSC-WAV ValleyBike Project Report" />
+  <meta property="og:type" content="book" />
+  
+  
+  
+  
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="9 Secondary Stops | DSC-WAV ValleyBike Project Report" />
+  
+  
+  
+
+
+
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="leaflet.html"/>
+<link rel="next" href="heat-maps.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
+<script src="libs/kePrint-0.0.1/kePrint.js"></script>
+<script src="libs/htmlwidgets-1.5.1/htmlwidgets.js"></script>
+<link href="libs/leaflet-1.3.1/leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-1.3.1/leaflet.js"></script>
+<link href="libs/leafletfix-1.0.0/leafletfix.css" rel="stylesheet" />
+<script src="libs/Proj4Leaflet-1.0.1/proj4-compressed.js"></script>
+<script src="libs/Proj4Leaflet-1.0.1/proj4leaflet.js"></script>
+<link href="libs/rstudio_leaflet-1.3.1/rstudio_leaflet.css" rel="stylesheet" />
+<script src="libs/leaflet-binding-2.0.3/leaflet.js"></script>
+
+
+<style type="text/css">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">DSC-WAV ValleyBike Project</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Project Description</a></li>
+<li class="chapter" data-level="2" data-path="data-import-and-processing.html"><a href="data-import-and-processing.html"><i class="fa fa-check"></i><b>2</b> Data Import and Processing</a></li>
+<li class="chapter" data-level="3" data-path="utility-functions.html"><a href="utility-functions.html"><i class="fa fa-check"></i><b>3</b> Utility Functions</a></li>
+<li class="chapter" data-level="4" data-path="introduction.html"><a href="introduction.html"><i class="fa fa-check"></i><b>4</b> Introduction</a></li>
+<li class="chapter" data-level="5" data-path="user-stories.html"><a href="user-stories.html"><i class="fa fa-check"></i><b>5</b> User Stories</a></li>
+<li class="chapter" data-level="6" data-path="station-summaries.html"><a href="station-summaries.html"><i class="fa fa-check"></i><b>6</b> Station Summaries</a></li>
+<li class="chapter" data-level="7" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html"><i class="fa fa-check"></i><b>7</b> Trips to Nowhere Overview</a><ul>
+<li class="chapter" data-level="7.1" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#motivation"><i class="fa fa-check"></i><b>7.1</b> Motivation</a></li>
+<li class="chapter" data-level="7.2" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#general-summary"><i class="fa fa-check"></i><b>7.2</b> General Summary</a></li>
+<li class="chapter" data-level="7.3" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#proportion-of-trips-that-dont-rnd-at-an-identified-station-over-time"><i class="fa fa-check"></i><b>7.3</b> Proportion of Trips That Don’t Rnd At an Identified Station Over Time</a></li>
+<li class="chapter" data-level="7.4" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#close-look-at-trips-to-na-in-springfield-june-july-2019"><i class="fa fa-check"></i><b>7.4</b> Close Look at Trips to NA in Springfield, June-July 2019</a></li>
+<li class="chapter" data-level="7.5" data-path="trips-to-nowhere-overview.html"><a href="trips-to-nowhere-overview.html#interactive-map-of-trip-end-points-that-are-not-stations"><i class="fa fa-check"></i><b>7.5</b> Interactive Map of Trip End Points That Are Not Stations</a></li>
+</ul></li>
+<li class="chapter" data-level="8" data-path="leaflet.html"><a href="leaflet.html"><i class="fa fa-check"></i><b>8</b> Leaflet</a><ul>
+<li class="chapter" data-level="8.1" data-path="leaflet.html"><a href="leaflet.html#leaflet-plots"><i class="fa fa-check"></i><b>8.1</b> Leaflet Plots</a></li>
+<li class="chapter" data-level="8.2" data-path="leaflet.html"><a href="leaflet.html#functions-for-visuals"><i class="fa fa-check"></i><b>8.2</b> Functions for Visuals</a></li>
+<li class="chapter" data-level="8.3" data-path="leaflet.html"><a href="leaflet.html#leaflet-plots-1"><i class="fa fa-check"></i><b>8.3</b> Leaflet Plots</a></li>
+</ul></li>
+<li class="chapter" data-level="9" data-path="secondary-stops.html"><a href="secondary-stops.html"><i class="fa fa-check"></i><b>9</b> Secondary Stops</a><ul>
+<li class="chapter" data-level="9.1" data-path="secondary-stops.html"><a href="secondary-stops.html#secondary-stops-1"><i class="fa fa-check"></i><b>9.1</b> Secondary Stops</a><ul>
+<li class="chapter" data-level="9.1.1" data-path="secondary-stops.html"><a href="secondary-stops.html#user-1-trips-12-13"><i class="fa fa-check"></i><b>9.1.1</b> User 1 (Trips 12-13)</a></li>
+<li class="chapter" data-level="9.1.2" data-path="secondary-stops.html"><a href="secondary-stops.html#user-2-trips-26-27"><i class="fa fa-check"></i><b>9.1.2</b> User 2 (Trips 26-27)</a></li>
+<li class="chapter" data-level="9.1.3" data-path="secondary-stops.html"><a href="secondary-stops.html#user-3-trips-41-42"><i class="fa fa-check"></i><b>9.1.3</b> User 3 (Trips 41-42)</a></li>
+<li class="chapter" data-level="9.1.4" data-path="secondary-stops.html"><a href="secondary-stops.html#user-4-trips-52-53"><i class="fa fa-check"></i><b>9.1.4</b> User 4 (Trips 52-53)</a></li>
+<li class="chapter" data-level="9.1.5" data-path="secondary-stops.html"><a href="secondary-stops.html#user-5-trips-88-89"><i class="fa fa-check"></i><b>9.1.5</b> User 5 (Trips 88-89)</a></li>
+</ul></li>
+<li class="chapter" data-level="9.2" data-path="secondary-stops.html"><a href="secondary-stops.html#all-secondary-stops"><i class="fa fa-check"></i><b>9.2</b> All Secondary Stops</a><ul>
+<li class="chapter" data-level="9.2.1" data-path="secondary-stops.html"><a href="secondary-stops.html#static-visualization-of-all-stops"><i class="fa fa-check"></i><b>9.2.1</b> Static Visualization of All Stops</a></li>
+<li class="chapter" data-level="9.2.2" data-path="secondary-stops.html"><a href="secondary-stops.html#static-visualization-of-stops-by-city"><i class="fa fa-check"></i><b>9.2.2</b> Static Visualization of Stops by City</a></li>
+<li class="chapter" data-level="9.2.3" data-path="secondary-stops.html"><a href="secondary-stops.html#interactive-visualization-of-all-stops"><i class="fa fa-check"></i><b>9.2.3</b> Interactive Visualization of All Stops</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="10" data-path="heat-maps.html"><a href="heat-maps.html"><i class="fa fa-check"></i><b>10</b> Heat Maps</a><ul>
+<li class="chapter" data-level="10.1" data-path="heat-maps.html"><a href="heat-maps.html#function-for-processing-heat-map-data-and-subtracting-points-within-a-certain-distance-from-the-station"><i class="fa fa-check"></i><b>10.1</b> Function for Processing Heat Map Data and Subtracting Points within a Certain Distance from the Station</a></li>
+<li class="chapter" data-level="10.2" data-path="heat-maps.html"><a href="heat-maps.html#function-for-obtaining-the-base-map"><i class="fa fa-check"></i><b>10.2</b> Function for Obtaining the Base Map</a></li>
+<li class="chapter" data-level="10.3" data-path="heat-maps.html"><a href="heat-maps.html#main-plotting-function"><i class="fa fa-check"></i><b>10.3</b> Main Plotting Function</a></li>
+<li class="chapter" data-level="10.4" data-path="heat-maps.html"><a href="heat-maps.html#using-the-function"><i class="fa fa-check"></i><b>10.4</b> Using the Function</a></li>
+</ul></li>
+<li class="chapter" data-level="11" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html"><i class="fa fa-check"></i><b>11</b> Demographic Exploration of ValleyBike Users</a><ul>
+<li class="chapter" data-level="11.1" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#motivations-and-initial-summary"><i class="fa fa-check"></i><b>11.1</b> Motivations and Initial Summary</a></li>
+<li class="chapter" data-level="11.2" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-of-trips-by-user-age"><i class="fa fa-check"></i><b>11.2</b> Tables and Plots of Trips by User Age</a></li>
+<li class="chapter" data-level="11.3" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-gender"><i class="fa fa-check"></i><b>11.3</b> Tables and Plots by Gender</a></li>
+<li class="chapter" data-level="11.4" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-by-gender-and-age"><i class="fa fa-check"></i><b>11.4</b> Tables by Gender and Age</a></li>
+<li class="chapter" data-level="11.5" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-location"><i class="fa fa-check"></i><b>11.5</b> Tables and Plots by User Location</a></li>
+<li class="chapter" data-level="11.6" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-user-type"><i class="fa fa-check"></i><b>11.6</b> Tables and Plots by User Type</a></li>
+<li class="chapter" data-level="11.7" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#tables-and-plots-by-whether-the-trip-is-on-a-workday"><i class="fa fa-check"></i><b>11.7</b> Tables and Plots by Whether the Trip is on a Workday</a></li>
+<li class="chapter" data-level="11.8" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#table-summary-of-most-common-visited-stations-by-user-location"><i class="fa fa-check"></i><b>11.8</b> Table Summary of Most Common Visited Stations by User Location</a></li>
+<li class="chapter" data-level="11.9" data-path="demographic-exploration-of-valleybike-users.html"><a href="demographic-exploration-of-valleybike-users.html#other-tables"><i class="fa fa-check"></i><b>11.9</b> Other Tables</a></li>
+</ul></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">DSC-WAV ValleyBike Project Report</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="secondary-stops" class="section level1">
+<h1><span class="header-section-number">9</span> Secondary Stops</h1>
+<div id="secondary-stops-1" class="section level2">
+<h2><span class="header-section-number">9.1</span> Secondary Stops</h2>
+<p>One other key question we wanted to focus on was identifying and focusing on secondary stops, or those that start a ride at a certain station, stopped the bike somewhere that wasn’t a station, and then started up a ride with the same bike shortly after continuing on in their route. The insights gained from looking into these types of rides could give especially helpful information on where to potentially put in new stations, since we would be identifying locations where people are stopping their rides frequently.</p>
+<p>After identifying the 5 rides that had secondary stops in the middle of the rides, we then focused on visualizing the rides themselves and where the stops took place. This involved for each of the separate rides, plotting an icon where each of the stops took place as well as where the starting and stop stations are. This also involved plotting the two separate trips, the part before the stop and the part after the stop, on a map to identify exactly where the routes themselves go. This can allow one to identify exactly where the stop took place and this can lead to future work where we look into more rides to identify where a lot of these secondary stops are taking place, in order to potentially identify locations for future stations to be put in.</p>
+<p>One of the last parts of for this task involved building a table thats connected to the rides themselves. Since it sometimes can be hard to identify where exactly the starting and ending locations of the trips themselves, by pairing this with the information provided by the table, we can start to look identify not only where the routes themselves went, but can look into how long the user stopped for and how longs the total trip was. All this information can be used to paint a more complete picture of the rides themselves and be able to gain insights on who the type of rider might be any why they might be stopping in the location they end up stopping in.</p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<p></p>
+<div style="page-break-after: always;"></div>
+<p></p>
+<p></p>
+<p></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="secondary-stops.html#cb1-1"></a>get_base_map &lt;-<span class="st"> </span><span class="cf">function</span>(zoom, dataset) {</span>
+<span id="cb1-2"><a href="secondary-stops.html#cb1-2"></a>  </span>
+<span id="cb1-3"><a href="secondary-stops.html#cb1-3"></a>  <span class="cf">if</span> (<span class="op">!</span><span class="kw">has_google_key</span>()) {</span>
+<span id="cb1-4"><a href="secondary-stops.html#cb1-4"></a>    <span class="kw">stop</span>(<span class="st">&quot;Please provide a valid Google API key.&quot;</span>)</span>
+<span id="cb1-5"><a href="secondary-stops.html#cb1-5"></a>  }</span>
+<span id="cb1-6"><a href="secondary-stops.html#cb1-6"></a>  </span>
+<span id="cb1-7"><a href="secondary-stops.html#cb1-7"></a>  sides &lt;-<span class="st"> </span><span class="kw">diff</span>(<span class="kw">range</span>(dataset<span class="op">$</span>latitude)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span></span>
+<span id="cb1-8"><a href="secondary-stops.html#cb1-8"></a>  </span>
+<span id="cb1-9"><a href="secondary-stops.html#cb1-9"></a>  boundary &lt;-<span class="st"> </span><span class="kw">c</span>(</span>
+<span id="cb1-10"><a href="secondary-stops.html#cb1-10"></a>    <span class="kw">min</span>(dataset<span class="op">$</span>longitude <span class="op">-</span><span class="st"> </span>sides, <span class="dt">na.rm =</span> T),</span>
+<span id="cb1-11"><a href="secondary-stops.html#cb1-11"></a>    <span class="kw">min</span>(dataset<span class="op">$</span>latitude <span class="op">-</span><span class="st"> </span><span class="fl">0.003</span>, <span class="dt">na.rm =</span> T),</span>
+<span id="cb1-12"><a href="secondary-stops.html#cb1-12"></a>    <span class="kw">max</span>(dataset<span class="op">$</span>longitude <span class="op">+</span><span class="st"> </span>sides, <span class="dt">na.rm =</span> T),</span>
+<span id="cb1-13"><a href="secondary-stops.html#cb1-13"></a>    <span class="kw">max</span>(dataset<span class="op">$</span>latitude <span class="op">+</span><span class="st"> </span><span class="fl">0.003</span>, <span class="dt">na.rm =</span> T)</span>
+<span id="cb1-14"><a href="secondary-stops.html#cb1-14"></a>  )</span>
+<span id="cb1-15"><a href="secondary-stops.html#cb1-15"></a>  </span>
+<span id="cb1-16"><a href="secondary-stops.html#cb1-16"></a>  base_map &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> boundary, <span class="dt">zoom =</span> zoom, <span class="dt">source =</span> <span class="st">&quot;google&quot;</span>)</span>
+<span id="cb1-17"><a href="secondary-stops.html#cb1-17"></a>  </span>
+<span id="cb1-18"><a href="secondary-stops.html#cb1-18"></a>  <span class="kw">return</span>(base_map)</span>
+<span id="cb1-19"><a href="secondary-stops.html#cb1-19"></a>}</span></code></pre></div>
+<p></p>
+<p></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="secondary-stops.html#cb2-1"></a>plot_stop_emoji &lt;-<span class="st"> </span><span class="cf">function</span>(dataset) {</span>
+<span id="cb2-2"><a href="secondary-stops.html#cb2-2"></a>  p1 &lt;-<span class="st"> </span><span class="kw">geom_emoji</span>(<span class="dt">data =</span> dataset,<span class="kw">aes</span>(longitude, latitude), <span class="dt">emoji =</span> <span class="st">&quot;1f6d1&quot;</span>, <span class="dt">size =</span> <span class="fl">0.05</span>)</span>
+<span id="cb2-3"><a href="secondary-stops.html#cb2-3"></a>  <span class="kw">return</span>(p1)</span>
+<span id="cb2-4"><a href="secondary-stops.html#cb2-4"></a>}</span>
+<span id="cb2-5"><a href="secondary-stops.html#cb2-5"></a></span>
+<span id="cb2-6"><a href="secondary-stops.html#cb2-6"></a>plot_start_station_emoji &lt;-<span class="st"> </span><span class="cf">function</span>(dataset) {</span>
+<span id="cb2-7"><a href="secondary-stops.html#cb2-7"></a>  </span>
+<span id="cb2-8"><a href="secondary-stops.html#cb2-8"></a>  data &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb2-9"><a href="secondary-stops.html#cb2-9"></a><span class="st">    </span><span class="kw">select</span>(start_station, route_id) <span class="op">%&gt;%</span></span>
+<span id="cb2-10"><a href="secondary-stops.html#cb2-10"></a><span class="st">    </span><span class="kw">drop_na</span>(start_station) <span class="op">%&gt;%</span></span>
+<span id="cb2-11"><a href="secondary-stops.html#cb2-11"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">name =</span> start_station) <span class="op">%&gt;%</span></span>
+<span id="cb2-12"><a href="secondary-stops.html#cb2-12"></a><span class="st">    </span><span class="kw">left_join</span>(stations, <span class="dt">by =</span> <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb2-13"><a href="secondary-stops.html#cb2-13"></a>  </span>
+<span id="cb2-14"><a href="secondary-stops.html#cb2-14"></a>  p2 &lt;-<span class="st"> </span><span class="kw">geom_emoji</span>(<span class="dt">data =</span> data, <span class="kw">aes</span>(longitude, latitude), <span class="dt">emoji =</span> <span class="st">&quot;2b50&quot;</span>, <span class="dt">size =</span> <span class="fl">0.05</span>)</span>
+<span id="cb2-15"><a href="secondary-stops.html#cb2-15"></a>  </span>
+<span id="cb2-16"><a href="secondary-stops.html#cb2-16"></a>  <span class="kw">return</span>(p2)</span>
+<span id="cb2-17"><a href="secondary-stops.html#cb2-17"></a>}</span>
+<span id="cb2-18"><a href="secondary-stops.html#cb2-18"></a></span>
+<span id="cb2-19"><a href="secondary-stops.html#cb2-19"></a>plot_end_station_emoji &lt;-<span class="st"> </span><span class="cf">function</span>(dataset) {</span>
+<span id="cb2-20"><a href="secondary-stops.html#cb2-20"></a>  </span>
+<span id="cb2-21"><a href="secondary-stops.html#cb2-21"></a>  data &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb2-22"><a href="secondary-stops.html#cb2-22"></a><span class="st">    </span><span class="kw">select</span>(end_station, route_id) <span class="op">%&gt;%</span></span>
+<span id="cb2-23"><a href="secondary-stops.html#cb2-23"></a><span class="st">    </span><span class="kw">drop_na</span>(end_station) <span class="op">%&gt;%</span></span>
+<span id="cb2-24"><a href="secondary-stops.html#cb2-24"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">name =</span> end_station) <span class="op">%&gt;%</span></span>
+<span id="cb2-25"><a href="secondary-stops.html#cb2-25"></a><span class="st">    </span><span class="kw">left_join</span>(stations, <span class="dt">by =</span> <span class="st">&quot;name&quot;</span>)</span>
+<span id="cb2-26"><a href="secondary-stops.html#cb2-26"></a>  </span>
+<span id="cb2-27"><a href="secondary-stops.html#cb2-27"></a>  p3 &lt;-<span class="st"> </span><span class="kw">geom_emoji</span>(<span class="dt">data =</span> data, <span class="kw">aes</span>(longitude <span class="op">+</span><span class="st"> </span><span class="fl">0.0005</span>, latitude <span class="op">+</span><span class="st"> </span><span class="fl">0.0005</span>), <span class="dt">emoji =</span> <span class="st">&quot;2733&quot;</span>, </span>
+<span id="cb2-28"><a href="secondary-stops.html#cb2-28"></a>                   <span class="dt">size =</span> <span class="fl">0.05</span>)</span>
+<span id="cb2-29"><a href="secondary-stops.html#cb2-29"></a>  </span>
+<span id="cb2-30"><a href="secondary-stops.html#cb2-30"></a>  <span class="kw">return</span>(p3)</span>
+<span id="cb2-31"><a href="secondary-stops.html#cb2-31"></a>}</span></code></pre></div>
+<p></p>
+<p></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="secondary-stops.html#cb3-1"></a>plot_stops &lt;-<span class="st"> </span><span class="cf">function</span>(starting_station, stop_station, api_key, <span class="dt">zoom =</span> <span class="st">&quot;auto&quot;</span>, location, dataset) {</span>
+<span id="cb3-2"><a href="secondary-stops.html#cb3-2"></a>  </span>
+<span id="cb3-3"><a href="secondary-stops.html#cb3-3"></a>  <span class="kw">register_google</span>(api_key)</span>
+<span id="cb3-4"><a href="secondary-stops.html#cb3-4"></a>  </span>
+<span id="cb3-5"><a href="secondary-stops.html#cb3-5"></a>  base_map &lt;-<span class="st"> </span><span class="kw">get_base_map</span>(<span class="dt">zoom =</span> zoom, <span class="dt">dataset =</span> dataset)</span>
+<span id="cb3-6"><a href="secondary-stops.html#cb3-6"></a>  </span>
+<span id="cb3-7"><a href="secondary-stops.html#cb3-7"></a>  start_route &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb3-8"><a href="secondary-stops.html#cb3-8"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(start_station))</span>
+<span id="cb3-9"><a href="secondary-stops.html#cb3-9"></a>  </span>
+<span id="cb3-10"><a href="secondary-stops.html#cb3-10"></a>  end_route &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb3-11"><a href="secondary-stops.html#cb3-11"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(end_station))</span>
+<span id="cb3-12"><a href="secondary-stops.html#cb3-12"></a>  </span>
+<span id="cb3-13"><a href="secondary-stops.html#cb3-13"></a>  p1 &lt;-<span class="st"> </span><span class="kw">plot_start_station_emoji</span>(dataset)</span>
+<span id="cb3-14"><a href="secondary-stops.html#cb3-14"></a>  p2 &lt;-<span class="st"> </span><span class="kw">plot_end_station_emoji</span>(dataset)</span>
+<span id="cb3-15"><a href="secondary-stops.html#cb3-15"></a>  </span>
+<span id="cb3-16"><a href="secondary-stops.html#cb3-16"></a>  route_map &lt;-<span class="st"> </span><span class="kw">ggmap</span>(base_map) <span class="op">+</span><span class="st"> </span></span>
+<span id="cb3-17"><a href="secondary-stops.html#cb3-17"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude, <span class="dt">color =</span> prop_trip_completed), <span class="dt">data =</span> start_route) <span class="op">+</span></span>
+<span id="cb3-18"><a href="secondary-stops.html#cb3-18"></a><span class="st">    </span><span class="kw">scale_color_gradient</span>(<span class="dt">low =</span> <span class="st">&quot;lightblue&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-19"><a href="secondary-stops.html#cb3-19"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">color =</span> <span class="st">&quot;Prop. Trip Completed&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-20"><a href="secondary-stops.html#cb3-20"></a><span class="st">    </span><span class="kw">new_scale_color</span>() <span class="op">+</span></span>
+<span id="cb3-21"><a href="secondary-stops.html#cb3-21"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">x =</span> longitude <span class="op">+</span><span class="st"> </span><span class="fl">0.0007</span>, <span class="dt">y =</span> latitude, <span class="dt">color =</span> prop_trip_completed), </span>
+<span id="cb3-22"><a href="secondary-stops.html#cb3-22"></a>               <span class="dt">data =</span> end_route) <span class="op">+</span></span>
+<span id="cb3-23"><a href="secondary-stops.html#cb3-23"></a><span class="st">    </span><span class="kw">scale_color_gradient</span>(<span class="dt">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;gray&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-24"><a href="secondary-stops.html#cb3-24"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;Prop. Trip Completed&quot;</span>) <span class="op">+</span></span>
+<span id="cb3-25"><a href="secondary-stops.html#cb3-25"></a><span class="st">    </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb3-26"><a href="secondary-stops.html#cb3-26"></a>  </span>
+<span id="cb3-27"><a href="secondary-stops.html#cb3-27"></a>  stops &lt;-<span class="st"> </span><span class="kw">subset</span>(dataset, stop <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>)</span>
+<span id="cb3-28"><a href="secondary-stops.html#cb3-28"></a>  </span>
+<span id="cb3-29"><a href="secondary-stops.html#cb3-29"></a>  <span class="cf">if</span> (<span class="kw">nrow</span>(stops) <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb3-30"><a href="secondary-stops.html#cb3-30"></a>    p3 &lt;-<span class="st"> </span><span class="kw">plot_stop_emoji</span>(<span class="dt">dataset =</span> stops)</span>
+<span id="cb3-31"><a href="secondary-stops.html#cb3-31"></a>    route_map &lt;-<span class="st"> </span>route_map <span class="op">+</span><span class="st"> </span>p3 <span class="op">+</span><span class="st"> </span>p1 <span class="op">+</span><span class="st"> </span>p2 </span>
+<span id="cb3-32"><a href="secondary-stops.html#cb3-32"></a>    route_map</span>
+<span id="cb3-33"><a href="secondary-stops.html#cb3-33"></a>  } <span class="cf">else</span> {</span>
+<span id="cb3-34"><a href="secondary-stops.html#cb3-34"></a>    route_map <span class="op">+</span><span class="st"> </span>p1 <span class="op">+</span><span class="st"> </span>p2 </span>
+<span id="cb3-35"><a href="secondary-stops.html#cb3-35"></a>  }</span>
+<span id="cb3-36"><a href="secondary-stops.html#cb3-36"></a>}</span></code></pre></div>
+<p></p>
+<p></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="secondary-stops.html#cb4-1"></a>get_table_data &lt;-<span class="st"> </span><span class="cf">function</span>(<span class="dt">dataset =</span> <span class="ot">NULL</span>) {</span>
+<span id="cb4-2"><a href="secondary-stops.html#cb4-2"></a>  </span>
+<span id="cb4-3"><a href="secondary-stops.html#cb4-3"></a>  start_table &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb4-4"><a href="secondary-stops.html#cb4-4"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-5"><a href="secondary-stops.html#cb4-5"></a><span class="st">    </span><span class="kw">select</span>(start_station) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-6"><a href="secondary-stops.html#cb4-6"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(start_station)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-7"><a href="secondary-stops.html#cb4-7"></a><span class="st">    </span><span class="kw">unique</span>()</span>
+<span id="cb4-8"><a href="secondary-stops.html#cb4-8"></a>  </span>
+<span id="cb4-9"><a href="secondary-stops.html#cb4-9"></a>  end_table &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-10"><a href="secondary-stops.html#cb4-10"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-11"><a href="secondary-stops.html#cb4-11"></a><span class="st">    </span><span class="kw">select</span>(end_station) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-12"><a href="secondary-stops.html#cb4-12"></a><span class="st">    </span><span class="kw">filter</span>(<span class="op">!</span><span class="kw">is.na</span>(end_station)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-13"><a href="secondary-stops.html#cb4-13"></a><span class="st">    </span><span class="kw">unique</span>()</span>
+<span id="cb4-14"><a href="secondary-stops.html#cb4-14"></a></span>
+<span id="cb4-15"><a href="secondary-stops.html#cb4-15"></a>  table1 &lt;-<span class="st"> </span>dataset <span class="op">%&gt;%</span></span>
+<span id="cb4-16"><a href="secondary-stops.html#cb4-16"></a><span class="st">    </span><span class="kw">mutate</span>(<span class="dt">end_times =</span> <span class="kw">max</span>(time), <span class="dt">start_times =</span> <span class="kw">min</span>(time), <span class="dt">total_times =</span> end_times <span class="op">-</span><span class="st"> </span>start_times) <span class="op">%&gt;%</span></span>
+<span id="cb4-17"><a href="secondary-stops.html#cb4-17"></a><span class="st">    </span><span class="kw">select</span>(start_times, end_times, total_times) <span class="op">%&gt;%</span></span>
+<span id="cb4-18"><a href="secondary-stops.html#cb4-18"></a><span class="st">    </span><span class="kw">unique</span>() <span class="op">%&gt;%</span></span>
+<span id="cb4-19"><a href="secondary-stops.html#cb4-19"></a><span class="st">    </span><span class="kw">arrange</span>(start_times)</span>
+<span id="cb4-20"><a href="secondary-stops.html#cb4-20"></a></span>
+<span id="cb4-21"><a href="secondary-stops.html#cb4-21"></a>  table2 &lt;-<span class="st"> </span>table1 <span class="op">%&gt;%</span></span>
+<span id="cb4-22"><a href="secondary-stops.html#cb4-22"></a><span class="st">    </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span></span>
+<span id="cb4-23"><a href="secondary-stops.html#cb4-23"></a><span class="st">    </span><span class="kw">mutate</span>(</span>
+<span id="cb4-24"><a href="secondary-stops.html#cb4-24"></a>      <span class="dt">start_time =</span> start_times[<span class="dv">1</span>],</span>
+<span id="cb4-25"><a href="secondary-stops.html#cb4-25"></a>      <span class="dt">end_time =</span> end_times[<span class="dv">2</span>],</span>
+<span id="cb4-26"><a href="secondary-stops.html#cb4-26"></a>      <span class="dt">total_trip_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time,</span>
+<span id="cb4-27"><a href="secondary-stops.html#cb4-27"></a>      <span class="dt">stop_duration =</span> start_times[<span class="dv">2</span>] <span class="op">-</span><span class="st"> </span>end_times[<span class="dv">1</span>]</span>
+<span id="cb4-28"><a href="secondary-stops.html#cb4-28"></a>    ) <span class="op">%&gt;%</span></span>
+<span id="cb4-29"><a href="secondary-stops.html#cb4-29"></a><span class="st">    </span><span class="kw">select</span>(start_time,end_time, total_trip_time, stop_duration) <span class="op">%&gt;%</span></span>
+<span id="cb4-30"><a href="secondary-stops.html#cb4-30"></a><span class="st">    </span><span class="kw">unique</span>()</span>
+<span id="cb4-31"><a href="secondary-stops.html#cb4-31"></a>  </span>
+<span id="cb4-32"><a href="secondary-stops.html#cb4-32"></a>  table2<span class="op">$</span>total_trip_time &lt;-<span class="st"> </span><span class="kw">round</span>(table2<span class="op">$</span>total_trip_time, <span class="dv">2</span>)</span>
+<span id="cb4-33"><a href="secondary-stops.html#cb4-33"></a>  table2<span class="op">$</span>stop_duration &lt;-<span class="st"> </span><span class="kw">round</span>(table2<span class="op">$</span>stop_duration, <span class="dv">2</span>)</span>
+<span id="cb4-34"><a href="secondary-stops.html#cb4-34"></a>  </span>
+<span id="cb4-35"><a href="secondary-stops.html#cb4-35"></a>  combined_tables &lt;-<span class="st"> </span><span class="kw">cbind</span>(start_table, end_table, table2)</span>
+<span id="cb4-36"><a href="secondary-stops.html#cb4-36"></a></span>
+<span id="cb4-37"><a href="secondary-stops.html#cb4-37"></a>  combined_tables &lt;-<span class="st"> </span>combined_tables <span class="op">%&gt;%</span></span>
+<span id="cb4-38"><a href="secondary-stops.html#cb4-38"></a><span class="st">    </span><span class="kw">kable</span>(<span class="dt">booktabs =</span> <span class="ot">TRUE</span>, <span class="dt">col.names =</span> <span class="kw">c</span>(<span class="st">&quot;Start Station&quot;</span>, <span class="st">&quot;End Station&quot;</span>, <span class="st">&quot;Start Time&quot;</span>, </span>
+<span id="cb4-39"><a href="secondary-stops.html#cb4-39"></a>                        <span class="st">&quot;End Time&quot;</span>, <span class="st">&quot;Trip Duration&quot;</span>, <span class="st">&quot;Stop Duration&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb4-40"><a href="secondary-stops.html#cb4-40"></a><span class="st">    </span><span class="kw">kable_styling</span>(<span class="dt">latex_options =</span> <span class="kw">c</span>(<span class="st">&quot;HOLD_position&quot;</span>), <span class="dt">font_size =</span> <span class="dv">8</span>)</span>
+<span id="cb4-41"><a href="secondary-stops.html#cb4-41"></a>  </span>
+<span id="cb4-42"><a href="secondary-stops.html#cb4-42"></a>  <span class="kw">return</span>(combined_tables)</span>
+<span id="cb4-43"><a href="secondary-stops.html#cb4-43"></a>}</span></code></pre></div>
+<p></p>
+<div style="page-break-after: always;"></div>
+<div id="user-1-trips-12-13" class="section level3">
+<h3><span class="header-section-number">9.1.1</span> User 1 (Trips 12-13)</h3>
+<p></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="secondary-stops.html#cb5-1"></a>user_<span class="dv">1</span> &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb5-2"><a href="secondary-stops.html#cb5-2"></a><span class="st">  </span><span class="kw">select</span>(start_station, end_station, route_id, user_id) <span class="op">%&gt;%</span></span>
+<span id="cb5-3"><a href="secondary-stops.html#cb5-3"></a><span class="st">  </span><span class="kw">filter</span>(route_id <span class="op">==</span><span class="st"> &quot;route_08_2020@cb1c957a-a5b9-493a-b327-b7f2cfa66a0e&quot;</span> <span class="op">|</span><span class="st"> </span></span>
+<span id="cb5-4"><a href="secondary-stops.html#cb5-4"></a><span class="st">           </span>route_id <span class="op">==</span><span class="st"> &quot;route_08_2020@79b103d7-e94a-4a06-b32c-1d5fb3fb7967&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-5"><a href="secondary-stops.html#cb5-5"></a><span class="st">  </span><span class="kw">left_join</span>(august2020, <span class="dt">route_id =</span> route_id) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-6"><a href="secondary-stops.html#cb5-6"></a><span class="st">  </span><span class="kw">group_by</span>(route_id) <span class="op">%&gt;%</span></span>
+<span id="cb5-7"><a href="secondary-stops.html#cb5-7"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb5-8"><a href="secondary-stops.html#cb5-8"></a>    <span class="dt">row =</span> <span class="kw">row_number</span>(),</span>
+<span id="cb5-9"><a href="secondary-stops.html#cb5-9"></a>    <span class="dt">num_rows =</span> <span class="kw">max</span>(row),</span>
+<span id="cb5-10"><a href="secondary-stops.html#cb5-10"></a>    <span class="dt">prop_trip_completed =</span> row <span class="op">/</span><span class="st"> </span>num_rows</span>
+<span id="cb5-11"><a href="secondary-stops.html#cb5-11"></a>  ) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb5-12"><a href="secondary-stops.html#cb5-12"></a><span class="st">  </span><span class="kw">arrange</span>(route_id, prop_trip_completed)</span>
+<span id="cb5-13"><a href="secondary-stops.html#cb5-13"></a></span>
+<span id="cb5-14"><a href="secondary-stops.html#cb5-14"></a>user_<span class="dv">1</span><span class="op">$</span>stop &lt;-<span class="st"> &quot;No&quot;</span></span>
+<span id="cb5-15"><a href="secondary-stops.html#cb5-15"></a>user_<span class="dv">1</span><span class="op">$</span>stop[<span class="dv">118</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb5-16"><a href="secondary-stops.html#cb5-16"></a>user_<span class="dv">1</span><span class="op">$</span>stop[<span class="dv">361</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb5-17"><a href="secondary-stops.html#cb5-17"></a></span>
+<span id="cb5-18"><a href="secondary-stops.html#cb5-18"></a>user_<span class="dv">1</span>_part_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">1</span>, route_id <span class="op">==</span><span class="st"> &quot;route_08_2020@cb1c957a-a5b9-493a-b327-b7f2cfa66a0e&quot;</span>)</span>
+<span id="cb5-19"><a href="secondary-stops.html#cb5-19"></a>user_<span class="dv">1</span>_part_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">1</span>, route_id <span class="op">==</span><span class="st"> &quot;route_08_2020@79b103d7-e94a-4a06-b32c-1d5fb3fb7967&quot;</span>)</span>
+<span id="cb5-20"><a href="secondary-stops.html#cb5-20"></a></span>
+<span id="cb5-21"><a href="secondary-stops.html#cb5-21"></a><span class="kw">get_table_data</span>(<span class="dt">dataset =</span> user_<span class="dv">1</span>)</span></code></pre></div>
+<table class="table" style="font-size: 8px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Start Station
+</th>
+<th style="text-align:left;">
+End Station
+</th>
+<th style="text-align:left;">
+Start Time
+</th>
+<th style="text-align:left;">
+End Time
+</th>
+<th style="text-align:left;">
+Trip Duration
+</th>
+<th style="text-align:left;">
+Stop Duration
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+North Pleasant Street
+</td>
+<td style="text-align:left;">
+UMass Haigis Mall
+</td>
+<td style="text-align:left;">
+2020-08-11 22:56:44
+</td>
+<td style="text-align:left;">
+2020-08-12 00:05:14
+</td>
+<td style="text-align:left;">
+1.14 hours
+</td>
+<td style="text-align:left;">
+38.58 mins
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="secondary-stops.html#cb6-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">14</span>, <span class="dt">dataset =</span> user_<span class="dv">1</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="secondary-stops.html#cb7-1"></a><span class="co">#plot_stops(api_key = key, zoom = 15, dataset = user_1_part_1)</span></span>
+<span id="cb7-2"><a href="secondary-stops.html#cb7-2"></a></span>
+<span id="cb7-3"><a href="secondary-stops.html#cb7-3"></a><span class="co">#plot_stops(api_key = key, zoom = 15, dataset = user_1_part_2)</span></span></code></pre></div>
+
+</div>
+<div id="user-2-trips-26-27" class="section level3">
+<h3><span class="header-section-number">9.1.2</span> User 2 (Trips 26-27)</h3>
+
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="secondary-stops.html#cb8-1"></a>user_<span class="dv">2</span> &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb8-2"><a href="secondary-stops.html#cb8-2"></a><span class="st">  </span><span class="kw">select</span>(start_station, end_station, route_id, user_id) <span class="op">%&gt;%</span></span>
+<span id="cb8-3"><a href="secondary-stops.html#cb8-3"></a><span class="st">  </span><span class="kw">filter</span>(route_id <span class="op">==</span><span class="st"> &quot;route_06_2019@d019efa8-b176-41eb-a8c3-79f6862d8877&quot;</span> <span class="op">|</span><span class="st"> </span></span>
+<span id="cb8-4"><a href="secondary-stops.html#cb8-4"></a><span class="st">           </span>route_id <span class="op">==</span><span class="st"> &quot;route_06_2019@b543b889-9973-4240-9e6c-dd28784f4915&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-5"><a href="secondary-stops.html#cb8-5"></a><span class="st">  </span><span class="kw">left_join</span>(june2019, <span class="dt">route_id =</span> route_id) <span class="op">%&gt;%</span></span>
+<span id="cb8-6"><a href="secondary-stops.html#cb8-6"></a><span class="st">  </span><span class="kw">group_by</span>(route_id) <span class="op">%&gt;%</span></span>
+<span id="cb8-7"><a href="secondary-stops.html#cb8-7"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb8-8"><a href="secondary-stops.html#cb8-8"></a>    <span class="dt">row =</span> <span class="kw">row_number</span>(),</span>
+<span id="cb8-9"><a href="secondary-stops.html#cb8-9"></a>    <span class="dt">num_rows =</span> <span class="kw">max</span>(row),</span>
+<span id="cb8-10"><a href="secondary-stops.html#cb8-10"></a>    <span class="dt">prop_trip_completed =</span> row <span class="op">/</span><span class="st"> </span>num_rows</span>
+<span id="cb8-11"><a href="secondary-stops.html#cb8-11"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb8-12"><a href="secondary-stops.html#cb8-12"></a><span class="st">  </span><span class="kw">arrange</span>(route_id, prop_trip_completed)</span>
+<span id="cb8-13"><a href="secondary-stops.html#cb8-13"></a></span>
+<span id="cb8-14"><a href="secondary-stops.html#cb8-14"></a>user_<span class="dv">2</span><span class="op">$</span>stop &lt;-<span class="st"> &quot;No&quot;</span></span>
+<span id="cb8-15"><a href="secondary-stops.html#cb8-15"></a>user_<span class="dv">2</span><span class="op">$</span>stop[<span class="dv">1276</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb8-16"><a href="secondary-stops.html#cb8-16"></a>user_<span class="dv">2</span><span class="op">$</span>stop[<span class="dv">1511</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb8-17"><a href="secondary-stops.html#cb8-17"></a></span>
+<span id="cb8-18"><a href="secondary-stops.html#cb8-18"></a>user_<span class="dv">2</span>_part_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">2</span>, route_id <span class="op">==</span><span class="st"> &quot;route_06_2019@d019efa8-b176-41eb-a8c3-79f6862d8877&quot;</span>)</span>
+<span id="cb8-19"><a href="secondary-stops.html#cb8-19"></a>user_<span class="dv">2</span>_part_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">2</span>, route_id <span class="op">==</span><span class="st"> &quot;route_06_2019@b543b889-9973-4240-9e6c-dd28784f4915&quot;</span>)</span>
+<span id="cb8-20"><a href="secondary-stops.html#cb8-20"></a></span>
+<span id="cb8-21"><a href="secondary-stops.html#cb8-21"></a><span class="kw">get_table_data</span>(<span class="dt">dataset =</span> user_<span class="dv">2</span>)</span></code></pre></div>
+<table class="table" style="font-size: 8px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Start Station
+</th>
+<th style="text-align:left;">
+End Station
+</th>
+<th style="text-align:left;">
+Start Time
+</th>
+<th style="text-align:left;">
+End Time
+</th>
+<th style="text-align:left;">
+Trip Duration
+</th>
+<th style="text-align:left;">
+Stop Duration
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Baystate Health/Chestnut Street
+</td>
+<td style="text-align:left;">
+South Holyoke
+</td>
+<td style="text-align:left;">
+2019-06-08 21:57:40
+</td>
+<td style="text-align:left;">
+2019-06-09 00:04:20
+</td>
+<td style="text-align:left;">
+2.11 hours
+</td>
+<td style="text-align:left;">
+55 secs
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="secondary-stops.html#cb9-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">12</span>, <span class="dt">dataset =</span> user_<span class="dv">2</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="secondary-stops.html#cb10-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">16</span>, <span class="dt">dataset =</span> user_<span class="dv">2</span>_part_<span class="dv">1</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="secondary-stops.html#cb11-1"></a><span class="co">#plot_stops(api_key = key, zoom = 12, dataset = user_2_part_2)</span></span></code></pre></div>
+
+<div style="page-break-after: always;"></div>
+</div>
+<div id="user-3-trips-41-42" class="section level3">
+<h3><span class="header-section-number">9.1.3</span> User 3 (Trips 41-42)</h3>
+
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="secondary-stops.html#cb12-1"></a>user_<span class="dv">3</span> &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb12-2"><a href="secondary-stops.html#cb12-2"></a><span class="st">  </span><span class="kw">select</span>(start_station, end_station, route_id, user_id) <span class="op">%&gt;%</span></span>
+<span id="cb12-3"><a href="secondary-stops.html#cb12-3"></a><span class="st">  </span><span class="kw">filter</span>(route_id <span class="op">==</span><span class="st"> &quot;route_05_2019@2f6fef2d-632e-41db-913d-51a195bfb8c1&quot;</span> <span class="op">|</span><span class="st"> </span></span>
+<span id="cb12-4"><a href="secondary-stops.html#cb12-4"></a><span class="st">           </span>route_id <span class="op">==</span><span class="st"> &quot;route_05_2019@46e30988-fe99-4959-9c25-fad252667539&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-5"><a href="secondary-stops.html#cb12-5"></a><span class="st">  </span><span class="kw">left_join</span>(may2019, <span class="dt">route_id =</span> route_id) <span class="op">%&gt;%</span></span>
+<span id="cb12-6"><a href="secondary-stops.html#cb12-6"></a><span class="st">  </span><span class="kw">group_by</span>(route_id) <span class="op">%&gt;%</span></span>
+<span id="cb12-7"><a href="secondary-stops.html#cb12-7"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb12-8"><a href="secondary-stops.html#cb12-8"></a>    <span class="dt">row =</span> <span class="kw">row_number</span>(),</span>
+<span id="cb12-9"><a href="secondary-stops.html#cb12-9"></a>    <span class="dt">num_rows =</span> <span class="kw">max</span>(row),</span>
+<span id="cb12-10"><a href="secondary-stops.html#cb12-10"></a>    <span class="dt">prop_trip_completed =</span> row <span class="op">/</span><span class="st"> </span>num_rows</span>
+<span id="cb12-11"><a href="secondary-stops.html#cb12-11"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb12-12"><a href="secondary-stops.html#cb12-12"></a><span class="st">  </span><span class="kw">arrange</span>(route_id, prop_trip_completed)</span>
+<span id="cb12-13"><a href="secondary-stops.html#cb12-13"></a></span>
+<span id="cb12-14"><a href="secondary-stops.html#cb12-14"></a>user_<span class="dv">3</span><span class="op">$</span>stop &lt;-<span class="st"> &quot;No&quot;</span></span>
+<span id="cb12-15"><a href="secondary-stops.html#cb12-15"></a>user_<span class="dv">3</span><span class="op">$</span>stop[<span class="dv">649</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb12-16"><a href="secondary-stops.html#cb12-16"></a>user_<span class="dv">3</span><span class="op">$</span>stop[<span class="dv">1128</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb12-17"><a href="secondary-stops.html#cb12-17"></a></span>
+<span id="cb12-18"><a href="secondary-stops.html#cb12-18"></a>user_<span class="dv">3</span>_part_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">3</span>, route_id <span class="op">==</span><span class="st"> &quot;route_05_2019@2f6fef2d-632e-41db-913d-51a195bfb8c1&quot;</span>)</span>
+<span id="cb12-19"><a href="secondary-stops.html#cb12-19"></a></span>
+<span id="cb12-20"><a href="secondary-stops.html#cb12-20"></a>user_<span class="dv">3</span>_part_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">3</span>, route_id <span class="op">==</span><span class="st"> &quot;route_05_2019@46e30988-fe99-4959-9c25-fad252667539&quot;</span>)</span>
+<span id="cb12-21"><a href="secondary-stops.html#cb12-21"></a></span>
+<span id="cb12-22"><a href="secondary-stops.html#cb12-22"></a><span class="kw">get_table_data</span>(<span class="dt">dataset =</span> user_<span class="dv">3</span>)</span></code></pre></div>
+<table class="table" style="font-size: 8px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Start Station
+</th>
+<th style="text-align:left;">
+End Station
+</th>
+<th style="text-align:left;">
+Start Time
+</th>
+<th style="text-align:left;">
+End Time
+</th>
+<th style="text-align:left;">
+Trip Duration
+</th>
+<th style="text-align:left;">
+Stop Duration
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Main Street/Bridge Street
+</td>
+<td style="text-align:left;">
+Main Street/Bridge Street
+</td>
+<td style="text-align:left;">
+2019-05-25 21:47:58
+</td>
+<td style="text-align:left;">
+2019-05-25 23:48:18
+</td>
+<td style="text-align:left;">
+2.01 hours
+</td>
+<td style="text-align:left;">
+26.5 mins
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="secondary-stops.html#cb13-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">13</span>, <span class="dt">dataset =</span> user_<span class="dv">3</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="secondary-stops.html#cb14-1"></a><span class="co">#plot_stops(api_key = key, zoom = 14, dataset = user_3_part_1)</span></span>
+<span id="cb14-2"><a href="secondary-stops.html#cb14-2"></a></span>
+<span id="cb14-3"><a href="secondary-stops.html#cb14-3"></a><span class="co">#plot_stops(api_key = key, zoom = 14, dataset = user_3_part_2)</span></span></code></pre></div>
+
+<div style="page-break-after: always;"></div>
+</div>
+<div id="user-4-trips-52-53" class="section level3">
+<h3><span class="header-section-number">9.1.4</span> User 4 (Trips 52-53)</h3>
+
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="secondary-stops.html#cb15-1"></a>user_<span class="dv">4</span> &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb15-2"><a href="secondary-stops.html#cb15-2"></a><span class="st">  </span><span class="kw">select</span>(start_station, end_station, route_id, user_id) <span class="op">%&gt;%</span></span>
+<span id="cb15-3"><a href="secondary-stops.html#cb15-3"></a><span class="st">  </span><span class="kw">filter</span>(route_id <span class="op">==</span><span class="st"> &quot;route_07_2019@acfb26e9-9d3e-40bf-b219-21a1399016b0&quot;</span> <span class="op">|</span><span class="st"> </span></span>
+<span id="cb15-4"><a href="secondary-stops.html#cb15-4"></a><span class="st">           </span>route_id <span class="op">==</span><span class="st"> &quot;route_07_2019@0f0457cc-c4c8-4939-a509-f1e93f5b867e&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb15-5"><a href="secondary-stops.html#cb15-5"></a><span class="st">  </span><span class="kw">left_join</span>(july2019, <span class="dt">route_id =</span> route_id) <span class="op">%&gt;%</span></span>
+<span id="cb15-6"><a href="secondary-stops.html#cb15-6"></a><span class="st">  </span><span class="kw">group_by</span>(route_id) <span class="op">%&gt;%</span></span>
+<span id="cb15-7"><a href="secondary-stops.html#cb15-7"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb15-8"><a href="secondary-stops.html#cb15-8"></a>    <span class="dt">row =</span> <span class="kw">row_number</span>(),</span>
+<span id="cb15-9"><a href="secondary-stops.html#cb15-9"></a>    <span class="dt">num_rows =</span> <span class="kw">max</span>(row),</span>
+<span id="cb15-10"><a href="secondary-stops.html#cb15-10"></a>    <span class="dt">prop_trip_completed =</span> row <span class="op">/</span><span class="st"> </span>num_rows</span>
+<span id="cb15-11"><a href="secondary-stops.html#cb15-11"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb15-12"><a href="secondary-stops.html#cb15-12"></a><span class="st">  </span><span class="kw">arrange</span>(route_id, prop_trip_completed)</span>
+<span id="cb15-13"><a href="secondary-stops.html#cb15-13"></a></span>
+<span id="cb15-14"><a href="secondary-stops.html#cb15-14"></a> user_<span class="dv">4</span><span class="op">$</span>stop &lt;-<span class="st"> &quot;No&quot;</span></span>
+<span id="cb15-15"><a href="secondary-stops.html#cb15-15"></a> user_<span class="dv">4</span><span class="op">$</span>stop[<span class="dv">75</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb15-16"><a href="secondary-stops.html#cb15-16"></a> user_<span class="dv">4</span><span class="op">$</span>stop[<span class="dv">191</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb15-17"><a href="secondary-stops.html#cb15-17"></a></span>
+<span id="cb15-18"><a href="secondary-stops.html#cb15-18"></a>user_<span class="dv">4</span>_part_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">4</span>, route_id <span class="op">==</span><span class="st"> &quot;route_07_2019@acfb26e9-9d3e-40bf-b219-21a1399016b0&quot;</span>)</span>
+<span id="cb15-19"><a href="secondary-stops.html#cb15-19"></a></span>
+<span id="cb15-20"><a href="secondary-stops.html#cb15-20"></a>user_<span class="dv">4</span>_part_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">4</span>, route_id <span class="op">==</span><span class="st"> &quot;route_07_2019@0f0457cc-c4c8-4939-a509-f1e93f5b867e&quot;</span>)</span>
+<span id="cb15-21"><a href="secondary-stops.html#cb15-21"></a></span>
+<span id="cb15-22"><a href="secondary-stops.html#cb15-22"></a><span class="kw">get_table_data</span>(<span class="dt">dataset =</span> user_<span class="dv">4</span>)</span></code></pre></div>
+<table class="table" style="font-size: 8px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Start Station
+</th>
+<th style="text-align:left;">
+End Station
+</th>
+<th style="text-align:left;">
+Start Time
+</th>
+<th style="text-align:left;">
+End Time
+</th>
+<th style="text-align:left;">
+Trip Duration
+</th>
+<th style="text-align:left;">
+Stop Duration
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+UMass Southwest
+</td>
+<td style="text-align:left;">
+UMass Southwest
+</td>
+<td style="text-align:left;">
+2019-07-30 01:06:39
+</td>
+<td style="text-align:left;">
+2019-07-30 03:20:24
+</td>
+<td style="text-align:left;">
+2.23 hours
+</td>
+<td style="text-align:left;">
+1.97 hours
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="secondary-stops.html#cb16-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">15</span>, <span class="dt">dataset =</span> user_<span class="dv">4</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="secondary-stops.html#cb17-1"></a><span class="co">#plot_stops(api_key = key, zoom = 15, dataset = user_4_part_1)</span></span>
+<span id="cb17-2"><a href="secondary-stops.html#cb17-2"></a></span>
+<span id="cb17-3"><a href="secondary-stops.html#cb17-3"></a><span class="co">#plot_stops(api_key = key, zoom = 15, dataset = user_4_part_2)</span></span></code></pre></div>
+
+<div style="page-break-after: always;"></div>
+</div>
+<div id="user-5-trips-88-89" class="section level3">
+<h3><span class="header-section-number">9.1.5</span> User 5 (Trips 88-89)</h3>
+
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="secondary-stops.html#cb18-1"></a>user_<span class="dv">5</span> &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb18-2"><a href="secondary-stops.html#cb18-2"></a><span class="st">  </span><span class="kw">select</span>(start_station, end_station, route_id, user_id) <span class="op">%&gt;%</span></span>
+<span id="cb18-3"><a href="secondary-stops.html#cb18-3"></a><span class="st">  </span><span class="kw">filter</span>(route_id <span class="op">==</span><span class="st"> &quot;route_09_2019@4c3978dd-48ec-4ca7-9af2-e08518e66b7c&quot;</span> <span class="op">|</span><span class="st"> </span></span>
+<span id="cb18-4"><a href="secondary-stops.html#cb18-4"></a><span class="st">           </span>route_id <span class="op">==</span><span class="st"> &quot;route_09_2019@91e61182-d511-4a4e-bbe1-86acb8e08483&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb18-5"><a href="secondary-stops.html#cb18-5"></a><span class="st">  </span><span class="kw">left_join</span>(september2019, <span class="dt">route_id =</span> route_id) <span class="op">%&gt;%</span></span>
+<span id="cb18-6"><a href="secondary-stops.html#cb18-6"></a><span class="st">  </span><span class="kw">group_by</span>(route_id) <span class="op">%&gt;%</span></span>
+<span id="cb18-7"><a href="secondary-stops.html#cb18-7"></a><span class="st">  </span><span class="kw">mutate</span>(</span>
+<span id="cb18-8"><a href="secondary-stops.html#cb18-8"></a>    <span class="dt">row =</span> <span class="kw">row_number</span>(),</span>
+<span id="cb18-9"><a href="secondary-stops.html#cb18-9"></a>    <span class="dt">num_rows =</span> <span class="kw">max</span>(row),</span>
+<span id="cb18-10"><a href="secondary-stops.html#cb18-10"></a>    <span class="dt">prop_trip_completed =</span> row <span class="op">/</span><span class="st"> </span>num_rows</span>
+<span id="cb18-11"><a href="secondary-stops.html#cb18-11"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb18-12"><a href="secondary-stops.html#cb18-12"></a><span class="st">  </span><span class="kw">arrange</span>(route_id, prop_trip_completed)</span>
+<span id="cb18-13"><a href="secondary-stops.html#cb18-13"></a></span>
+<span id="cb18-14"><a href="secondary-stops.html#cb18-14"></a>user_<span class="dv">5</span><span class="op">$</span>stop &lt;-<span class="st"> &quot;No&quot;</span></span>
+<span id="cb18-15"><a href="secondary-stops.html#cb18-15"></a>user_<span class="dv">5</span><span class="op">$</span>stop[<span class="dv">511</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb18-16"><a href="secondary-stops.html#cb18-16"></a>user_<span class="dv">5</span><span class="op">$</span>stop[<span class="dv">763</span>] &lt;-<span class="st"> &quot;Yes&quot;</span></span>
+<span id="cb18-17"><a href="secondary-stops.html#cb18-17"></a></span>
+<span id="cb18-18"><a href="secondary-stops.html#cb18-18"></a>user_<span class="dv">5</span>_part_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">5</span>, route_id <span class="op">==</span><span class="st"> &quot;route_09_2019@4c3978dd-48ec-4ca7-9af2-e08518e66b7c&quot;</span>)</span>
+<span id="cb18-19"><a href="secondary-stops.html#cb18-19"></a></span>
+<span id="cb18-20"><a href="secondary-stops.html#cb18-20"></a>user_<span class="dv">5</span>_part_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">filter</span>(user_<span class="dv">5</span>, route_id <span class="op">==</span><span class="st"> &quot;route_09_2019@91e61182-d511-4a4e-bbe1-86acb8e08483&quot;</span>)</span>
+<span id="cb18-21"><a href="secondary-stops.html#cb18-21"></a></span>
+<span id="cb18-22"><a href="secondary-stops.html#cb18-22"></a><span class="kw">get_table_data</span>(<span class="dt">dataset =</span> user_<span class="dv">5</span>)</span></code></pre></div>
+<table class="table" style="font-size: 8px; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+Start Station
+</th>
+<th style="text-align:left;">
+End Station
+</th>
+<th style="text-align:left;">
+Start Time
+</th>
+<th style="text-align:left;">
+End Time
+</th>
+<th style="text-align:left;">
+Trip Duration
+</th>
+<th style="text-align:left;">
+Stop Duration
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Northampton Train Station
+</td>
+<td style="text-align:left;">
+North Pleasant Street
+</td>
+<td style="text-align:left;">
+2019-09-18 18:09:10
+</td>
+<td style="text-align:left;">
+2019-09-18 19:13:25
+</td>
+<td style="text-align:left;">
+1.07 hours
+</td>
+<td style="text-align:left;">
+50 secs
+</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="secondary-stops.html#cb19-1"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">12</span>, <span class="dt">dataset =</span> user_<span class="dv">5</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="secondary-stops.html#cb20-1"></a><span class="co">#plot_stops(api_key = key, zoom = 14, dataset = user_5_part_1)</span></span>
+<span id="cb20-2"><a href="secondary-stops.html#cb20-2"></a></span>
+<span id="cb20-3"><a href="secondary-stops.html#cb20-3"></a><span class="kw">plot_stops</span>(<span class="dt">api_key =</span> key, <span class="dt">zoom =</span> <span class="dv">14</span>, <span class="dt">dataset =</span> user_<span class="dv">5</span>_part_<span class="dv">2</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
+
+</div>
+</div>
+<div id="all-secondary-stops" class="section level2">
+<h2><span class="header-section-number">9.2</span> All Secondary Stops</h2>
+
+
+<div id="static-visualization-of-all-stops" class="section level3">
+<h3><span class="header-section-number">9.2.1</span> Static Visualization of All Stops</h3>
+
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="secondary-stops.html#cb21-1"></a>center &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">lon =</span> (<span class="kw">max</span>(stops<span class="op">$</span>longitude) <span class="op">+</span><span class="st"> </span><span class="kw">min</span>(stops<span class="op">$</span>longitude)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>,</span>
+<span id="cb21-2"><a href="secondary-stops.html#cb21-2"></a>            <span class="dt">lat =</span> (<span class="kw">max</span>(stops<span class="op">$</span>latitude) <span class="op">+</span><span class="st"> </span><span class="kw">min</span>(stops<span class="op">$</span>latitude)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb21-3"><a href="secondary-stops.html#cb21-3"></a></span>
+<span id="cb21-4"><a href="secondary-stops.html#cb21-4"></a>map &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> center, <span class="dt">zoom =</span> <span class="dv">11</span>)</span>
+<span id="cb21-5"><a href="secondary-stops.html#cb21-5"></a></span>
+<span id="cb21-6"><a href="secondary-stops.html#cb21-6"></a><span class="kw">ggmap</span>(map, <span class="dt">base_layer =</span> <span class="kw">ggplot</span>(stops, <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude))) <span class="op">+</span></span>
+<span id="cb21-7"><a href="secondary-stops.html#cb21-7"></a><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">4</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">shape =</span> <span class="dv">18</span>) <span class="op">+</span></span>
+<span id="cb21-8"><a href="secondary-stops.html#cb21-8"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-17-1.png" width="1152" /></p>
+
+</div>
+<div id="static-visualization-of-stops-by-city" class="section level3">
+<h3><span class="header-section-number">9.2.2</span> Static Visualization of Stops by City</h3>
+
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="secondary-stops.html#cb22-1"></a>cities &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Springfield&quot;</span>, <span class="st">&quot;Northampton&quot;</span>, <span class="st">&quot;Holyoke&quot;</span>, <span class="st">&quot;Amherst&quot;</span>, <span class="st">&quot;South Hadley&quot;</span>, <span class="st">&quot;Easthampton&quot;</span>)</span>
+<span id="cb22-2"><a href="secondary-stops.html#cb22-2"></a></span>
+<span id="cb22-3"><a href="secondary-stops.html#cb22-3"></a>city_plots &lt;-<span class="st"> </span><span class="kw">lapply</span>(cities, <span class="cf">function</span>(city) {</span>
+<span id="cb22-4"><a href="secondary-stops.html#cb22-4"></a></span>
+<span id="cb22-5"><a href="secondary-stops.html#cb22-5"></a>  city_center &lt;-<span class="st"> </span><span class="kw">geocode</span>(<span class="kw">paste0</span>(city, <span class="st">&quot;, MA&quot;</span>))</span>
+<span id="cb22-6"><a href="secondary-stops.html#cb22-6"></a></span>
+<span id="cb22-7"><a href="secondary-stops.html#cb22-7"></a>  stops &lt;-<span class="st"> </span>stops <span class="op">%&gt;%</span></span>
+<span id="cb22-8"><a href="secondary-stops.html#cb22-8"></a><span class="st">    </span><span class="kw">rowwise</span>() <span class="op">%&gt;%</span></span>
+<span id="cb22-9"><a href="secondary-stops.html#cb22-9"></a><span class="st">    </span><span class="kw">filter</span>(geosphere<span class="op">::</span><span class="kw">distVincentyEllipsoid</span>(<span class="kw">c</span>(city_center<span class="op">$</span>lon, city_center<span class="op">$</span>lat), <span class="kw">c</span>(longitude, latitude)) <span class="op">&lt;=</span><span class="st"> </span><span class="dv">3000</span>)</span>
+<span id="cb22-10"><a href="secondary-stops.html#cb22-10"></a>  </span>
+<span id="cb22-11"><a href="secondary-stops.html#cb22-11"></a>  map_center &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dt">lon =</span> (<span class="kw">max</span>(stops<span class="op">$</span>longitude) <span class="op">+</span><span class="st"> </span><span class="kw">min</span>(stops<span class="op">$</span>longitude)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>,</span>
+<span id="cb22-12"><a href="secondary-stops.html#cb22-12"></a>                  <span class="dt">lat =</span> (<span class="kw">max</span>(stops<span class="op">$</span>latitude) <span class="op">+</span><span class="st"> </span><span class="kw">min</span>(stops<span class="op">$</span>latitude)) <span class="op">/</span><span class="st"> </span><span class="dv">2</span>)</span>
+<span id="cb22-13"><a href="secondary-stops.html#cb22-13"></a></span>
+<span id="cb22-14"><a href="secondary-stops.html#cb22-14"></a>  map &lt;-<span class="st"> </span><span class="kw">get_map</span>(<span class="dt">location =</span> map_center, <span class="dt">zoom =</span> <span class="dv">13</span>)</span>
+<span id="cb22-15"><a href="secondary-stops.html#cb22-15"></a></span>
+<span id="cb22-16"><a href="secondary-stops.html#cb22-16"></a>  <span class="kw">ggmap</span>(map, <span class="dt">base_layer =</span> <span class="kw">ggplot</span>(stops, <span class="kw">aes</span>(<span class="dt">x =</span> longitude, <span class="dt">y =</span> latitude))) <span class="op">+</span></span>
+<span id="cb22-17"><a href="secondary-stops.html#cb22-17"></a><span class="st">    </span><span class="kw">geom_point</span>(<span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">shape =</span> <span class="dv">18</span>) <span class="op">+</span></span>
+<span id="cb22-18"><a href="secondary-stops.html#cb22-18"></a><span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Longitude&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Latitude&quot;</span>, <span class="dt">title =</span> <span class="kw">paste</span>(<span class="st">&quot;Stops in&quot;</span>, city))</span>
+<span id="cb22-19"><a href="secondary-stops.html#cb22-19"></a>})</span>
+<span id="cb22-20"><a href="secondary-stops.html#cb22-20"></a></span>
+<span id="cb22-21"><a href="secondary-stops.html#cb22-21"></a>cowplot<span class="op">::</span><span class="kw">plot_grid</span>(<span class="dt">plotlist =</span> city_plots, <span class="dt">ncol =</span> <span class="dv">2</span>)</span></code></pre></div>
+<p><img src="valleybike-report_files/figure-html/unnamed-chunk-18-1.png" width="960" /></p>
+
+</div>
+<div id="interactive-visualization-of-all-stops" class="section level3">
+<h3><span class="header-section-number">9.2.3</span> Interactive Visualization of All Stops</h3>
+
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="secondary-stops.html#cb23-1"></a><span class="kw">leaflet</span>(stops) <span class="op">%&gt;%</span></span>
+<span id="cb23-2"><a href="secondary-stops.html#cb23-2"></a><span class="st">  </span><span class="kw">addTiles</span>() <span class="op">%&gt;%</span></span>
+<span id="cb23-3"><a href="secondary-stops.html#cb23-3"></a><span class="st">  </span><span class="kw">addMarkers</span>(</span>
+<span id="cb23-4"><a href="secondary-stops.html#cb23-4"></a>    <span class="dt">lng =</span> <span class="op">~</span>longitude,</span>
+<span id="cb23-5"><a href="secondary-stops.html#cb23-5"></a>    <span class="dt">lat =</span> <span class="op">~</span>latitude,</span>
+<span id="cb23-6"><a href="secondary-stops.html#cb23-6"></a>    <span class="dt">popup =</span> <span class="op">~</span><span class="kw">paste</span>(<span class="st">&quot;Duration:&quot;</span>, duration, <span class="st">&quot;mins&quot;</span>),</span>
+<span id="cb23-7"><a href="secondary-stops.html#cb23-7"></a>    <span class="dt">icon =</span> <span class="kw">icons</span>(<span class="dt">iconUrl =</span> <span class="st">&quot;resources/pin.png&quot;</span>, <span class="dt">iconWidth =</span> <span class="dv">30</span>, <span class="dt">iconHeight =</span> <span class="dv">30</span>)</span>
+<span id="cb23-8"><a href="secondary-stops.html#cb23-8"></a>  )</span></code></pre></div>
+<div id="htmlwidget-37ddd67573685174ec4b" style="width:912px;height:576px;" class="leaflet html-widget"></div>
+<script type="application/json" data-for="htmlwidget-37ddd67573685174ec4b">{"x":{"options":{"crs":{"crsClass":"L.CRS.EPSG3857","code":null,"proj4def":null,"projectedBounds":null,"options":{}}},"calls":[{"method":"addTiles","args":["//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",null,null,{"minZoom":0,"maxZoom":18,"tileSize":256,"subdomains":"abc","errorTileUrl":"","tms":false,"noWrap":false,"zoomOffset":0,"zoomReverse":false,"opacity":1,"zIndex":1,"detectRetina":false,"attribution":"&copy; <a href=\"http://openstreetmap.org\">OpenStreetMap<\/a> contributors, <a href=\"http://creativecommons.org/licenses/by-sa/2.0/\">CC-BY-SA<\/a>"}]},{"method":"addMarkers","args":[[42.1163233333333,42.1162783333333,42.368325,42.3682833333333,42.368315,42.3683366666667,42.3683266666667,42.3682733333333,42.368305,42.3683,42.1163083333333,42.11634,42.1162566666667,42.36832,42.3683283333333,42.36829,42.368305,42.36834,42.3683616666667,42.3682983333333,42.37731,42.2022983333333,42.3683133333333,42.1112066666667,42.27082,42.1163066666667,42.116305,42.368315,42.368315,42.368315,42.3683183333333,42.11633,42.1162466666667,42.3380166666667,42.3684266666667,42.3683083333333,42.3682933333333,42.36827,42.368315,42.116305,42.116215,42.1161966666667,42.3682433333333,42.3682966666667,42.3682633333333,42.3682533333333,42.3289883333333,42.3683033333333,42.368325,42.3682883333333,42.3683066666667,42.3292616666667,42.3293333333333,42.3292616666667,42.368305,42.3683433333333,42.3682633333333,42.1087383333333,42.10887,42.1087266666667,42.1085516666667,42.1087666666667,42.108715,42.1087216666667,42.1212183333333,42.3683116666667,42.3683283333333,42.3683316666667,42.11623,42.1163533333333,42.11629,42.11634,42.116325,42.1162866666667,42.19783,42.2074333333333,42.202785,42.197695,42.338125,42.1162483333333,42.3682966666667,42.3683066666667,42.3683366666667,42.3683616666667,42.1866216666667,42.2070616666667,42.2081433333333,42.21343,42.1890616666667,42.3683383333333,42.3682683333333,42.36829,42.36832,42.36832,42.2068416666667,42.116305,42.329235,42.3293833333333,42.3291916666667,42.32928,42.3293883333333,42.3287333333333,42.329395,42.3293033333333,42.329235,42.329155,42.329335,42.3293183333333,42.368285,42.36825,42.379885,42.329275,42.3291866666667,42.3293466666667,42.3293266666667,42.3356916666667,42.1163033333333,42.116225,42.368315,42.3299866666667,42.3132416666667,42.3299716666667,42.328785,42.2070066666667,42.2070466666667,42.36836,42.3683183333333,42.368275,42.3682666666667,42.368275,42.368325,42.3682733333333,42.1162983333333,42.2022866666667,42.1162933333333,42.1162183333333,42.3682733333333,42.1162283333333,42.3292816666667,42.36823,42.3293383333333,42.329265,42.3289716666667,42.36833,42.3683116666667,42.3682933333333,42.1162866666667,42.116185,42.1162133333333,42.1162566666667,42.116235,42.1162666666667,42.1162583333333,42.1161566666667,42.1162116666667,42.1161683333333,42.36945,42.11577,42.368315,42.1162716666667,42.368335,42.3683333333333,42.3683033333333,42.3683033333333,42.3683116666667,42.3683433333333,42.368305,42.368305,42.3682883333333,42.329215,42.3682633333333,42.116225,42.3682833333333,42.3683583333333,42.1163433333333,42.1163433333333,42.1162616666667,42.3683333333333,42.368365,42.3683266666667,42.3682516666667,42.3291016666667,42.0967983333333,42.2800116666667,42.3369916666667,42.116235,42.1161733333333,42.1162716666667,42.3682816666667,42.368325,42.1108883333333,42.1108816666667,42.1109816666667,42.1108783333333,42.3682866666667,42.3682733333333,42.368275,42.36829,42.3683966666667,42.36827,42.1162533333333,42.237055,42.3682883333333,42.3683133333333,42.3683066666667,42.3683033333333,42.3683116666667,42.3683566666667,42.1162516666667,42.1162933333333,42.3682583333333,42.3682966666667,42.368275,42.1162466666667,42.3683366666667,42.3683233333333,42.368375,42.3683183333333,42.368335,42.1162416666667,42.3683016666667,42.1163316666667,42.1162933333333,42.36832,42.368315,42.3683533333333,42.36833,42.3683,42.3683,42.3682516666667,42.36831,42.36831,42.3892283333333,42.3840966666667,42.3840733333333,42.389255,42.3824416666667,42.382745,42.3889766666667,42.3888583333333,42.38889,42.38244,42.389245,42.3844316666667,42.3842733333333,42.1162516666667,42.368265,42.368315,42.3682616666667,42.3683416666667,42.3682683333333,42.368325,42.3682766666667,42.3683516666667,42.368285,42.329015,42.329125,42.36828,42.1341633333333,42.1279833333333,42.1273516666667,42.1277716666667,42.3682783333333,42.3682633333333,42.3682416666667,42.3682866666667,42.3682533333333,42.368315,42.3683416666667,42.368275,42.368345,42.3682866666667,42.3682966666667,42.1162833333333,42.3682883333333,42.3293033333333,42.3683116666667,42.3683083333333,42.3682833333333,42.3682783333333,42.32934,42.3683083333333,42.3380616666667,42.36827,42.36835,42.3683216666667,42.3682983333333,42.1163333333333,42.3682533333333,42.368345,42.39076,42.11631,42.3682933333333,42.36829,42.36827,42.368265,42.3683516666667,42.3683166666667,42.3683333333333,42.368315,42.2015583333333,42.368265,42.1162916666667,42.3290516666667,42.3290516666667,42.3290516666667,42.3683183333333,42.313005,42.368275,42.3683416666667,42.3682783333333,42.368305,42.368325,42.3683383333333,42.1162566666667,42.116245,42.36824,42.3682883333333,42.368315,42.3683216666667,42.3683416666667,42.36835,42.1162916666667,42.11624,42.3682933333333,42.1098516666667,42.0967933333333,42.368285,42.3683466666667,42.3298783333333,42.2370883333333,42.3683116666667,42.36823,42.3682866666667,42.36832,42.3683483333333,42.36828,42.368275,42.3682683333333,42.3683216666667,42.3682733333333,42.3296216666667,42.36831,42.1162716666667,42.36933,42.368275,42.116265,42.11621,42.368325,42.3683416666667,42.3683166666667,42.1161966666667,42.368335,42.368325,42.3682716666667,42.368285,42.3292333333333,42.368295,42.3683366666667,42.3682833333333,42.3289933333333,42.3289766666667,42.36831,42.3682833333333,42.3682933333333,42.368265,42.368265,42.1163216666667,42.116255,42.116255,42.3682583333333,42.1094233333333,42.320315,42.3683333333333,42.3683583333333,42.3682466666667,42.3357316666667,42.3683316666667,42.3445683333333,42.3445683333333,42.3445683333333,42.1162483333333,42.3290216666667,42.3290216666667,42.116245,42.1162166666667,42.3682933333333,42.3682833333333,42.368295,42.3188016666667,42.116325,42.1163466666667,42.368275,42.368275,42.1290116666667,42.13303,42.1072783333333,42.1101916666667,42.10732,42.2110483333333,42.2044583333333,42.113585,42.1141516666667,42.0942683333333,42.0933316666667,42.1101716666667,42.205645,42.2041633333333,42.2045366666667,42.2127216666667,42.1105616666667,42.1146933333333,42.11377,42.0932733333333,42.1008516666667,42.1101466666667,42.1101533333333,42.11031,42.0890033333333,42.1072666666667,42.10018,42.103555,42.1074966666667,42.1136583333333,42.13397,42.1111333333333,42.093325,42.10726,42.10215,42.0936633333333,42.1101983333333,42.1072616666667,42.0883916666667,42.0933266666667,42.1101383333333,42.0933483333333,42.0889783333333,42.2121416666667,42.2120416666667,42.20563,42.1006483333333,42.1010516666667,42.09901,42.1039583333333,42.106935,42.0934533333333,42.093375,42.0889916666667,42.0933266666667,42.0933616666667,42.0889716666667,42.0933116666667,42.0933733333333,42.09486,42.0933383333333,42.1113366666667,42.10963,42.2053016666667,42.2131166666667,42.210965,42.0968333333333,42.3683383333333,42.3682816666667,42.3682883333333,42.3683516666667,42.36831,42.3683466666667,42.36836,42.11622,42.3683516666667,42.3683033333333,42.3682833333333,42.36827,42.3683483333333,42.3683183333333,42.3682783333333,42.3683266666667,42.3682583333333,42.3682783333333,42.3683066666667,42.3683183333333,42.3682833333333,42.116225,42.36832,42.3683133333333,42.3290416666667,42.36835,42.1162533333333,42.2113566666667,42.20835,42.18898,42.2068783333333,42.186765,42.1866116666667,42.2070966666667,42.20562,42.2081466666667,42.2136966666667,42.36825,42.3682733333333,42.3682466666667,42.3682783333333,42.3683133333333,42.39379,42.368285,42.3682683333333,42.368315,42.368305,42.116235,42.368345,42.329015,42.3683133333333,42.1162883333333,42.1163133333333,42.3685,42.368275,42.3682833333333,42.3682833333333,42.3682933333333,42.3291616666667,42.368425,42.1162916666667,42.2022516666667,42.3683083333333,42.270615,42.3682966666667,42.3297116666667,42.3136283333333,42.3296816666667,42.3296166666667,42.3296066666667,42.3296066666667,42.3296066666667,42.313655,42.3683383333333,42.3683016666667,42.3683016666667,42.3791666666667,42.3791666666667,42.3791666666667,42.3791666666667,42.3791666666667,42.3682816666667,42.3683083333333,42.11633,42.116325,42.1162183333333,42.3682916666667,42.3152816666667,42.3172216666667,42.3682816666667,42.1163666666667,42.3682983333333,42.380955,42.3682966666667,42.3683516666667,42.3683016666667,42.36826,42.3683483333333,42.3291983333333,42.3292166666667,42.3683383333333,42.3682883333333,42.3683316666667,42.368285,42.3682233333333,42.3683283333333,42.3682216666667,42.3683,42.3682766666667,42.3682833333333,42.3292666666667,42.329355,42.3291633333333,42.3293883333333,42.3291733333333,42.3293683333333,42.3293566666667,42.329355,42.3294066666667,42.3293266666667,42.3293333333333,42.3293583333333,42.329285,42.3293383333333,42.3292266666667,42.328735,42.3292833333333,42.3292633333333,42.3292316666667,42.3292616666667,42.3293416666667,42.328805,42.3351,42.36827,42.3682766666667,42.3682916666667,42.0996816666667,42.0978283333333,42.368345,42.3683016666667,42.3380433333333,42.3380683333333,42.11633,42.116335,42.1162933333333,42.1162416666667,42.11637,42.1162683333333,42.1163083333333,42.1162383333333,42.1162433333333,42.116335,42.1162633333333,42.1163183333333,42.1163333333333,42.1162533333333,42.1162966666667,42.1163466666667,42.1162883333333,42.1163066666667,42.1163666666667,42.1162633333333,42.1162983333333,42.1161883333333,42.116235,42.11626,42.11615,42.1161733333333,42.1163416666667,42.1162266666667,42.1162983333333,42.116305,42.1163633333333,42.116265,42.1162933333333,42.1163083333333,42.1162566666667,42.1163166666667,42.116285,42.1163116666667,42.1162816666667,42.116335,42.1163083333333,42.1162933333333,42.1163816666667,42.1013466666667,42.3682533333333,42.36835,42.36835,42.1161883333333,42.1162666666667,42.116285,42.1149466666667,42.115145,42.3683666666667,42.3682966666667,42.36823,42.32943,42.3293033333333,42.3683016666667,42.36833,42.3682916666667,42.3682916666667,42.3682866666667,42.368275,42.3683166666667,42.329625,42.32918,42.3682733333333,42.1162366666667,42.116245,42.36827,42.3683016666667,42.3290383333333,42.3290633333333,42.1163716666667,42.3683433333333,42.3683066666667,42.368375,42.3349,42.3349,42.3578116666667,42.3578116666667,42.3578116666667,42.1162983333333,42.1164,42.3683366666667,42.3683233333333,42.3682516666667,42.32926,42.3683083333333,42.3683616666667,42.3682866666667,42.3683466666667,42.3381883333333,42.36837,42.3683133333333,42.3683366666667,42.368295,42.3682783333333,42.3682966666667,42.3683983333333,42.368275,42.3682983333333,42.3682933333333,42.3682733333333,42.1162483333333,42.116325,42.116205,42.3684233333333,42.36831,42.3683316666667,42.3683133333333,42.329115,42.3291033333333,42.3682683333333,42.3683516666667,42.3292333333333,42.32934,42.368315,42.3682933333333,42.3683716666667,42.36828,42.3682766666667,42.3297783333333,42.3296883333333,42.1162966666667,42.1162766666667,42.3682916666667,42.3683666666667,42.368265,42.3682666666667,42.3682966666667,42.317545,42.2075666666667,42.1730366666667,42.3683316666667,42.3683533333333,42.36833,42.32916,42.32916,42.116315,42.3682983333333,42.36829,42.329325,42.36834,42.3683266666667,42.3682616666667,42.3682883333333,42.3682916666667,42.3681716666667,42.3682766666667,42.368335,42.3682666666667,42.368325,42.3682783333333,42.3683233333333,42.3682833333333,42.3683166666667,42.3683083333333,42.3682516666667,42.3682966666667,42.3683066666667,42.3682566666667,42.3682716666667,42.3683433333333,42.3682766666667,42.116325,42.3682833333333,42.3682616666667,42.36822,42.3682566666667,42.3683083333333,42.3683,42.3683466666667,42.3683183333333,42.3683016666667,42.3683516666667,42.3683233333333,42.3287883333333,42.3293933333333,42.32936,42.329005,42.2029466666667,42.2012983333333,42.2121466666667,42.2028783333333,42.2013,42.2121133333333,42.2009933333333,42.2012883333333,42.201325,42.20493,42.204315,42.2007266666667,42.2054566666667,42.20512,42.2117266666667,42.1162983333333,42.1162983333333,42.3683383333333,42.368295,42.11637,42.11637,42.3683066666667,42.368285,42.3682666666667,42.1162816666667,42.3683333333333,42.3839266666667,42.368285,42.3209283333333,42.36828,42.368325,42.3895433333333,42.39139,42.3913966666667,42.3914183333333,42.3891833333333,42.3912583333333,42.3891683333333,42.3895466666667,42.3934566666667,42.3938233333333,42.3913033333333,42.3870283333333,42.368295,42.3359816666667,42.3237383333333,42.3291216666667,42.3365716666667,42.3360116666667,42.329025,42.368285,42.3292766666667,42.1163083333333,42.1162933333333,42.1162933333333,42.1162066666667,42.1162333333333,42.11627,42.1162683333333,42.1163983333333,42.1162583333333,42.368295,42.3682633333333,42.3683333333333,42.3293816666667,42.329525,42.368275,42.3292583333333,42.3682333333333,42.3293366666667,42.3288366666667,42.329335,42.3682533333333,42.3683066666667,42.11627,42.1162466666667,42.3798683333333,42.36832,42.3242366666667,42.37304,42.368305,42.3287633333333,42.3682316666667,42.271145,42.2707183333333,42.3683083333333,42.368275,42.3793166666667,42.3295566666667,42.328785,42.32873,42.3295816666667,42.36835,42.3291733333333,42.3683516666667,42.3683716666667,42.3292666666667,42.3292466666667,42.3683283333333,42.3683033333333,42.3682866666667,42.2070083333333,42.1977233333333,42.2005,42.2003483333333,42.368275,42.3683183333333,42.08878,42.368335,42.36828,42.1211283333333,42.1246466666667,42.1210816666667,42.1149583333333,42.36833,42.3683483333333,42.1163016666667,42.3683016666667,42.3683066666667,42.3682733333333,42.368285,42.116245,42.3243833333333,42.36841,42.1163,42.1163116666667,42.1162316666667,42.1162983333333,42.1162916666667,42.11634,42.1341683333333,42.1342016666667,42.117035,42.1210066666667,42.1210066666667,42.3292683333333,42.3287883333333,42.3682983333333,42.3683383333333,42.368285,42.379295,42.379295,42.10601,42.368315,42.3683383333333,42.116315,42.116295,42.1163266666667,42.11634,42.1163233333333,42.116345,42.1162833333333,42.1162833333333,42.1162833333333,42.1162716666667,42.1163183333333,42.1163183333333,42.1162916666667,42.1163183333333,42.1163016666667,42.329705,42.3249666666667,42.3297016666667,42.3136516666667,42.379425,42.3291333333333,42.3293283333333,42.1162516666667,42.1163666666667,42.1163216666667,42.3683366666667,42.3683516666667,42.3683,42.32904,42.368325,42.317655,42.3190233333333,42.32924,42.337655,42.3344616666667,42.3375316666667,42.3532166666667,42.314595,42.3375966666667,42.3412066666667,42.337505,42.3593683333333,42.37814,42.3769533333333,42.1965766666667,42.3289966666667,42.3289966666667,42.3289966666667,42.3289966666667,42.2023183333333,42.3692433333333,42.1163016666667,42.1790133333333,42.368315,42.3682816666667,42.3682816666667,42.3682683333333,42.3683333333333,42.3682566666667,42.1162016666667,42.32902,42.3683033333333,42.3683166666667,42.3290833333333,42.11622,42.3380266666667,42.3682816666667,42.3682833333333,42.3682616666667,42.3396416666667,42.3682833333333,42.368325,42.36827,42.3682666666667,42.36827,42.3682966666667,42.3683466666667,42.368295,42.36828,42.368285,42.3683,42.3292966666667,42.337415,42.32983,42.3296583333333,42.3287333333333,42.3683216666667,42.3682966666667,42.3683233333333,42.3293433333333,42.3682866666667,42.3682433333333,42.3682883333333,42.3683116666667,42.3293483333333,42.368335,42.3292666666667,42.3682583333333,42.368195,42.3682916666667,42.368305,42.3683016666667,42.36837,42.3682933333333,42.368425,42.368425,42.368425,42.3683316666667,42.36827,42.3682866666667,42.3682483333333,42.3683066666667,42.368265,42.3682716666667,42.3682716666667,42.368255,42.3682466666667,42.3683066666667,42.3682333333333,42.368285,42.368335,42.3683033333333,42.3682383333333,42.11625,42.3681783333333,42.32931],[-72.613475,-72.613425,-72.5333116666667,-72.533365,-72.533365,-72.5333833333333,-72.53333,-72.533365,-72.5333116666667,-72.53339,-72.6134333333333,-72.613475,-72.61347,-72.5333466666667,-72.53331,-72.5333316666667,-72.5333916666667,-72.5333083333333,-72.5333233333333,-72.5333433333333,-72.5200216666667,-72.6199433333333,-72.5333333333333,-72.580235,-72.6718616666667,-72.6135016666667,-72.613495,-72.53332,-72.53332,-72.53332,-72.5333483333333,-72.6134733333333,-72.6133816666667,-72.6736233333333,-72.5338283333333,-72.533335,-72.5333316666667,-72.5333616666667,-72.5333383333333,-72.61353,-72.6134283333333,-72.6134883333333,-72.5333766666667,-72.53335,-72.533345,-72.5333766666667,-72.6350166666667,-72.5333616666667,-72.533365,-72.5333783333333,-72.53336,-72.6352266666667,-72.6354016666667,-72.6352583333333,-72.5333533333333,-72.5333466666667,-72.5333666666667,-72.5950716666667,-72.59505,-72.5950916666667,-72.5951183333333,-72.59504,-72.5951083333333,-72.59508,-72.5854816666667,-72.53336,-72.533335,-72.5333733333333,-72.61334,-72.6133716666667,-72.6133866666667,-72.6134633333333,-72.6135033333333,-72.61346,-72.6043466666667,-72.6433666666667,-72.64269,-72.6341883333333,-72.6734516666667,-72.6134583333333,-72.53334,-72.5333233333333,-72.5333033333333,-72.533295,-72.63008,-72.64545,-72.615675,-72.6233633333333,-72.6227416666667,-72.5333633333333,-72.5333233333333,-72.5333383333333,-72.533345,-72.533345,-72.608165,-72.6134733333333,-72.6355866666667,-72.6351433333333,-72.6353966666667,-72.6352516666667,-72.6351633333333,-72.63432,-72.63541,-72.6353716666667,-72.63525,-72.6350166666667,-72.6353933333333,-72.6352916666667,-72.5333533333333,-72.5333666666667,-72.51895,-72.6353516666667,-72.6353633333333,-72.6353183333333,-72.6353983333333,-72.6720166666667,-72.6135383333333,-72.6134083333333,-72.5333183333333,-72.677905,-72.6280683333333,-72.6779316666667,-72.6333733333333,-72.64293,-72.6454583333333,-72.5333266666667,-72.5333333333333,-72.5333483333333,-72.5333583333333,-72.533325,-72.5333483333333,-72.5333566666667,-72.61352,-72.6199966666667,-72.6135066666667,-72.6134466666667,-72.533335,-72.613295,-72.6353433333333,-72.5333366666667,-72.6352783333333,-72.6352533333333,-72.63499,-72.5333533333333,-72.53333,-72.5333433333333,-72.6134133333333,-72.61335,-72.613305,-72.6134683333333,-72.6133483333333,-72.6133933333333,-72.6133633333333,-72.613315,-72.613345,-72.61334,-72.5338316666667,-72.59574,-72.5333266666667,-72.6134583333333,-72.533335,-72.5333466666667,-72.5333166666667,-72.5333583333333,-72.533355,-72.533325,-72.5333466666667,-72.5333466666667,-72.53335,-72.63525,-72.53337,-72.61347,-72.5333783333333,-72.5334433333333,-72.61349,-72.61349,-72.613485,-72.5333433333333,-72.5333583333333,-72.533405,-72.5334416666667,-72.6352066666667,-72.5824083333333,-72.6704683333333,-72.63892,-72.613495,-72.6134483333333,-72.6134433333333,-72.5333566666667,-72.5333583333333,-72.5671833333333,-72.5671666666667,-72.5671133333333,-72.5671716666667,-72.5333633333333,-72.5333883333333,-72.53337,-72.53331,-72.5333583333333,-72.5333683333333,-72.6133916666667,-72.58203,-72.5333583333333,-72.533365,-72.53332,-72.5333216666667,-72.5333,-72.5334533333333,-72.6134783333333,-72.61345,-72.5333233333333,-72.5333716666667,-72.5333716666667,-72.613455,-72.533335,-72.5333716666667,-72.5333283333333,-72.5332983333333,-72.53331,-72.6133716666667,-72.5333066666667,-72.6134983333333,-72.6134733333333,-72.5333516666667,-72.5333733333333,-72.53334,-72.533315,-72.5333416666667,-72.5333416666667,-72.533325,-72.5333466666667,-72.5333183333333,-72.5321883333333,-72.5297216666667,-72.529655,-72.5320783333333,-72.529145,-72.5288866666667,-72.52275,-72.5180516666667,-72.5180866666667,-72.529115,-72.5320983333333,-72.5297683333333,-72.5298533333333,-72.6135033333333,-72.5333583333333,-72.533345,-72.5332966666667,-72.5333283333333,-72.5333533333333,-72.5333366666667,-72.5333683333333,-72.533355,-72.53332,-72.6349216666667,-72.6350716666667,-72.5333216666667,-72.6001383333333,-72.595205,-72.5947766666667,-72.5935833333333,-72.5333683333333,-72.5333416666667,-72.533355,-72.5333483333333,-72.5333116666667,-72.5332916666667,-72.5333083333333,-72.5333533333333,-72.5333033333333,-72.5333366666667,-72.5333383333333,-72.61351,-72.5333983333333,-72.63536,-72.53334,-72.53334,-72.533335,-72.5333566666667,-72.6354066666667,-72.53336,-72.673335,-72.5333466666667,-72.533295,-72.5333216666667,-72.5333333333333,-72.6134983333333,-72.5333683333333,-72.5333216666667,-72.5263983333333,-72.61344,-72.5333383333333,-72.5333833333333,-72.5333283333333,-72.53333,-72.5333116666667,-72.5333533333333,-72.53333,-72.5333516666667,-72.60556,-72.5333633333333,-72.6134733333333,-72.6349266666667,-72.6349266666667,-72.6349266666667,-72.53337,-72.6249716666667,-72.533345,-72.53332,-72.5332816666667,-72.5333316666667,-72.533335,-72.533355,-72.613445,-72.61343,-72.5333716666667,-72.5333316666667,-72.533325,-72.5333116666667,-72.53333,-72.5333783333333,-72.6133533333333,-72.6134816666667,-72.53337,-72.57696,-72.5824533333333,-72.5333283333333,-72.5333116666667,-72.6360466666667,-72.5820966666667,-72.5333416666667,-72.533325,-72.5333816666667,-72.5333583333333,-72.5333183333333,-72.5333833333333,-72.5333483333333,-72.5333216666667,-72.533305,-72.5333183333333,-72.6790316666667,-72.5332716666667,-72.6134516666667,-72.5339066666667,-72.533365,-72.6134616666667,-72.6135083333333,-72.5333566666667,-72.533325,-72.5333733333333,-72.613415,-72.5333383333333,-72.53336,-72.533345,-72.5333616666667,-72.6349966666667,-72.5333266666667,-72.5333783333333,-72.5333566666667,-72.6350366666667,-72.6349766666667,-72.533305,-72.533305,-72.5333416666667,-72.5333133333333,-72.5333683333333,-72.6134916666667,-72.6135416666667,-72.6135016666667,-72.5333333333333,-72.5772566666667,-72.6300433333333,-72.5333183333333,-72.53336,-72.533315,-72.66919,-72.53336,-72.6842383333333,-72.6842383333333,-72.6842383333333,-72.6134566666667,-72.6350333333333,-72.6350333333333,-72.6134533333333,-72.6134183333333,-72.5332816666667,-72.5333666666667,-72.5333183333333,-72.629895,-72.6135333333333,-72.613475,-72.5333966666667,-72.5334483333333,-72.6224133333333,-72.6292666666667,-72.5861566666667,-72.5846716666667,-72.5861483333333,-72.603645,-72.6125116666667,-72.584845,-72.5945066666667,-72.5815383333333,-72.5775033333333,-72.5847233333333,-72.6106333333333,-72.6083316666667,-72.6126416666667,-72.60797,-72.60001,-72.60702,-72.6071766666667,-72.5774816666667,-72.5865716666667,-72.58468,-72.5846583333333,-72.5844566666667,-72.5785816666667,-72.586165,-72.5933183333333,-72.5989166666667,-72.6086166666667,-72.5846833333333,-72.6198116666667,-72.6040233333333,-72.57756,-72.5861316666667,-72.5787966666667,-72.5694583333333,-72.5846866666667,-72.5861416666667,-72.5564216666667,-72.5774716666667,-72.584715,-72.5775483333333,-72.5785766666667,-72.6083083333333,-72.607765,-72.6106366666667,-72.6064883333333,-72.60654,-72.609025,-72.5986883333333,-72.5936616666667,-72.5776916666667,-72.5775483333333,-72.57846,-72.577495,-72.5775366666667,-72.578465,-72.5776066666667,-72.57756,-72.5816933333333,-72.5775633333333,-72.5654216666667,-72.5540833333333,-72.6023033333333,-72.6069116666667,-72.6036766666667,-72.5823133333333,-72.5333133333333,-72.5333016666667,-72.5333383333333,-72.5333483333333,-72.5333783333333,-72.5333433333333,-72.533365,-72.6134916666667,-72.5333366666667,-72.5333533333333,-72.5333683333333,-72.53334,-72.5333683333333,-72.53334,-72.5333683333333,-72.5332916666667,-72.5333566666667,-72.53334,-72.533325,-72.5333383333333,-72.533405,-72.6134866666667,-72.5333583333333,-72.5333366666667,-72.6350416666667,-72.533315,-72.613465,-72.6206383333333,-72.60861,-72.6226366666667,-72.597285,-72.6302133333333,-72.63001,-72.645385,-72.6106016666667,-72.6156683333333,-72.623365,-72.533365,-72.5334183333333,-72.533325,-72.5333533333333,-72.5333333333333,-72.5297066666667,-72.5333533333333,-72.5333416666667,-72.5333583333333,-72.5334416666667,-72.6134783333333,-72.5333616666667,-72.63505,-72.53334,-72.613325,-72.6133433333333,-72.5338566666667,-72.533335,-72.53331,-72.5333433333333,-72.53334,-72.6352716666667,-72.5334066666667,-72.6134766666667,-72.6199066666667,-72.533315,-72.6725233333333,-72.5333066666667,-72.6789933333333,-72.63526,-72.6790916666667,-72.67897,-72.67899,-72.6790066666667,-72.6790066666667,-72.6353383333333,-72.533325,-72.533345,-72.5333683333333,-72.5199533333333,-72.5199533333333,-72.5199533333333,-72.5199533333333,-72.5199533333333,-72.5333383333333,-72.5333183333333,-72.61345,-72.613415,-72.6133433333333,-72.5333583333333,-72.6392766666667,-72.6258033333333,-72.533365,-72.61336,-72.5333433333333,-72.518955,-72.533345,-72.5333333333333,-72.5332966666667,-72.5333433333333,-72.5333216666667,-72.635325,-72.6353483333333,-72.5333266666667,-72.5333066666667,-72.5333116666667,-72.5333566666667,-72.5333183333333,-72.53332,-72.53339,-72.5333416666667,-72.5333316666667,-72.5333533333333,-72.6354166666667,-72.635285,-72.63539,-72.635425,-72.6354083333333,-72.635235,-72.635095,-72.635425,-72.635265,-72.6349416666667,-72.63517,-72.6350683333333,-72.635315,-72.63523,-72.635125,-72.6342516666667,-72.635355,-72.6353033333333,-72.6352683333333,-72.6353033333333,-72.635125,-72.6345716666667,-72.669295,-72.5333333333333,-72.533355,-72.533335,-72.5853366666667,-72.5827216666667,-72.5333033333333,-72.5333066666667,-72.6733466666667,-72.673405,-72.6134433333333,-72.6134916666667,-72.61346,-72.613435,-72.6135083333333,-72.6133133333333,-72.6134816666667,-72.613465,-72.6132866666667,-72.6134133333333,-72.6133483333333,-72.61346,-72.6133433333333,-72.6134816666667,-72.61346,-72.6134983333333,-72.6132816666667,-72.613365,-72.6133366666667,-72.61345,-72.6134466666667,-72.6133533333333,-72.6134916666667,-72.6135116666667,-72.6133833333333,-72.6133383333333,-72.61339,-72.6134666666667,-72.6134916666667,-72.6134866666667,-72.613465,-72.6133433333333,-72.6134616666667,-72.6133233333333,-72.613375,-72.6134733333333,-72.6132766666667,-72.6134616666667,-72.6135166666667,-72.61351,-72.6134966666667,-72.6133383333333,-72.61343,-72.5886316666667,-72.5333466666667,-72.5333266666667,-72.533335,-72.61337,-72.6134966666667,-72.6134666666667,-72.6121733333333,-72.6122716666667,-72.5333333333333,-72.5333516666667,-72.5333483333333,-72.6354216666667,-72.6353283333333,-72.533315,-72.5333466666667,-72.53336,-72.53336,-72.5333616666667,-72.53333,-72.533345,-72.63524,-72.6351316666667,-72.5333416666667,-72.6133483333333,-72.61344,-72.5333433333333,-72.5334033333333,-72.6350416666667,-72.634995,-72.61332,-72.5333783333333,-72.5333283333333,-72.5333266666667,-72.621035,-72.621035,-72.549615,-72.549615,-72.549615,-72.61348,-72.6134366666667,-72.5333483333333,-72.53334,-72.53335,-72.6352983333333,-72.5333266666667,-72.5333266666667,-72.5333816666667,-72.5332566666667,-72.67342,-72.5333516666667,-72.5333883333333,-72.5333533333333,-72.533335,-72.53332,-72.5333466666667,-72.533385,-72.5333566666667,-72.5333366666667,-72.5333616666667,-72.5333583333333,-72.6134633333333,-72.6133333333333,-72.6133933333333,-72.5333183333333,-72.5333216666667,-72.533345,-72.5333366666667,-72.63498,-72.6349983333333,-72.5333383333333,-72.5333416666667,-72.6352983333333,-72.6351083333333,-72.533325,-72.5333366666667,-72.53328,-72.533355,-72.5333383333333,-72.6361066666667,-72.6360483333333,-72.6134483333333,-72.6135083333333,-72.53336,-72.5333833333333,-72.5333883333333,-72.5333433333333,-72.5333483333333,-72.63037,-72.64339,-72.64216,-72.53333,-72.5333466666667,-72.533345,-72.6352883333333,-72.6352883333333,-72.6134233333333,-72.5333266666667,-72.5333266666667,-72.63506,-72.533365,-72.5332816666667,-72.5333316666667,-72.53336,-72.5333483333333,-72.533335,-72.5333166666667,-72.53333,-72.5333416666667,-72.53338,-72.5333616666667,-72.5333316666667,-72.5333333333333,-72.533345,-72.5333016666667,-72.5333416666667,-72.5333366666667,-72.5333333333333,-72.533355,-72.533345,-72.533335,-72.5333333333333,-72.6133983333333,-72.5333116666667,-72.53337,-72.5333533333333,-72.5333883333333,-72.5333466666667,-72.5333266666667,-72.53334,-72.5333116666667,-72.533335,-72.5333533333333,-72.53332,-72.6346083333333,-72.63524,-72.6353533333333,-72.634875,-72.6118516666667,-72.614465,-72.630055,-72.6118583333333,-72.6145816666667,-72.63019,-72.61494,-72.6146866666667,-72.6188916666667,-72.61309,-72.6150933333333,-72.6287716666667,-72.60891,-72.6156083333333,-72.6043533333333,-72.6134933333333,-72.6134266666667,-72.533335,-72.53336,-72.61353,-72.61353,-72.5333416666667,-72.5333483333333,-72.5333566666667,-72.6134083333333,-72.5333,-72.529985,-72.5333016666667,-72.642335,-72.533315,-72.5333433333333,-72.52284,-72.5195733333333,-72.5199933333333,-72.5196933333333,-72.5219533333333,-72.5197316666667,-72.521905,-72.5279033333333,-72.5287066666667,-72.5242466666667,-72.5195216666667,-72.524645,-72.5333366666667,-72.6414716666667,-72.676065,-72.6333433333333,-72.641495,-72.6415366666667,-72.6350316666667,-72.5333433333333,-72.6353166666667,-72.6134766666667,-72.6133683333333,-72.6133683333333,-72.6134066666667,-72.6134166666667,-72.6133666666667,-72.6135416666667,-72.61339,-72.6133716666667,-72.53338,-72.5333516666667,-72.5333583333333,-72.6352866666667,-72.6360916666667,-72.533365,-72.6353983333333,-72.53337,-72.6353083333333,-72.6346066666667,-72.635275,-72.5333833333333,-72.5333683333333,-72.613475,-72.6134766666667,-72.5184883333333,-72.5333383333333,-72.6321233333333,-72.515715,-72.5333366666667,-72.6345066666667,-72.533375,-72.6711616666667,-72.6722916666667,-72.5333266666667,-72.5333583333333,-72.519015,-72.6359683333333,-72.6344633333333,-72.6343983333333,-72.6358733333333,-72.5333166666667,-72.6354683333333,-72.5333416666667,-72.5339016666667,-72.6352566666667,-72.6353266666667,-72.53334,-72.5333216666667,-72.533295,-72.6429466666667,-72.6059216666667,-72.6063566666667,-72.6060366666667,-72.533355,-72.5333583333333,-72.56922,-72.5333483333333,-72.53334,-72.5854516666667,-72.5845033333333,-72.585395,-72.58684,-72.5333283333333,-72.5332716666667,-72.6135083333333,-72.5332983333333,-72.53332,-72.53335,-72.5333566666667,-72.6134616666667,-72.6206266666667,-72.53333,-72.613455,-72.6134816666667,-72.6133266666667,-72.6134916666667,-72.6134483333333,-72.6134666666667,-72.60008,-72.6000466666667,-72.5843633333333,-72.585195,-72.585195,-72.6353416666667,-72.6342516666667,-72.5333216666667,-72.53351,-72.5333233333333,-72.5191133333333,-72.5191133333333,-72.592685,-72.5333183333333,-72.5333083333333,-72.613495,-72.6134616666667,-72.6134916666667,-72.6134966666667,-72.6134216666667,-72.6134283333333,-72.6134316666667,-72.6134316666667,-72.6134316666667,-72.6133516666667,-72.6134683333333,-72.6134683333333,-72.613505,-72.61351,-72.61349,-72.67895,-72.6552416666667,-72.6789866666667,-72.6353966666667,-72.519025,-72.6353566666667,-72.635045,-72.613455,-72.6133733333333,-72.61334,-72.53334,-72.53335,-72.5333433333333,-72.63504,-72.5333316666667,-72.63033,-72.6307283333333,-72.6353366666667,-72.640805,-72.6353216666667,-72.6407916666667,-72.55619,-72.6364383333333,-72.6408483333333,-72.6433066666667,-72.6408816666667,-72.5488133333333,-72.520115,-72.520125,-72.6056333333333,-72.635045,-72.635045,-72.635045,-72.635045,-72.6198316666667,-72.53389,-72.6134566666667,-72.6378733333333,-72.533355,-72.5333466666667,-72.5333466666667,-72.5333133333333,-72.5333083333333,-72.5333233333333,-72.6132616666667,-72.6349183333333,-72.5333266666667,-72.5333433333333,-72.6349533333333,-72.6134633333333,-72.67331,-72.533325,-72.5333266666667,-72.5333533333333,-72.66106,-72.5332966666667,-72.53328,-72.5333666666667,-72.5333333333333,-72.5333616666667,-72.533325,-72.5334116666667,-72.533315,-72.53336,-72.5333316666667,-72.53332,-72.635325,-72.6727466666667,-72.636055,-72.636055,-72.6342316666667,-72.5332916666667,-72.5333383333333,-72.5333366666667,-72.6353616666667,-72.5333583333333,-72.5333266666667,-72.53335,-72.5333216666667,-72.6352033333333,-72.53333,-72.6354683333333,-72.5333666666667,-72.5333,-72.53331,-72.5333433333333,-72.533365,-72.5333683333333,-72.5333333333333,-72.53392,-72.53392,-72.53392,-72.5333333333333,-72.5333783333333,-72.5333416666667,-72.5333416666667,-72.5333166666667,-72.53334,-72.5333433333333,-72.5333533333333,-72.5333233333333,-72.5333533333333,-72.533345,-72.533355,-72.5333266666667,-72.5333766666667,-72.5333083333333,-72.5333416666667,-72.6134933333333,-72.533355,-72.6350983333333],{"iconUrl":{"data":"data:image/png;base64,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","index":0},"iconWidth":30,"iconHeight":30},null,null,{"interactive":true,"draggable":false,"keyboard":true,"title":"","alt":"","zIndexOffset":0,"opacity":1,"riseOnHover":false,"riseOffset":250},["Duration: 6.5 mins","Duration: 1.33 mins","Duration: 1.58 mins","Duration: 9.08 mins","Duration: 19.58 mins","Duration: 4.25 mins","Duration: 53.33 mins","Duration: 60.25 mins","Duration: 22.5 mins","Duration: 3.08 mins","Duration: 3.17 mins","Duration: 4.67 mins","Duration: 4.08 mins","Duration: 1.67 mins","Duration: 1.58 mins","Duration: 1.75 mins","Duration: 107.67 mins","Duration: 30.25 mins","Duration: 22.17 mins","Duration: 2.5 mins","Duration: 66.08 mins","Duration: 6.92 mins","Duration: 53.92 mins","Duration: 1.75 mins","Duration: 1.17 mins","Duration: 1.75 mins","Duration: 9.08 mins","Duration: 5.42 mins","Duration: 2.33 mins","Duration: 1 mins","Duration: 3.83 mins","Duration: 2.58 mins","Duration: 2.08 mins","Duration: 45.08 mins","Duration: 11.38 mins","Duration: 1.67 mins","Duration: 5.42 mins","Duration: 1.25 mins","Duration: 24.42 mins","Duration: 1.42 mins","Duration: 3.5 mins","Duration: 2.17 mins","Duration: 91.25 mins","Duration: 22.67 mins","Duration: 4 mins","Duration: 2.08 mins","Duration: 9.25 mins","Duration: 1.17 mins","Duration: 1.25 mins","Duration: 1.08 mins","Duration: 1.17 mins","Duration: 5.33 mins","Duration: 2.33 mins","Duration: 1.08 mins","Duration: 23.5 mins","Duration: 44.67 mins","Duration: 13.83 mins","Duration: 13.08 mins","Duration: 3.37 mins","Duration: 18.33 mins","Duration: 26.62 mins","Duration: 30.02 mins","Duration: 27 mins","Duration: 20.72 mins","Duration: 12.92 mins","Duration: 1.53 mins","Duration: 9.08 mins","Duration: 19.67 mins","Duration: 146.92 mins","Duration: 173.8 mins","Duration: 177.88 mins","Duration: 2.42 mins","Duration: 1.17 mins","Duration: 3.83 mins","Duration: 1 mins","Duration: 9.42 mins","Duration: 1.67 mins","Duration: 2.5 mins","Duration: 53.08 mins","Duration: 2.17 mins","Duration: 19 mins","Duration: 1.75 mins","Duration: 35.83 mins","Duration: 17.33 mins","Duration: 5.42 mins","Duration: 6.17 mins","Duration: 18.83 mins","Duration: 34.75 mins","Duration: 2.33 mins","Duration: 14.33 mins","Duration: 16.5 mins","Duration: 11.48 mins","Duration: 40.75 mins","Duration: 5.33 mins","Duration: 2.5 mins","Duration: 3.17 mins","Duration: 5.33 mins","Duration: 18.25 mins","Duration: 4.58 mins","Duration: 20.17 mins","Duration: 1 mins","Duration: 3.33 mins","Duration: 5.33 mins","Duration: 9.08 mins","Duration: 27.17 mins","Duration: 17.67 mins","Duration: 7.67 mins","Duration: 32.25 mins","Duration: 11.33 mins","Duration: 14.25 mins","Duration: 2.77 mins","Duration: 6.17 mins","Duration: 2.92 mins","Duration: 5.42 mins","Duration: 11.5 mins","Duration: 21.33 mins","Duration: 13.08 mins","Duration: 12 mins","Duration: 22.67 mins","Duration: 15.92 mins","Duration: 10.67 mins","Duration: 44.58 mins","Duration: 10 mins","Duration: 3.42 mins","Duration: 1.58 mins","Duration: 31.67 mins","Duration: 33.67 mins","Duration: 42.58 mins","Duration: 29.42 mins","Duration: 17.58 mins","Duration: 3.25 mins","Duration: 35.5 mins","Duration: 1.17 mins","Duration: 4.67 mins","Duration: 1.5 mins","Duration: 3.92 mins","Duration: 1.68 mins","Duration: 6.58 mins","Duration: 11.42 mins","Duration: 11.33 mins","Duration: 27.17 mins","Duration: 26.5 mins","Duration: 3.83 mins","Duration: 266.17 mins","Duration: 262.25 mins","Duration: 30.83 mins","Duration: 1.17 mins","Duration: 4.82 mins","Duration: 11.2 mins","Duration: 2.32 mins","Duration: 7.83 mins","Duration: 146.33 mins","Duration: 131.5 mins","Duration: 1.75 mins","Duration: 19.5 mins","Duration: 3.83 mins","Duration: 2.08 mins","Duration: 1.08 mins","Duration: 78.25 mins","Duration: 6.58 mins","Duration: 21 mins","Duration: 10.67 mins","Duration: 9.25 mins","Duration: 1.17 mins","Duration: 7.25 mins","Duration: 28.75 mins","Duration: 9.83 mins","Duration: 3.25 mins","Duration: 2.67 mins","Duration: 54.17 mins","Duration: 1.58 mins","Duration: 1.67 mins","Duration: 26.25 mins","Duration: 6.1 mins","Duration: 2.3 mins","Duration: 1.55 mins","Duration: 20.17 mins","Duration: 19.5 mins","Duration: 1.25 mins","Duration: 9.97 mins","Duration: 19.72 mins","Duration: 20.42 mins","Duration: 5.08 mins","Duration: 12.25 mins","Duration: 3.17 mins","Duration: 1.17 mins","Duration: 6.83 mins","Duration: 9.23 mins","Duration: 42.33 mins","Duration: 32.08 mins","Duration: 100.05 mins","Duration: 41.5 mins","Duration: 35.42 mins","Duration: 59 mins","Duration: 36.75 mins","Duration: 7.58 mins","Duration: 4 mins","Duration: 45.5 mins","Duration: 80.67 mins","Duration: 7.75 mins","Duration: 4.08 mins","Duration: 41.5 mins","Duration: 91.33 mins","Duration: 90.58 mins","Duration: 35.25 mins","Duration: 54.83 mins","Duration: 237 mins","Duration: 118.83 mins","Duration: 1.42 mins","Duration: 10.17 mins","Duration: 30.83 mins","Duration: 1.67 mins","Duration: 2.42 mins","Duration: 31.58 mins","Duration: 118.17 mins","Duration: 1.28 mins","Duration: 12.97 mins","Duration: 75.25 mins","Duration: 16.75 mins","Duration: 5.25 mins","Duration: 36 mins","Duration: 5.67 mins","Duration: 2.08 mins","Duration: 18.92 mins","Duration: 39.75 mins","Duration: 17.37 mins","Duration: 29.17 mins","Duration: 100.92 mins","Duration: 3.58 mins","Duration: 27.17 mins","Duration: 37.83 mins","Duration: 58.5 mins","Duration: 236 mins","Duration: 31.58 mins","Duration: 31.83 mins","Duration: 129.42 mins","Duration: 10.08 mins","Duration: 87.58 mins","Duration: 8.5 mins","Duration: 170.58 mins","Duration: 53.25 mins","Duration: 30.83 mins","Duration: 130.5 mins","Duration: 119.08 mins","Duration: 178.83 mins","Duration: 1.08 mins","Duration: 128.25 mins","Duration: 68.08 mins","Duration: 6.33 mins","Duration: 69.67 mins","Duration: 10.17 mins","Duration: 118.42 mins","Duration: 53.67 mins","Duration: 152.67 mins","Duration: 1.67 mins","Duration: 31.08 mins","Duration: 3.42 mins","Duration: 1 mins","Duration: 4.83 mins","Duration: 1.75 mins","Duration: 24.42 mins","Duration: 82.17 mins","Duration: 10.58 mins","Duration: 140.78 mins","Duration: 2.08 mins","Duration: 2.5 mins","Duration: 25.58 mins","Duration: 89.58 mins","Duration: 15.75 mins","Duration: 2.72 mins","Duration: 204.03 mins","Duration: 1.17 mins","Duration: 21.42 mins","Duration: 1.67 mins","Duration: 2.17 mins","Duration: 18.25 mins","Duration: 25.25 mins","Duration: 74.17 mins","Duration: 13.75 mins","Duration: 1.17 mins","Duration: 18.75 mins","Duration: 114 mins","Duration: 57.58 mins","Duration: 29 mins","Duration: 1.67 mins","Duration: 37.5 mins","Duration: 33.87 mins","Duration: 1.17 mins","Duration: 6.83 mins","Duration: 13.17 mins","Duration: 1.17 mins","Duration: 1.25 mins","Duration: 8.53 mins","Duration: 49.83 mins","Duration: 39.92 mins","Duration: 32.92 mins","Duration: 6.83 mins","Duration: 30.75 mins","Duration: 23.92 mins","Duration: 35.65 mins","Duration: 10.08 mins","Duration: 1.67 mins","Duration: 1.08 mins","Duration: 22.25 mins","Duration: 8.42 mins","Duration: 1.17 mins","Duration: 22.17 mins","Duration: 131.83 mins","Duration: 1.67 mins","Duration: 36.25 mins","Duration: 6.83 mins","Duration: 9.92 mins","Duration: 19.83 mins","Duration: 1.08 mins","Duration: 6.15 mins","Duration: 2.02 mins","Duration: 26.5 mins","Duration: 13.75 mins","Duration: 26.42 mins","Duration: 25.67 mins","Duration: 28.5 mins","Duration: 34.33 mins","Duration: 7.25 mins","Duration: 11.75 mins","Duration: 1.58 mins","Duration: 59.33 mins","Duration: 1.67 mins","Duration: 151.25 mins","Duration: 15.67 mins","Duration: 37.83 mins","Duration: 41.17 mins","Duration: 24.17 mins","Duration: 20.25 mins","Duration: 3.08 mins","Duration: 25.25 mins","Duration: 34.3 mins","Duration: 21.17 mins","Duration: 74.17 mins","Duration: 8.58 mins","Duration: 5.33 mins","Duration: 10.08 mins","Duration: 1.58 mins","Duration: 28.42 mins","Duration: 4.17 mins","Duration: 16 mins","Duration: 24.83 mins","Duration: 3.17 mins","Duration: 2.17 mins","Duration: 71 mins","Duration: 77.42 mins","Duration: 1.08 mins","Duration: 12.58 mins","Duration: 10.67 mins","Duration: 1.67 mins","Duration: 64.92 mins","Duration: 1.08 mins","Duration: 55.33 mins","Duration: 3.17 mins","Duration: 16.58 mins","Duration: 92.17 mins","Duration: 19.08 mins","Duration: 17.17 mins","Duration: 23.33 mins","Duration: 31.67 mins","Duration: 2.1 mins","Duration: 78.33 mins","Duration: 1.58 mins","Duration: 1.02 mins","Duration: 2.08 mins","Duration: 8.08 mins","Duration: 50.5 mins","Duration: 21.75 mins","Duration: 65.58 mins","Duration: 2.42 mins","Duration: 21.92 mins","Duration: 1.58 mins","Duration: 20.58 mins","Duration: 4.08 mins","Duration: 10.83 mins","Duration: 1.25 mins","Duration: 48.75 mins","Duration: 1.17 mins","Duration: 12.83 mins","Duration: 2.75 mins","Duration: 1.25 mins","Duration: 4.33 mins","Duration: 62.75 mins","Duration: 5.33 mins","Duration: 10.58 mins","Duration: 33.5 mins","Duration: 1.58 mins","Duration: 3.92 mins","Duration: 5.67 mins","Duration: 118.42 mins","Duration: 53.25 mins","Duration: 39.95 mins","Duration: 3.08 mins","Duration: 33.04 mins","Duration: 3.08 mins","Duration: 6.33 mins","Duration: 53.33 mins","Duration: 85.33 mins","Duration: 13.67 mins","Duration: 6.92 mins","Duration: 26.67 mins","Duration: 18.33 mins","Duration: 10.17 mins","Duration: 24.17 mins","Duration: 6.83 mins","Duration: 1.58 mins","Duration: 51.67 mins","Duration: 9.25 mins","Duration: 1.75 mins","Duration: 27.25 mins","Duration: 22.5 mins","Duration: 6.08 mins","Duration: 21.75 mins","Duration: 6.83 mins","Duration: 79.58 mins","Duration: 4 mins","Duration: 9.17 mins","Duration: 53.75 mins","Duration: 20.5 mins","Duration: 50.75 mins","Duration: 19.08 mins","Duration: 15.08 mins","Duration: 48.92 mins","Duration: 5.42 mins","Duration: 1.67 mins","Duration: 8.42 mins","Duration: 26.08 mins","Duration: 2.42 mins","Duration: 1161.88 mins","Duration: 62.5 mins","Duration: 16.75 mins","Duration: 104.58 mins","Duration: 70 mins","Duration: 1.42 mins","Duration: 23.33 mins","Duration: 7.58 mins","Duration: 16.5 mins","Duration: 120.75 mins","Duration: 62 mins","Duration: 14.5 mins","Duration: 10.08 mins","Duration: 18.83 mins","Duration: 135.08 mins","Duration: 68.92 mins","Duration: 108.58 mins","Duration: 965.09 mins","Duration: 57.5 mins","Duration: 22.17 mins","Duration: 13.92 mins","Duration: 85.25 mins","Duration: 30.25 mins","Duration: 7.83 mins","Duration: 74.08 mins","Duration: 5.33 mins","Duration: 11.5 mins","Duration: 96.08 mins","Duration: 1.67 mins","Duration: 11.5 mins","Duration: 14.25 mins","Duration: 2.42 mins","Duration: 5.42 mins","Duration: 12.58 mins","Duration: 13.58 mins","Duration: 3.08 mins","Duration: 11.42 mins","Duration: 46.17 mins","Duration: 68.08 mins","Duration: 67.08 mins","Duration: 1.08 mins","Duration: 1.25 mins","Duration: 1.58 mins","Duration: 2.5 mins","Duration: 1.17 mins","Duration: 7.83 mins","Duration: 1.67 mins","Duration: 1.75 mins","Duration: 55.5 mins","Duration: 1.08 mins","Duration: 2.42 mins","Duration: 2.08 mins","Duration: 6.08 mins","Duration: 24.67 mins","Duration: 1.67 mins","Duration: 5.08 mins","Duration: 10.25 mins","Duration: 18.42 mins","Duration: 3.08 mins","Duration: 1.58 mins","Duration: 2.5 mins","Duration: 5.5 mins","Duration: 6.42 mins","Duration: 11.58 mins","Duration: 3.83 mins","Duration: 35.25 mins","Duration: 9.42 mins","Duration: 8.33 mins","Duration: 13.98 mins","Duration: 1.08 mins","Duration: 45.25 mins","Duration: 2.75 mins","Duration: 282.07 mins","Duration: 293.17 mins","Duration: 1 mins","Duration: 17.5 mins","Duration: 1 mins","Duration: 23.42 mins","Duration: 23.5 mins","Duration: 23.17 mins","Duration: 118.58 mins","Duration: 145.17 mins","Duration: 10.68 mins","Duration: 27.17 mins","Duration: 58.5 mins","Duration: 1.17 mins","Duration: 75.08 mins","Duration: 3.92 mins","Duration: 23.58 mins","Duration: 1.67 mins","Duration: 6.17 mins","Duration: 38.5 mins","Duration: 13.08 mins","Duration: 169.5 mins","Duration: 29.92 mins","Duration: 1 mins","Duration: 39.33 mins","Duration: 93.08 mins","Duration: 43.58 mins","Duration: 40.58 mins","Duration: 25.83 mins","Duration: 52.17 mins","Duration: 15.17 mins","Duration: 33.58 mins","Duration: 102.83 mins","Duration: 9.5 mins","Duration: 16.5 mins","Duration: 4.17 mins","Duration: 1.17 mins","Duration: 1.58 mins","Duration: 45 mins","Duration: 15.92 mins","Duration: 3.75 mins","Duration: 11.08 mins","Duration: 5.08 mins","Duration: 10.67 mins","Duration: 37.58 mins","Duration: 9.08 mins","Duration: 81.5 mins","Duration: 10.58 mins","Duration: 30.08 mins","Duration: 6.92 mins","Duration: 6.33 mins","Duration: 3.58 mins","Duration: 5.5 mins","Duration: 23.33 mins","Duration: 4.7 mins","Duration: 5.33 mins","Duration: 9.83 mins","Duration: 13 mins","Duration: 12.08 mins","Duration: 36.92 mins","Duration: 5.53 mins","Duration: 8.25 mins","Duration: 41.92 mins","Duration: 3.08 mins","Duration: 1.58 mins","Duration: 76.9 mins","Duration: 1.67 mins","Duration: 34 mins","Duration: 41.33 mins","Duration: 12.17 mins","Duration: 21.83 mins","Duration: 22.67 mins","Duration: 23.25 mins","Duration: 16.83 mins","Duration: 29.42 mins","Duration: 23.08 mins","Duration: 9.92 mins","Duration: 12.42 mins","Duration: 30.33 mins","Duration: 40.42 mins","Duration: 10.92 mins","Duration: 5.42 mins","Duration: 8.33 mins","Duration: 18 mins","Duration: 23.25 mins","Duration: 10.75 mins","Duration: 74.33 mins","Duration: 28 mins","Duration: 19 mins","Duration: 50.5 mins","Duration: 24.17 mins","Duration: 108.92 mins","Duration: 27.58 mins","Duration: 33.58 mins","Duration: 12.25 mins","Duration: 10.58 mins","Duration: 12.08 mins","Duration: 47.25 mins","Duration: 7.58 mins","Duration: 4.67 mins","Duration: 2.33 mins","Duration: 3.33 mins","Duration: 6.83 mins","Duration: 9.53 mins","Duration: 8.58 mins","Duration: 2.5 mins","Duration: 2.5 mins","Duration: 10 mins","Duration: 4.67 mins","Duration: 6.25 mins","Duration: 3.67 mins","Duration: 3.92 mins","Duration: 6.17 mins","Duration: 6.83 mins","Duration: 5.33 mins","Duration: 128.67 mins","Duration: 2.58 mins","Duration: 5.42 mins","Duration: 4.75 mins","Duration: 2.33 mins","Duration: 5.58 mins","Duration: 4.58 mins","Duration: 8.42 mins","Duration: 6.25 mins","Duration: 8.42 mins","Duration: 6.17 mins","Duration: 3.42 mins","Duration: 2.08 mins","Duration: 3.17 mins","Duration: 5.17 mins","Duration: 43 mins","Duration: 3.17 mins","Duration: 9.08 mins","Duration: 16.08 mins","Duration: 1 mins","Duration: 4.58 mins","Duration: 3.83 mins","Duration: 5.42 mins","Duration: 6.92 mins","Duration: 4.08 mins","Duration: 6.92 mins","Duration: 3.17 mins","Duration: 199.75 mins","Duration: 14.25 mins","Duration: 7.17 mins","Duration: 11.17 mins","Duration: 9.83 mins","Duration: 2.33 mins","Duration: 1.67 mins","Duration: 1.67 mins","Duration: 1.92 mins","Duration: 21.08 mins","Duration: 3.17 mins","Duration: 14.8 mins","Duration: 10 mins","Duration: 2.58 mins","Duration: 2.67 mins","Duration: 281.25 mins","Duration: 13.25 mins","Duration: 2.17 mins","Duration: 67.83 mins","Duration: 85.25 mins","Duration: 14.67 mins","Duration: 12.08 mins","Duration: 34.58 mins","Duration: 34.08 mins","Duration: 1.67 mins","Duration: 1.33 mins","Duration: 22 mins","Duration: 1.67 mins","Duration: 35.83 mins","Duration: 53 mins","Duration: 7.42 mins","Duration: 33.83 mins","Duration: 1.17 mins","Duration: 3.05 mins","Duration: 1.25 mins","Duration: 1.67 mins","Duration: 1.08 mins","Duration: 1 mins","Duration: 1.17 mins","Duration: 1.58 mins","Duration: 10.58 mins","Duration: 24.25 mins","Duration: 94.67 mins","Duration: 21.83 mins","Duration: 6.17 mins","Duration: 31.17 mins","Duration: 35.5 mins","Duration: 69.58 mins","Duration: 16.17 mins","Duration: 55.5 mins","Duration: 80.92 mins","Duration: 18.68 mins","Duration: 1.67 mins","Duration: 3.17 mins","Duration: 4.67 mins","Duration: 3.17 mins","Duration: 61.08 mins","Duration: 75 mins","Duration: 1.92 mins","Duration: 1.17 mins","Duration: 22.58 mins","Duration: 2.17 mins","Duration: 4.33 mins","Duration: 3.67 mins","Duration: 3.08 mins","Duration: 11.58 mins","Duration: 1.83 mins","Duration: 15.83 mins","Duration: 12.08 mins","Duration: 15.92 mins","Duration: 44.75 mins","Duration: 6.83 mins","Duration: 6.83 mins","Duration: 4.58 mins","Duration: 12.92 mins","Duration: 42.75 mins","Duration: 2.33 mins","Duration: 1.75 mins","Duration: 1.75 mins","Duration: 11.17 mins","Duration: 1.58 mins","Duration: 1.5 mins","Duration: 1.17 mins","Duration: 1.68 mins","Duration: 17.32 mins","Duration: 6.08 mins","Duration: 26.5 mins","Duration: 32.42 mins","Duration: 72.58 mins","Duration: 12.17 mins","Duration: 1.67 mins","Duration: 42.67 mins","Duration: 126.5 mins","Duration: 56.17 mins","Duration: 18.17 mins","Duration: 2.42 mins","Duration: 1.33 mins","Duration: 12.83 mins","Duration: 13.42 mins","Duration: 14.58 mins","Duration: 8.42 mins","Duration: 8.58 mins","Duration: 109.08 mins","Duration: 1.58 mins","Duration: 5.67 mins","Duration: 188.75 mins","Duration: 1.17 mins","Duration: 13.83 mins","Duration: 169.42 mins","Duration: 16.83 mins","Duration: 12.92 mins","Duration: 12.17 mins","Duration: 6.92 mins","Duration: 1.17 mins","Duration: 21.25 mins","Duration: 29.92 mins","Duration: 19.75 mins","Duration: 12.08 mins","Duration: 217.25 mins","Duration: 3.08 mins","Duration: 29.92 mins","Duration: 34.58 mins","Duration: 6.42 mins","Duration: 25.08 mins","Duration: 11.42 mins","Duration: 10.83 mins","Duration: 24 mins","Duration: 22.75 mins","Duration: 8.33 mins","Duration: 104.08 mins","Duration: 38.42 mins","Duration: 22.17 mins","Duration: 11.33 mins","Duration: 57.08 mins","Duration: 16.25 mins","Duration: 33.17 mins","Duration: 22.5 mins","Duration: 17.17 mins","Duration: 1.67 mins","Duration: 126.08 mins","Duration: 9.92 mins","Duration: 20.33 mins","Duration: 4.67 mins","Duration: 26.42 mins","Duration: 7.67 mins","Duration: 19.83 mins","Duration: 1.92 mins","Duration: 23.25 mins","Duration: 7.17 mins","Duration: 34.67 mins","Duration: 100.25 mins","Duration: 11.42 mins","Duration: 12.83 mins","Duration: 2.08 mins","Duration: 4.53 mins","Duration: 14.5 mins","Duration: 22.42 mins","Duration: 4.23 mins","Duration: 2.7 mins","Duration: 56.43 mins","Duration: 34.83 mins","Duration: 23.42 mins","Duration: 7.58 mins","Duration: 34.67 mins","Duration: 21.25 mins","Duration: 57.58 mins","Duration: 11.05 mins","Duration: 2.58 mins","Duration: 4.58 mins","Duration: 22.75 mins","Duration: 36.92 mins","Duration: 14.42 mins","Duration: 4.58 mins","Duration: 29.25 mins","Duration: 1064.92 mins","Duration: 23.25 mins","Duration: 14.33 mins","Duration: 90.42 mins","Duration: 18.17 mins","Duration: 64.5 mins","Duration: 42.25 mins","Duration: 39.5 mins","Duration: 28.17 mins","Duration: 86.67 mins","Duration: 6.17 mins","Duration: 53.42 mins","Duration: 16.67 mins","Duration: 7.92 mins","Duration: 126.5 mins","Duration: 10.58 mins","Duration: 1.58 mins","Duration: 64.92 mins","Duration: 1 mins","Duration: 64.5 mins","Duration: 1771.75 mins","Duration: 38.75 mins","Duration: 13.58 mins","Duration: 40.33 mins","Duration: 245.42 mins","Duration: 50.33 mins","Duration: 76.25 mins","Duration: 114.72 mins","Duration: 17.25 mins","Duration: 6.83 mins","Duration: 2.58 mins","Duration: 13.08 mins","Duration: 6.08 mins","Duration: 31.42 mins","Duration: 12 mins","Duration: 9.78 mins","Duration: 73 mins","Duration: 96.25 mins","Duration: 2.08 mins","Duration: 2.17 mins","Duration: 13.5 mins","Duration: 8.42 mins","Duration: 54.42 mins","Duration: 11.73 mins","Duration: 12.9 mins","Duration: 14.67 mins","Duration: 12.08 mins","Duration: 4.58 mins","Duration: 16.67 mins","Duration: 9.17 mins","Duration: 1.67 mins","Duration: 3.92 mins","Duration: 4.58 mins","Duration: 10.83 mins","Duration: 1.75 mins","Duration: 8.42 mins","Duration: 5.33 mins","Duration: 7.92 mins","Duration: 5.33 mins","Duration: 5.42 mins","Duration: 6.08 mins","Duration: 15.83 mins","Duration: 10.42 mins","Duration: 3.83 mins","Duration: 25.5 mins","Duration: 23 mins","Duration: 1.58 mins","Duration: 11.67 mins","Duration: 9.17 mins","Duration: 3.08 mins","Duration: 39.83 mins","Duration: 34.17 mins","Duration: 54.02 mins","Duration: 49.27 mins","Duration: 66 mins","Duration: 20.5 mins","Duration: 1.67 mins","Duration: 4 mins","Duration: 57.25 mins","Duration: 20.75 mins","Duration: 1.67 mins","Duration: 45.08 mins","Duration: 67.17 mins","Duration: 2.33 mins","Duration: 1.58 mins","Duration: 6.92 mins","Duration: 45.5 mins","Duration: 27.25 mins","Duration: 1 mins","Duration: 1.92 mins","Duration: 273.75 mins","Duration: 1.08 mins","Duration: 3.42 mins","Duration: 1.75 mins","Duration: 76.08 mins","Duration: 38.83 mins","Duration: 40.33 mins","Duration: 1026.25 mins","Duration: 71.58 mins","Duration: 15.67 mins","Duration: 3.83 mins","Duration: 1.25 mins","Duration: 61.65 mins","Duration: 9.83 mins","Duration: 4.58 mins","Duration: 1.93 mins","Duration: 7.17 mins","Duration: 15.08 mins","Duration: 32.33 mins","Duration: 2.5 mins","Duration: 1.08 mins","Duration: 1.32 mins","Duration: 1.35 mins","Duration: 1.42 mins","Duration: 1.17 mins","Duration: 2.08 mins","Duration: 2.17 mins","Duration: 1.08 mins","Duration: 75 mins","Duration: 1.17 mins","Duration: 1.17 mins","Duration: 3.25 mins","Duration: 1.17 mins","Duration: 1.08 mins","Duration: 39 mins","Duration: 90.5 mins","Duration: 30.25 mins","Duration: 52.17 mins","Duration: 2.5 mins","Duration: 27.17 mins","Duration: 21.67 mins","Duration: 7.67 mins","Duration: 5.75 mins","Duration: 4.25 mins","Duration: 38.5 mins","Duration: 2.33 mins","Duration: 48.92 mins","Duration: 18.17 mins","Duration: 1.58 mins","Duration: 19.92 mins","Duration: 17.42 mins","Duration: 25.83 mins","Duration: 23.75 mins","Duration: 1.67 mins","Duration: 92.75 mins","Duration: 14.33 mins","Duration: 10.58 mins","Duration: 26.25 mins","Duration: 29.25 mins","Duration: 7.58 mins","Duration: 6.17 mins","Duration: 2.42 mins","Duration: 2.33 mins","Duration: 13.83 mins","Duration: 16.67 mins","Duration: 2.5 mins","Duration: 3.92 mins","Duration: 1.17 mins","Duration: 18.58 mins","Duration: 9.33 mins","Duration: 1.17 mins","Duration: 1.67 mins","Duration: 17.47 mins","Duration: 17.25 mins","Duration: 8.33 mins","Duration: 14.58 mins","Duration: 6.33 mins","Duration: 5.67 mins","Duration: 161.5 mins","Duration: 8.33 mins","Duration: 52.7 mins","Duration: 5.67 mins","Duration: 4.83 mins","Duration: 1.58 mins","Duration: 46.92 mins","Duration: 1.17 mins","Duration: 1 mins","Duration: 22.58 mins","Duration: 18.08 mins","Duration: 187.25 mins","Duration: 38.58 mins","Duration: 1 mins","Duration: 22.58 mins","Duration: 12.08 mins","Duration: 18.83 mins","Duration: 50.5 mins","Duration: 35.92 mins","Duration: 76.17 mins","Duration: 61.67 mins","Duration: 9.83 mins","Duration: 12.33 mins","Duration: 8.08 mins","Duration: 12.08 mins","Duration: 28.58 mins","Duration: 2.33 mins","Duration: 1.67 mins","Duration: 1 mins","Duration: 1.17 mins","Duration: 9.17 mins","Duration: 1.08 mins","Duration: 2.42 mins","Duration: 1.75 mins","Duration: 15.25 mins","Duration: 52.18 mins","Duration: 1.75 mins","Duration: 18.08 mins","Duration: 5.67 mins","Duration: 1.92 mins","Duration: 3.17 mins","Duration: 1 mins","Duration: 2.67 mins","Duration: 1.67 mins","Duration: 4.05 mins","Duration: 38.43 mins","Duration: 2.48 mins","Duration: 2.7 mins","Duration: 1.67 mins","Duration: 6.58 mins","Duration: 10.17 mins","Duration: 1.25 mins","Duration: 1.17 mins","Duration: 1.67 mins","Duration: 1 mins","Duration: 1.08 mins","Duration: 1.08 mins","Duration: 1.58 mins","Duration: 1 mins","Duration: 6.92 mins","Duration: 12.08 mins","Duration: 3.92 mins","Duration: 8.5 mins","Duration: 1 mins","Duration: 1.08 mins","Duration: 1.58 mins","Duration: 19.93 mins"],null,null,null,null,{"interactive":false,"permanent":false,"direction":"auto","opacity":1,"offset":[0,0],"textsize":"10px","textOnly":false,"className":"","sticky":true},null]}],"limits":{"lat":[42.0883916666667,42.3938233333333],"lng":[-72.6842383333333,-72.515715]}},"evals":[],"jsHooks":[]}</script>
+
+
+</div>
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="leaflet.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="heat-maps.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/rstudio/bookdown-demo/edit/master/06.5-Secondary_Stops_Graham.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["valleybike-report.pdf", "valleybike-report.epub"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+</body>
+
+</html>

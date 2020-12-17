@@ -1,4 +1,5 @@
 
+
 ```{r, include=FALSE}
 library(valleybikeData)
 library(tidyverse)
@@ -15,28 +16,9 @@ In total, there are 16589 users and 112011 trips by those users from June 2018 t
 
 
 ```{r, echo = FALSE, message=FALSE,warning=FALSE}
-users2020 <- readr::read_csv(curl("https://raw.githubusercontent.com/DSC-WAV/proj-valleyriders/master/data/users_2020_10.csv?token=ANCR62LHPFUAQPVKBTFBOFK73JU22")) %>%
-  mutate(
-    membership_start = lubridate::parse_date_time(membership_start, "YmdHMS"),
-    membership_end = lubridate::parse_date_time(membership_end, "YmdHMS")
-  ) %>%
-  select(-X1)
 
-get_other <- function(ds) {
-  categories <- c(
-    "Missing", "Agawam", "Belchertown", "Boston", "Chicopee", "East Longmeadow", "Enfield, CT",
-    "Granby", "Hadley", "Leverett", "Ludlow", "New York City", "South Hadley", "Southampton",
-    "Sunderland", "West Springfield", "Westfield"
-  )
 
-  for (i in 1:length(ds$location)) {
-    if (str_detect(ds$location[i], "Other") | ds$location[i] %in% categories) {
-      ds$location[i] <- "Other"
-    }
-  }
-  return(ds)
-}
-users2020_cleaned <- get_other(users2020)
+users2020_cleaned <- readRDS("../ValleyBike-Fall2020-Report/users2020_cleaned.Rds")
 
 users2020_cleaned <- users2020_cleaned %>%
   mutate(
